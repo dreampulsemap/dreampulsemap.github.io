@@ -1007,23 +1007,96 @@ Rules: Max 80 words. 2-3 sentences. ONLY about dreams. RESPOND ONLY IN ${targetL
             closeAllAccess();
         }
 
+        // ============ 🆘 FALLBACK SAMPLE DATA ============
+        const SAMPLE_DREAMS = [
+            { id: 'sample-1', text: 'I was flying over a vast ocean, the waves shimmering below me. I felt completely free and weightless.', symbol: 'flying', symbols: [{name:'flying', emoji:'🕊️', imageUrl:'', description:'Freedom and transcendence'}], timestamp: new Date(Date.now() - 3600000).toISOString(), language: 'en', lat: 40.7, lng: -74.0, country: 'United States', source: 'Sample' },
+            { id: 'sample-2', text: 'Korkunç bir yılan beni kovalıyordu karanlık bir ormanda. Koşuyordum ama ayaklarım hareket etmiyordu.', symbol: 'chase', symbols: [{name:'chase', emoji:'🏃', imageUrl:'', description:'Anxiety and avoidance'}], timestamp: new Date(Date.now() - 7200000).toISOString(), language: 'tr', lat: 41.0, lng: 28.9, country: 'Turkey', source: 'Sample' },
+            { id: 'sample-3', text: 'My teeth started falling out one by one while I was giving a presentation. Everyone was watching.', symbol: 'teeth', symbols: [{name:'teeth', emoji:'🦷', imageUrl:'', description:'Loss of power or confidence'}], timestamp: new Date(Date.now() - 10800000).toISOString(), language: 'en', lat: 51.5, lng: -0.1, country: 'United Kingdom', source: 'Sample' },
+            { id: 'sample-4', text: 'Estaba cayendo desde un edificio muy alto, pero de repente comencé a volar sobre la ciudad.', symbol: 'flying', symbols: [{name:'flying', emoji:'🕊️', imageUrl:'', description:'Liberation from fears'}], timestamp: new Date(Date.now() - 14400000).toISOString(), language: 'es', lat: 40.4, lng: -3.7, country: 'Spain', source: 'Sample' },
+            { id: 'sample-5', text: 'A giant wave was coming and I was trying to run but the water was too fast. I drowned in it.', symbol: 'water', symbols: [{name:'water', emoji:'🌊', imageUrl:'', description:'Emotional overwhelm'}], timestamp: new Date(Date.now() - 18000000).toISOString(), language: 'en', lat: -33.9, lng: 151.2, country: 'Australia', source: 'Sample' },
+            { id: 'sample-6', text: 'Büyük bir evin içinde kaybolmuştum, her kapı farklı bir odaya açılıyordu ama çıkış bulamıyordum.', symbol: 'house', symbols: [{name:'house', emoji:'🏠', imageUrl:'', description:'Self exploration'}], timestamp: new Date(Date.now() - 21600000).toISOString(), language: 'tr', lat: 39.9, lng: 32.8, country: 'Turkey', source: 'Sample' },
+            { id: 'sample-7', text: 'I was naked in school and everyone was laughing at me. I tried to hide behind a locker.', symbol: 'naked', symbols: [{name:'naked', emoji:'👤', imageUrl:'', description:'Vulnerability and shame'}], timestamp: new Date(Date.now() - 25200000).toISOString(), language: 'en', lat: 34.0, lng: -118.2, country: 'United States', source: 'Sample' },
+            { id: 'sample-8', text: 'Une voiture folle me poursuivait sur une autoroute sans fin. Je ne pouvais pas m\'arrêter.', symbol: 'car', symbols: [{name:'car', emoji:'🚗', imageUrl:'', description:'Life direction anxiety'}], timestamp: new Date(Date.now() - 28800000).toISOString(), language: 'fr', lat: 48.9, lng: 2.3, country: 'France', source: 'Sample' },
+            { id: 'sample-9', text: 'Found a bag full of gold coins in my grandmother\'s garden. I was so happy and excited.', symbol: 'money', symbols: [{name:'money', emoji:'💰', imageUrl:'', description:'Hidden value or opportunity'}], timestamp: new Date(Date.now() - 32400000).toISOString(), language: 'en', lat: 37.7, lng: -122.4, country: 'United States', source: 'Sample' },
+            { id: 'sample-10', text: 'Sevdiğim kişiyle evleniyordum ama düğün günü o gelmedi. Herkes bana bakıyordu.', symbol: 'love', symbols: [{name:'love', emoji:'💕', imageUrl:'', description:'Relationship fears'}], timestamp: new Date(Date.now() - 36000000).toISOString(), language: 'tr', lat: 41.0, lng: 29.0, country: 'Turkey', source: 'Sample' },
+            { id: 'sample-11', text: 'A snake was wrapped around my arm and I could not move. It was speaking to me in whispers.', symbol: 'snake', symbols: [{name:'snake', emoji:'🐍', imageUrl:'', description:'Transformation and wisdom'}], timestamp: new Date(Date.now() - 39600000).toISOString(), language: 'en', lat: 35.7, lng: 139.7, country: 'Japan', source: 'Sample' },
+            { id: 'sample-12', text: 'Estaba en un examen muy importante pero no sabía las respuestas. El tiempo se acababa.', symbol: 'exam', symbols: [{name:'exam', emoji:'📝', imageUrl:'', description:'Performance anxiety'}], timestamp: new Date(Date.now() - 43200000).toISOString(), language: 'es', lat: 19.4, lng: -99.1, country: 'Mexico', source: 'Sample' },
+            { id: 'sample-13', text: 'The whole city was on fire and I was trying to save my family. The smoke was everywhere.', symbol: 'fire', symbols: [{name:'fire', emoji:'🔥', imageUrl:'', description:'Destruction and passion'}], timestamp: new Date(Date.now() - 46800000).toISOString(), language: 'en', lat: 52.5, lng: 13.4, country: 'Germany', source: 'Sample' },
+            { id: 'sample-14', text: 'Bir kedi beni takip ediyordu her yere. Sonra konuşmaya başladı ve bana sırlarımı söylüyordu.', symbol: 'animal', symbols: [{name:'animal', emoji:'🐾', imageUrl:'', description:'Instincts and intuition'}], timestamp: new Date(Date.now() - 50400000).toISOString(), language: 'tr', lat: 41.0, lng: 29.1, country: 'Turkey', source: 'Sample' },
+            { id: 'sample-15', text: 'I was falling from a cliff but just before hitting the ground I woke up screaming.', symbol: 'falling', symbols: [{name:'falling', emoji:'⬇️', imageUrl:'', description:'Loss of control'}], timestamp: new Date(Date.now() - 54000000).toISOString(), language: 'en', lat: 43.6, lng: -79.4, country: 'Canada', source: 'Sample' }
+        ];
+
+        function loadSampleDreams() {
+            console.log('🆘 Loading sample dreams as fallback...');
+            const added = window.DreamArchive.addManyDreams(SAMPLE_DREAMS);
+            console.log(`✅ Added ${added} sample dreams`);
+            return added;
+        }
+
         // ============ INIT ============
         window.addEventListener('DOMContentLoaded', async () => {
             updateUI();
             
-            // 📚 ARCHIVE.JS'den yükle
+            console.log('🎬 Starting initialization...');
+            
+            // 1. Arşivi yükle
             loadDreamsFromArchive();
             
-            // 🌐 İlk yükleme: Fetcher ile Reddit/Tumblr'dan veri çek
+            // 2. Arşiv boşsa sample data + fetcher dene
             if (allDreams.length === 0) {
-                console.log('🚀 First run: Fetching dreams from global sources...');
+                console.log('🆘 Archive empty, loading samples first...');
+                loadSampleDreams();
+                loadDreamsFromArchive();
+                
+                console.log('🚀 Now trying to fetch from real sources...');
                 try {
                     await window.DreamFetcher.initialLoad();
                     loadDreamsFromArchive();
                 } catch (error) {
-                    console.warn('Initial fetch failed:', error);
+                    console.warn('⚠️ Fetch failed, using samples:', error);
                 }
+            } else {
+                console.log(`📚 Using existing archive: ${allDreams.length} dreams`);
             }
+            
+            // 3. UI'ı güncelle
+            applyTimeFilter();
+            
+            // 4. AI forecast'ları
+            try {
+                await generateGlobalForecasts();
+            } catch (e) {
+                console.warn('⚠️ Forecasts failed:', e);
+            }
+            
+            console.log('🎉 Initialization complete!');
+            console.log('📊 Final stats:', window.DreamArchive.getStats());
+            
+            // 5. Debug komutu konsola ekle
+            window.debugArchive = () => {
+                const archive = window.DreamArchive.getAllDreams();
+                console.table(archive.slice(0, 10));
+                console.log('Total:', archive.length);
+                console.log('Symbols:', archive.map(d => d.symbol));
+                return archive;
+            };
+            console.log('💡 Run "debugArchive()" in console to inspect data');
+            
+            // 6. Periyodik güncelleme (30 dk)
+            setInterval(async () => {
+                try {
+                    await window.DreamFetcher.fetchAndArchive();
+                    loadDreamsFromArchive();
+                    applyTimeFilter();
+                } catch (e) { console.warn('Auto-fetch failed:', e); }
+            }, 30 * 60 * 1000);
+            
+            if (window.location.hash === '#forecasts') {
+                setTimeout(() => {
+                    document.getElementById('forecasts').scrollIntoView({ behavior: 'smooth' });
+                }, 500);
+            }
+        });
             
             applyTimeFilter();
             await generateGlobalForecasts();
