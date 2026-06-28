@@ -10,7 +10,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     
     <!-- 📚 ARCHIVE.js - RÜYA VERİ DEPOSU -->
-    <script src="archive.js"></script>
+    <script src="js/archive.js"></script>
+    <!-- 🌐 FETCHER.js - REDDIT/TUMBLR/RSS VERİ ÇEKME -->
+    <script src="js/fetcher.js"></script>
     
     <style>
         * { font-family: 'Cormorant Garamond', serif; }
@@ -116,6 +118,12 @@
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.5); }
         ::-webkit-scrollbar-thumb { background: rgba(168, 85, 247, 0.5); border-radius: 4px; }
+        
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px);
+            z-index: 100; display: none; align-items: center; justify-content: center;
+        }
+        .modal-overlay.active { display: flex; }
     </style>
 </head>
 <body class="text-white">
@@ -130,6 +138,12 @@
             </a>
 
             <div class="flex items-center gap-3">
+                <button onclick="openAddDreamModal()" class="btn-gold px-4 py-2 rounded-lg text-white font-semibold">
+                    + Add Dream
+                </button>
+                <button onclick="fetchNewDreams()" class="glass px-4 py-2 rounded-lg hover:bg-purple-500/20 transition">
+                    📥 Fetch Dreams
+                </button>
                 <a href="index.html" class="glass px-4 py-2 rounded-lg hover:bg-purple-500/20 transition">
                     <span id="backBtn">← Back</span>
                 </a>
@@ -341,6 +355,27 @@
         </div>
     </div>
 
+    <!-- ADD DREAM MODAL -->
+    <div id="addDreamModal" class="modal-overlay">
+        <div class="glass-strong rounded-2xl p-8 max-w-lg w-full glow-purple">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-purple-300">🌙 Add Your Dream</h3>
+                <button onclick="closeAddDreamModal()" class="text-gray-400 hover:text-white text-3xl">&times;</button>
+            </div>
+            <form id="dreamForm" class="space-y-4">
+                <div>
+                    <label class="block text-sm text-gray-300 mb-2">Dream Text</label>
+                    <textarea id="dreamText" rows="6" class="w-full bg-slate-900/50 border border-purple-500/30 rounded-lg px-4 py-3 text-white" placeholder="Describe your dream in detail..." required></textarea>
+                </div>
+                <div>
+                    <label class="block text-sm text-gray-300 mb-2">Country</label>
+                    <input type="text" id="dreamCountry" class="w-full bg-slate-900/50 border border-purple-500/30 rounded-lg px-4 py-3 text-white" placeholder="e.g., Turkey" required>
+                </div>
+                <button type="submit" class="w-full btn-gold text-white font-bold py-4 rounded-xl">Add to Archive</button>
+            </form>
+        </div>
+    </div>
+
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     
     <script>
@@ -442,7 +477,7 @@
             document.body.style.direction = currentLang === 'ar' ? 'rtl' : 'ltr';
         }
 
-        // ============ 📚 ARCHIVE.js KULLANIMI ============
+        // ============ 📚 ARCHIVE.js & FETCHER.js KULLANIMI ============
         let currentTimeFilter = 'week';
         let customDateFrom = null;
         let customDateTo = null;
@@ -455,6 +490,77 @@
             allDreams = window.DreamArchive.getAllDreams();
             document.getElementById('liveCount').textContent = allDreams.length;
             return allDreams;
+        }
+
+        // ============ 🌐 FETCHER ENTEGRASYONU ============
+        async function fetchNewDreams() {
+            const btn = event.target;
+            const originalText = btn.textContent;
+            btn.disabled = true;
+            btn.textContent = '⏳ Fetching...';
+            
+            try {
+                const result = await window.DreamFetcher.fetchAndArchive();
+                alert(`✅ ${result.fetched} dreams fetched, ${result.added} new dreams added to archive`);
+                loadDreamsFromArchive();
+                applyTimeFilter();
+                await generateGlobalForecasts();
+            } catch (error) {
+                alert('❌ Fetch error: ' + error.message);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = originalText;
+            }
+        }
+
+        // ============ 🌙 RÜYA EKLEME ============
+        function openAddDreamModal() {
+            document.getElementById('addDreamModal').classList.add('active');
+        }
+
+        function closeAddDreamModal() {
+            document.getElementById('addDreamModal').classList.remove('active');
+        }
+
+        document.getElementById('dreamForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const text = document.getElementById('dreamText').value;
+            const country = document.getElementById('dreamCountry').value;
+            
+            const lang = window.DreamFetcher.detectLanguage(text);
+            const location = window.DreamFetcher.getLocationForLanguage(lang);
+            const symbol = window.DreamFetcher.detectSymbol(text);
+            
+            const newDream = {
+                id: `user-${Date.now()}`,
+                text: text,
+                symbol: symbol,
+                symbols: [{ name: symbol, emoji: getSymbolEmoji(symbol), imageUrl: '' }],
+                timestamp: new Date().toISOString(),
+                language: lang,
+                lat: location.lat + (Math.random() - 0.5) * 3,
+                lng: location.lng + (Math.random() - 0.5) * 3,
+                country: country,
+                source: 'User'
+            };
+
+            window.DreamArchive.addDream(newDream);
+            loadDreamsFromArchive();
+            applyTimeFilter();
+            closeAddDreamModal();
+            document.getElementById('dreamForm').reset();
+            alert('✅ Dream added to archive!');
+        });
+
+        function getSymbolEmoji(symbol) {
+            const emojis = {
+                'water': '🌊', 'flying': '🕊️', 'falling': '⬇️', 'chase': '🏃',
+                'teeth': '🦷', 'naked': '👤', 'exam': '📝', 'snake': '🐍',
+                'death': '💀', 'money': '💰', 'animal': '🐾', 'house': '🏠',
+                'car': '🚗', 'fire': '🔥', 'love': '💕', 'other': '🌙'
+            };
+            return emojis[symbol] || '🌙';
         }
 
         // ============ TIME FILTER ============
@@ -483,7 +589,6 @@
         }
 
         function applyTimeFilter() {
-            // 📚 ARCHIVE.JS FONKSİYONLARI KULLAN
             switch (currentTimeFilter) {
                 case 'today': allDreams = window.DreamArchive.getTodayDreams(); break;
                 case 'week': allDreams = window.DreamArchive.getWeekDreams(); break;
@@ -633,7 +738,6 @@
             const apiKey = localStorage.getItem('groq_api_key');
             if (!apiKey) return 'API key not set. Add ?admin=1 to URL.';
             
-            // 📚 ARCHIVE.JS'den bölge rüyalarını çek
             const regionDreams = window.DreamArchive.getDreamsByRegion(lat, lng, 15);
             const dreamCount = regionDreams.length;
             const dreamSample = regionDreams.slice(0, 5).map(d => d.text.substring(0, 100)).join(' | ') || 'No recent dreams';
@@ -695,7 +799,6 @@ Rules:
             const langNames = { en: 'English', tr: 'Turkish', es: 'Spanish', ar: 'Arabic', hi: 'Hindi', zh: 'Chinese' };
             const targetLang = langNames[currentLang] || 'English';
             
-            // 📚 ARCHIVE.JS'den son 24 saat rüyalarını çek
             const last24h = window.DreamArchive.getLast24hDreams();
             const dreamSample = last24h.slice(0, 15).map(d => d.text.substring(0, 120)).join(' | ') || 'No recent dreams';
             
@@ -819,9 +922,12 @@ Rules: Max 80 words. 2-3 sentences. ONLY about dreams. RESPOND ONLY IN ${targetL
                         `);
                     markers.push(marker);
                 } else {
+                    const symbol = dream.symbol || 'other';
+                    const emoji = getSymbolEmoji(symbol);
+                    
                     const icon = L.divIcon({
                         className: 'dream-icon',
-                        html: `<div style="background:rgba(168,85,247,0.9);width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:22px;">🌙</div>`,
+                        html: `<div style="background:rgba(168,85,247,0.9);width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:22px;">${emoji}</div>`,
                         iconSize: [40, 40]
                     });
                     
@@ -831,7 +937,7 @@ Rules: Max 80 words. 2-3 sentences. ONLY about dreams. RESPOND ONLY IN ${targetL
                         .addTo(map)
                         .bindPopup(`
                             <div style="color: #1a1a2e; max-width: 300px;">
-                                <div style="font-size:24px;margin-bottom:8px;">🌙</div>
+                                <div style="font-size:24px;margin-bottom:8px;">${emoji} ${symbol}</div>
                                 <p style="font-size:14px;margin-bottom:8px;">${dream.text}</p>
                                 <small style="color:#666;">📍 ${translatedCountry}<br>🕐 ${new Date(dream.timestamp).toLocaleDateString()}</small>
                             </div>
@@ -883,7 +989,6 @@ Rules: Max 80 words. 2-3 sentences. ONLY about dreams. RESPOND ONLY IN ${targetL
         }
 
         function updateStats(dreams) {
-            const stats = window.DreamArchive.getStats();
             document.getElementById('totalDreams').textContent = dreams.length;
             document.getElementById('totalSymbols').textContent = Object.keys(allSymbols).length;
             document.getElementById('totalCountries').textContent = new Set(dreams.map(d => d.country)).size;
@@ -908,15 +1013,32 @@ Rules: Max 80 words. 2-3 sentences. ONLY about dreams. RESPOND ONLY IN ${targetL
             
             // 📚 ARCHIVE.JS'den yükle
             loadDreamsFromArchive();
-            applyTimeFilter();
             
+            // 🌐 İlk yükleme: Fetcher ile Reddit/Tumblr'dan veri çek
+            if (allDreams.length === 0) {
+                console.log('🚀 First run: Fetching dreams from global sources...');
+                try {
+                    await window.DreamFetcher.initialLoad();
+                    loadDreamsFromArchive();
+                } catch (error) {
+                    console.warn('Initial fetch failed:', error);
+                }
+            }
+            
+            applyTimeFilter();
             await generateGlobalForecasts();
             
-            // Her 5 dakikada yenile (sadece localStorage kontrolü için)
-            setInterval(() => {
-                loadDreamsFromArchive();
-                applyTimeFilter();
-            }, 300000);
+            // Her 30 dakikada yeni rüya çek
+            setInterval(async () => {
+                console.log('🔄 Auto-fetching new dreams...');
+                try {
+                    await window.DreamFetcher.fetchAndArchive();
+                    loadDreamsFromArchive();
+                    applyTimeFilter();
+                } catch (error) {
+                    console.warn('Auto-fetch failed:', error);
+                }
+            }, 30 * 60 * 1000);
             
             if (window.location.hash === '#forecasts') {
                 setTimeout(() => {
