@@ -1,111 +1,226 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en" translate="no">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>DreamPulse.live | Kolektif Rüya Haritası</title>
-  <meta name="description" content="Dünyanın ilk bilinçaltının ısı haritası. Rüyalar toplanıyor. Gerçek zamanlı değil. Hâlâ inşa aşamasında." />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>DreamPulse.live | Global Dream Map</title>
+  <meta name="description" content="The world's first collective unconscious heatmap from dreams of Turkey, India, Japan, Iran, and beyond. AI-powered, anonymous, free." />
 
-  <!-- Minimal CSS -->
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg: #000;
+      --text: #eee;
+      --accent: #a855f7;
+      --accent-dark: #7c1db8;
+      --btn-bg: #9333ea;
+      --btn-hover: #a74ef2;
+      --secondary-text: #9ca3af;
+      --section-bg: #111;
+      --radius: 16px;
+      --gap: 30px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
+      background: var(--bg);
+      color: var(--text);
       font-family: 'Inter', sans-serif;
-      background: #000;
-      color: #eee;
-      line-height: 1.6;
+      line-height: 1.7;
+      padding: 0;
+      margin: 0;
       text-align: center;
-      padding: 40px 20px;
+      font-size: clamp(1rem, 2.5vw, 1.1rem); /* Mobilde kendi büyüsün */
     }
+
     .container {
-      max-width: 800px;
+      max-width: 900px;
       margin: 0 auto;
+      padding: 50px 20px;
     }
+
     h1 {
-      font-size: 3rem;
+      font-size: clamp(2.2rem, 5vw, 3.5rem);
       margin-bottom: 10px;
-      background: linear-gradient(90deg, #a855f7, #4c1d95);
+      background: linear-gradient(90deg, var(--accent), #6d0bad);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      font-weight: 700;
     }
+
     h2 {
       font-weight: 400;
       margin-bottom: 30px;
-      font-size: 1.3rem;
-      color: #aaa;
+      font-size: clamp(1.1rem, 3vw, 1.4rem);
+      color: var(--secondary-text);
     }
+
     p {
       margin: 20px 0;
-      color: #ccc;
+      color: var(--text);
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
     }
+
+    .demo {
+      margin: 40px auto;
+      padding: clamp(20px, 5vw, 30px);
+      background: var(--section-bg);
+      border-radius: var(--radius);
+      text-align: left;
+      font-family: 'Courier New', monospace;
+      font-size: clamp(0.9rem, 2.5vw, 1rem);
+      color: #b39dff;
+      max-width: 600px;
+      border: 1px solid #333;
+    }
+
     .btn {
       display: inline-block;
-      margin: 30px 10px;
-      padding: 12px 30px;
-      background: #7e22ce;
+      margin: 25px 10px;
+      padding: 15px 36px;
+      background: var(--btn-bg);
       color: white;
+      border: none;
       border-radius: 30px;
       text-decoration: none;
       font-weight: 600;
-      transition: 0.3s;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(106, 0, 255, 0.2);
     }
+
     .btn:hover {
-      background: #9333ea;
-      transform: scale(1.05);
+      background: var(--btn-hover);
+      transform: translateY(-3px);
     }
+
+    .btn.secondary {
+      background: #333;
+    }
+
+    .lang-switch {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: #111;
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 0.9rem;
+      border: 1px solid #444;
+    }
+
+    .lang-switch select {
+      background: #000;
+      color: var(--accent);
+      border: none;
+      outline: none;
+      font-size: 0.9rem;
+    }
+
     .foot {
       margin-top: 60px;
       font-size: 0.9rem;
       color: #555;
     }
-    .demo {
-      margin: 40px 0;
-      padding: 20px;
-      background: #111;
-      border-radius: 12px;
-      text-align: left;
-      font-family: 'Courier New', monospace;
-      font-size: 0.95rem;
-      color: #b39dff;
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 30px 15px;
+      }
+      .btn {
+        width: 90%;
+        max-width: 300px;
+      }
     }
   </style>
-
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
 
+  <!-- Language Switcher -->
+  <div class="lang-switch">
+    <select id="language-select" onchange="changeLanguage()">
+      <option value="en">🇬🇧 English</option>
+      <option value="tr">🇹🇷 Türkçe</option>
+      <option value="hi">🇮🇳 हिन्दी</option>
+      <option value="ja">🇯🇵 日本語</option>
+      <option value="fa">🇮🇷 فارسی</option>
+    </select>
+  </div>
+
   <div class="container">
     <h1>DreamPulse.live</h1>
-    <h2>Kolektif Bilinçaltının Isı Haritası</h2>
-    <p>Her gece milyonlar rüya görüyor.<br>Biz onları dinliyoruz.</p>
+    <h2>The Unconscious Compass</h2>
+    <p>Every night, millions dream.  
+       We collect, map, and reveal the pulse of the collective mind.  
+       <em>Free, anonymous, global.</em></p>
 
-    <a href="#join" class="btn">Rüyamı Gönder (Beta)</a>
-    <a href="#demo" class="btn" style="background:#333">Nasıl Görünüyor?</a>
+    <a href="#demo" class="btn">See How It Works</a>
+    <a href="https://forms.gle/YOUR_FORM_LINK" class="btn">✨ Submit Your Dream</a>
 
     <div class="demo" id="demo">
-      <strong>Örnek Rüya:</strong><br>
-      "Dün karanlık bir koridorda yürüyordum. Uzakta bir ışık vardı ama kapılardan hiçbiri açılmıyordu."<br><br>
-      <strong>AI Analiz:</strong><br>
-      > "Kapalı kapılar, henüz hazır olmadığın içsel alanları temsil ediyor. Ama ışık — farkındalığın ilk adımı — hâlâ var. Bu rüya, bilinçaltının seni bir dönüşüme çağırdığına işaret ediyor."
+      <strong>Dream:</strong><br>
+      "Last night, I was walking through a dark corridor.  
+      There was a light far ahead, but none of the doors would open."<br><br>
+      <strong>AI Insight:</strong><br>
+      > "Closed doors suggest inner areas you're not ready to enter.  
+         But the light — a sign of awakening — is still there.  
+         This dream may mark the beginning of transformation."
     </div>
 
-    <p id="join">
-      <strong>Beta’ya katılmak istiyor musun?</strong><br>
-      İlk 100 katılımcıya özel erişim ve aylık rüya raporu.
+    <p>
+      <strong>Join the Beta</strong><br>
+      First 100 contributors get early access + monthly dream reports.
     </p>
 
-    <a href="https://forms.gle/YOUR_GOOGLE_FORM_LINK" class="btn" style="background:#10b981">
-      📝 Beta Listesine Yazıl
+    <a href="https://forms.gle/YOUR_FORM_LINK" class="btn secondary">
+      📝 Join Beta List
     </a>
 
     <p class="foot">
-      DreamPulse, AI ve kolektif bilinçaltı üzerine bir denemedir.<br>
-      Veriler anonim, sistem açık kaynak olacak. | <a href="mailto:dream@dreampulse.live">İletişim</a>
+      Powered by AI. Inspired by Jung.<br>
+      Data is anonymous. No personal analysis. Not medical advice.<br>
+      <a href="mailto:dream@dreampulse.live" style="color:#9ca3af">Contact</a> | 
+      <a href="#" style="color:#9ca3af">Ethics & Privacy</a>
     </p>
   </div>
 
-</body>
-</html>
+  <script>
+    // Basit dörtlü çeviri objesi
+    const translations = {
+      en: {
+        title: "The Unconscious Compass",
+        subtitle: "Every night, millions dream.<br>We collect, map, and reveal the pulse of the collective mind.<br><em>Free, anonymous, global.</em>",
+        btn1: "See How It Works",
+        btn2: "✨ Submit Your Dream",
+        btn3: "📝 Join Beta List",
+        demoDream: "Last night, I was walking through a dark corridor. There was a light far ahead, but none of the doors would open.",
+        demoInsight: "Closed doors suggest inner areas you're not ready to enter. But the light — a sign of awakening — is still there. This dream may mark the beginning of transformation."
+      },
+      tr: {
+        title: "Bilinçdışı Pusula",
+        subtitle: "Her gece milyonlar rüya görüyoruz.<br>Birlikte topluyor, haritalıyor, toplumsal bilinçaltının nabzını duyuruyoruz.<br><em>Ücretsiz, anonim, küresel.</em>",
+        btn1: "Nasıl Çalışır?",
+        btn2: "✨ Rüyanı Gönder",
+        btn3: "📝 Beta Listesine Katıl",
+        demoDream: "Dün gece karanlık bir koridorda yürüyordum. Uzakta bir ışık vardı ama kapıların hiçbiri açılmıyordu.",
+        demoInsight: "Kapalı kapılar, henüz içeri girmeye hazır olmadığın alanları işaret eder. Ama ışık — farkındalığın habercisi — hâlâ var. Bu rüya, dönüşümün başlangıcı olabilir."
+      },
+      hi: {
+        title: "अवचेतन की दिशा",
+        subtitle: "हर रात लाखों लोग सपने देखते हैं.<br>हम इकट्ठा करते हैं, नक्शा बनाते हैं, सामूहिक मन की धड़कन दिखाते हैं.<br><em>मुफ़्त, गुमनाम, वैश्विक।</em>",
+        btn1: "कैसे काम करता है?",
+        btn2: "✨ अपना सपना भेजें",
+        btn3: "📝 बीटा सूची में शामिल हों",
+        demoDream: "कल रात मैं एक अंधेरे रास्ते में चल रहा था। आगे एक प्रकाश था, लेकिन कोई भी दरवाज़ा नहीं खुला।",
+        demoInsight: "बंद दरवाज़े उन आंतरिक क्षेत्रों को दर्शाते हैं जिनमें अभी आप प्रवेश नहीं कर सकते। लेकिन प्रकाश — जागृति का संकेत — अभी भी है। यह सपना परिवर्तन क<span class="ml-2" /><span data-testid="markdown-streaming-circle" class="inline-block w-3 h-3 rounded-full bg-neutral-a12 align-middle mb-[0.1rem]" />
