@@ -9,6 +9,9 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     
+    <!-- 📚 ARCHIVE.js - RÜYA VERİ DEPOSU -->
+    <script src="archive.js"></script>
+    
     <style>
         * { font-family: 'Cormorant Garamond', serif; }
         h1, h2, h3, .brand { font-family: 'Cinzel', serif; letter-spacing: 0.1em; }
@@ -30,12 +33,10 @@
         
         .btn-gold {
             background: linear-gradient(135deg, rgba(180, 83, 9, 0.8) 0%, rgba(146, 64, 14, 0.8) 100%);
-            border: 1px solid rgba(251, 191, 36, 0.5);
-            transition: all 0.3s;
+            border: 1px solid rgba(251, 191, 36, 0.5); transition: all 0.3s;
         }
         .btn-gold:hover {
             background: linear-gradient(135deg, rgba(217, 119, 6, 0.9) 0%, rgba(180, 83, 9, 0.9) 100%);
-            border-color: rgba(251, 191, 36, 0.9);
             box-shadow: 0 0 30px rgba(251, 191, 36, 0.5);
         }
         
@@ -81,10 +82,7 @@
             border: 1px solid rgba(251, 191, 36, 0.4);
             animation: glow 3s ease-in-out infinite;
         }
-        @keyframes glow {
-            0%, 100% { box-shadow: 0 0 20px rgba(251, 191, 36, 0.3); }
-            50% { box-shadow: 0 0 40px rgba(251, 191, 36, 0.6); }
-        }
+        @keyframes glow { 0%, 100% { box-shadow: 0 0 20px rgba(251, 191, 36, 0.3); } 50% { box-shadow: 0 0 40px rgba(251, 191, 36, 0.6); } }
         
         .live-feed-item { animation: slideIn 0.5s ease-out; }
         @keyframes slideIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
@@ -106,53 +104,14 @@
         
         .all-access-card {
             background: linear-gradient(135deg, rgba(180, 83, 9, 0.15) 0%, rgba(88, 28, 135, 0.15) 100%);
-            border: 2px solid rgba(251, 191, 36, 0.5);
-            position: relative;
-            overflow: hidden;
+            border: 2px solid rgba(251, 191, 36, 0.5); position: relative; overflow: hidden;
         }
         .all-access-card::before {
-            content: '';
-            position: absolute; top: -50%; left: -50%;
-            width: 200%; height: 200%;
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
             background: linear-gradient(45deg, transparent, rgba(251, 191, 36, 0.1), transparent);
             animation: shimmer 3s infinite;
         }
-        @keyframes shimmer {
-            0% { transform: translateX(-100%) translateY(-100%); }
-            100% { transform: translateX(100%) translateY(100%); }
-        }
-        
-        /* Bağımlılık mekanizmaları */
-        .streak-badge {
-            background: linear-gradient(135deg, rgba(251, 191, 36, 0.3) 0%, rgba(217, 119, 6, 0.3) 100%);
-            border: 2px solid rgba(251, 191, 36, 0.6);
-            animation: streakPulse 2s ease-in-out infinite;
-        }
-        @keyframes streakPulse {
-            0%, 100% { box-shadow: 0 0 20px rgba(251, 191, 36, 0.4); }
-            50% { box-shadow: 0 0 40px rgba(251, 191, 36, 0.8); }
-        }
-        
-        .daily-card {
-            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2) 0%, rgba(59, 130, 246, 0.2) 100%);
-            border: 2px solid rgba(168, 85, 247, 0.5);
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .daily-card:hover {
-            transform: scale(1.05);
-            box-shadow: 0 10px 40px rgba(168, 85, 247, 0.6);
-        }
-        
-        .notification-banner {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(5, 150, 105, 0.2) 100%);
-            border: 1px solid rgba(16, 185, 129, 0.5);
-            animation: slideDown 0.5s ease-out;
-        }
-        @keyframes slideDown {
-            from { transform: translateY(-100%); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
+        @keyframes shimmer { 0% { transform: translateX(-100%) translateY(-100%); } 100% { transform: translateX(100%) translateY(100%); } }
         
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.5); }
@@ -161,23 +120,6 @@
 </head>
 <body class="text-white">
     <div class="mystic-bg"></div>
-
-    <!-- 🔔 NOTIFICATION BANNER (Bağımlılık) -->
-    <div id="notificationBanner" class="hidden fixed top-16 left-0 right-0 z-40 notification-banner px-4 py-3">
-        <div class="container mx-auto max-w-7xl flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <span class="text-2xl">🔔</span>
-                <div>
-                    <div class="font-semibold text-green-300" id="notifTitle">Enable Notifications</div>
-                    <div class="text-sm text-green-200/70" id="notifDesc">Get daily dream insights & never miss a forecast</div>
-                </div>
-            </div>
-            <div class="flex gap-2">
-                <button onclick="enableNotifications()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-semibold">Enable</button>
-                <button onclick="dismissNotification()" class="bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded-lg text-sm">Later</button>
-            </div>
-        </div>
-    </div>
 
     <!-- TOP BAR -->
     <div class="fixed top-0 left-0 right-0 z-50 glass-strong border-b border-purple-500/20">
@@ -188,13 +130,6 @@
             </a>
 
             <div class="flex items-center gap-3">
-                <!-- 🔥 STREAK BADGE (Bağımlılık) -->
-                <div id="streakBadge" class="hidden streak-badge px-3 py-1 rounded-full flex items-center gap-2">
-                    <span class="text-lg">🔥</span>
-                    <span class="font-bold text-amber-300" id="streakCount">0</span>
-                    <span class="text-xs text-amber-200/70" id="streakLabel">day streak</span>
-                </div>
-                
                 <a href="index.html" class="glass px-4 py-2 rounded-lg hover:bg-purple-500/20 transition">
                     <span id="backBtn">← Back</span>
                 </a>
@@ -224,16 +159,6 @@
         <div class="text-center mb-8">
             <h1 class="text-5xl font-bold mb-2 text-glow" id="mapTitle">Collective Unconscious Map</h1>
             <p class="text-purple-300" id="mapSubtitle">Dreams flowing from the collective unconscious</p>
-        </div>
-
-        <!-- 🔮 DAILY DREAM CARD (Bağımlılık) -->
-        <div id="dailyCard" class="daily-card rounded-2xl p-6 mb-8 text-center">
-            <div class="text-5xl mb-3">🎴</div>
-            <h3 class="text-xl font-bold mb-2" id="dailyCardTitle">Today's Dream Card</h3>
-            <p class="text-gray-300 mb-4" id="dailyCardText">Click to reveal your mystical insight for today...</p>
-            <button onclick="revealDailyCard()" class="btn-gold text-white font-semibold px-6 py-2 rounded-xl">
-                <span id="dailyCardBtn">Reveal Card</span>
-            </button>
         </div>
 
         <!-- STATS -->
@@ -312,7 +237,6 @@
                 <span id="forecastTitle">Regional Forecasts</span>
             </h3>
             
-            <!-- Selected Region Forecast -->
             <div id="selectedRegionForecast" class="hidden forecast-badge rounded-xl p-6 mb-6">
                 <div class="flex items-start justify-between mb-4">
                     <div>
@@ -330,7 +254,6 @@
                 </div>
             </div>
             
-            <!-- AI-GENERATED GLOBAL FORECASTS (rüya odaklı) -->
             <div class="grid md:grid-cols-2 gap-6">
                 <div class="forecast-card glass rounded-xl p-6">
                     <div class="flex items-start justify-between mb-4">
@@ -342,7 +265,6 @@
                     </div>
                     <div id="forecast1Content">
                         <div class="loading-spinner mx-auto my-4"></div>
-                        <p class="text-gray-500 text-center text-sm">Analyzing dreams...</p>
                     </div>
                 </div>
 
@@ -356,7 +278,6 @@
                     </div>
                     <div id="forecast2Content">
                         <div class="loading-spinner mx-auto my-4"></div>
-                        <p class="text-gray-500 text-center text-sm">Analyzing dreams...</p>
                     </div>
                 </div>
 
@@ -393,7 +314,7 @@
             </h3>
             
             <div id="liveFeed" class="space-y-3 max-h-96 overflow-y-auto">
-                <div class="text-center py-8 text-gray-500">Loading dreams...</div>
+                <div class="text-center py-8 text-gray-500">Loading dreams from archive...</div>
             </div>
         </div>
     </div>
@@ -405,26 +326,18 @@
                 <h3 class="text-2xl font-bold text-amber-300" id="allAccessModalTitle">👑 All-Access Pass</h3>
                 <button onclick="closeAllAccess()" class="text-gray-400 hover:text-white text-3xl">&times;</button>
             </div>
-            
             <div class="text-center mb-6">
                 <div class="text-6xl mb-4">👑</div>
                 <div class="text-4xl font-bold text-amber-300 mb-2">$12.99<span class="text-lg text-amber-200/70">/month</span></div>
-                <p class="text-gray-400 text-sm" id="allAccessModalDesc">Everything unlocked. One subscription.</p>
             </div>
-            
             <div class="bg-slate-900/50 rounded-xl p-6 mb-6 space-y-3">
-                <div class="flex items-center gap-3"><span class="text-green-400">✓</span><span class="text-gray-200" id="allAccessFeat1">Unlimited regional forecasts (full deep analysis)</span></div>
-                <div class="flex items-center gap-3"><span class="text-green-400">✓</span><span class="text-gray-200" id="allAccessFeat2">Unlimited Jungian dream analyses</span></div>
-                <div class="flex items-center gap-3"><span class="text-green-400">✓</span><span class="text-gray-200" id="allAccessFeat3">Personal Dream Journal with AI insights</span></div>
-                <div class="flex items-center gap-3"><span class="text-green-400">✓</span><span class="text-gray-200" id="allAccessFeat4">Daily + weekly AI forecast emails</span></div>
-                <div class="flex items-center gap-3"><span class="text-green-400">✓</span><span class="text-gray-200" id="allAccessFeat5">Priority access to new features</span></div>
+                <div class="flex items-center gap-3"><span class="text-green-400">✓</span><span class="text-gray-200" id="aaFeat1">Unlimited regional forecasts</span></div>
+                <div class="flex items-center gap-3"><span class="text-green-400">✓</span><span class="text-gray-200" id="aaFeat2">Unlimited Jungian analyses</span></div>
+                <div class="flex items-center gap-3"><span class="text-green-400">✓</span><span class="text-gray-200" id="aaFeat3">Personal Dream Journal</span></div>
+                <div class="flex items-center gap-3"><span class="text-green-400">✓</span><span class="text-gray-200" id="aaFeat4">Daily + weekly emails</span></div>
+                <div class="flex items-center gap-3"><span class="text-green-400">✓</span><span class="text-gray-200" id="aaFeat5">Priority features</span></div>
             </div>
-            
-            <button onclick="subscribeAllAccess()" class="w-full btn-gold text-white font-bold py-4 rounded-xl">
-                <span id="allAccessSubBtn">Subscribe Now — $12.99/month</span>
-            </button>
-            
-            <p class="text-center text-xs text-gray-500 mt-4" id="allAccessCancel">Cancel anytime. No commitment.</p>
+            <button onclick="subscribeAllAccess()" class="w-full btn-gold text-white font-bold py-4 rounded-xl"><span id="allAccessSubBtn">Subscribe — $12.99/month</span></button>
         </div>
     </div>
 
@@ -446,13 +359,7 @@
             'Brazil': { en: 'Brazil', tr: 'Brezilya', es: 'Brasil', ar: 'البرازيل', hi: 'ब्राज़िल', zh: '巴西' },
             'Mexico': { en: 'Mexico', tr: 'Meksika', es: 'México', ar: 'المكسيك', hi: 'मेक्सिको', zh: '墨西哥' },
             'Australia': { en: 'Australia', tr: 'Avustralya', es: 'Australia', ar: 'أستراليا', hi: 'ऑस्ट्रेलिया', zh: '澳大利亚' },
-            'Canada': { en: 'Canada', tr: 'Kanada', es: 'Canadá', ar: 'كندا', hi: 'कनाडा', zh: '加拿大' },
-            'Italy': { en: 'Italy', tr: 'İtalya', es: 'Italia', ar: 'إيطاليا', hi: 'इटली', zh: '意大利' },
-            'Egypt': { en: 'Egypt', tr: 'Mısır', es: 'Egipto', ar: 'مصر', hi: 'मिस्र', zh: '埃及' },
-            'Saudi Arabia': { en: 'Saudi Arabia', tr: 'Suudi Arabistan', es: 'Arabia Saudita', ar: 'السعودية', hi: 'सऊदी अरब', zh: '沙特' },
-            'Iran': { en: 'Iran', tr: 'İran', es: 'Irán', ar: 'إيران', hi: 'ईरान', zh: '伊朗' },
-            'Greece': { en: 'Greece', tr: 'Yunanistan', es: 'Grecia', ar: 'اليونان', hi: 'यूनान', zh: '希腊' },
-            'South Korea': { en: 'South Korea', tr: 'Güney Kore', es: 'Corea del Sur', ar: 'كوريا الجنوبية', hi: 'दक्षिण कोरिया', zh: '韩国' }
+            'Saudi Arabia': { en: 'Saudi Arabia', tr: 'Suudi Arabistan', es: 'Arabia Saudita', ar: 'السعودية', hi: 'सऊदी अरब', zh: '沙特' }
         };
 
         function translateCountryName(name) {
@@ -461,21 +368,6 @@
                 return COUNTRY_NAMES[name][currentLang];
             }
             return name;
-        }
-
-        // ============ 🌐 DİL → ÜLKE KONUM ============
-        const LANG_LOCATIONS = {
-            'en': [{ lat: 40.7, lng: -74, country: 'United States' }, { lat: 51.5, lng: -0.1, country: 'United Kingdom' }, { lat: 37.8, lng: -122, country: 'United States' }, { lat: -33.9, lng: 151.2, country: 'Australia' }],
-            'tr': [{ lat: 41.0, lng: 29.0, country: 'Turkey' }, { lat: 39.9, lng: 32.8, country: 'Turkey' }, { lat: 38.4, lng: 27.1, country: 'Turkey' }],
-            'es': [{ lat: 40.4, lng: -3.7, country: 'Spain' }, { lat: 19.4, lng: -99.1, country: 'Mexico' }, { lat: -34.6, lng: -58.4, country: 'Brazil' }],
-            'ar': [{ lat: 24.7, lng: 46.7, country: 'Saudi Arabia' }, { lat: 30.0, lng: 31.2, country: 'Egypt' }, { lat: 33.3, lng: 44.4, country: 'Saudi Arabia' }],
-            'hi': [{ lat: 28.6, lng: 77.2, country: 'India' }, { lat: 19.1, lng: 72.9, country: 'India' }, { lat: 13.0, lng: 80.3, country: 'India' }],
-            'zh': [{ lat: 39.9, lng: 116.4, country: 'China' }, { lat: 31.2, lng: 121.5, country: 'China' }, { lat: 23.1, lng: 113.3, country: 'China' }]
-        };
-
-        function getLocationForLanguage(lang) {
-            const locs = LANG_LOCATIONS[lang] || LANG_LOCATIONS['en'];
-            return locs[Math.floor(Math.random() * locs.length)];
         }
 
         // ============ TRANSLATIONS ============
@@ -492,14 +384,10 @@
                 forecast3Title: "🔒 Deep Analysis", forecast3Region: "Europe",
                 forecast4Title: "🔒 Future Predictions", forecast4Region: "Asia-Pacific",
                 liveFeedTitle: "Live Dream Feed",
-                allAccessModalTitle: "👑 All-Access Pass", allAccessModalDesc: "Everything unlocked. One subscription.",
-                allAccessFeat1: "Unlimited regional forecasts (full deep analysis)", allAccessFeat2: "Unlimited Jungian dream analyses",
-                allAccessFeat3: "Personal Dream Journal with AI insights", allAccessFeat4: "Daily + weekly AI forecast emails",
-                allAccessFeat5: "Priority access to new features",
-                allAccessSubBtn: "Subscribe Now — $12.99/month", allAccessCancel: "Cancel anytime. No commitment.",
-                streakLabel: "day streak",
-                dailyCardTitle: "Today's Dream Card", dailyCardText: "Click to reveal your mystical insight for today...", dailyCardBtn: "Reveal Card",
-                notifTitle: "Enable Notifications", notifDesc: "Get daily dream insights & never miss a forecast"
+                allAccessModalTitle: "👑 All-Access Pass",
+                aaFeat1: "Unlimited regional forecasts", aaFeat2: "Unlimited Jungian analyses",
+                aaFeat3: "Personal Dream Journal", aaFeat4: "Daily + weekly emails", aaFeat5: "Priority features",
+                allAccessSubBtn: "Subscribe — $12.99/month"
             },
             tr: {
                 backBtn: "← Geri", mapTitle: "Kolektif Bilinçaltı Haritası", mapSubtitle: "Kolektif bilinçaltından akan rüyalar", mapHint: "💡 Bölgesel tahmin için haritaya tıkla",
@@ -513,99 +401,15 @@
                 forecast3Title: "🔒 Derin Analiz", forecast3Region: "Avrupa",
                 forecast4Title: "🔒 Gelecek", forecast4Region: "Asya-Pasifik",
                 liveFeedTitle: "Canlı Rüya Akışı",
-                allAccessModalTitle: "👑 Tam Erişim Pass", allAccessModalDesc: "Her şey açık. Tek abonelik.",
-                allAccessFeat1: "Sınırsız bölgesel tahmin (tam derin analiz)", allAccessFeat2: "Sınırsız Jungian rüya analizi",
-                allAccessFeat3: "AI içgörülü Kişisel Rüya Günlüğü", allAccessFeat4: "Günlük + haftalık AI tahmin e-postaları",
-                allAccessFeat5: "Yeni özelliklere öncelikli erişim",
-                allAccessSubBtn: "Şimdi Abone Ol — 12.99$/ay", allAccessCancel: "İstediğin zaman iptal et.",
-                streakLabel: "gün seri",
-                dailyCardTitle: "Bugünün Rüya Kartı", dailyCardText: "Bugünkü mistik içgörünü görmek için tıkla...", dailyCardBtn: "Kartı Aç",
-                notifTitle: "Bildirimleri Aç", notifDesc: "Günlük rüya içgörüleri al, hiçbir tahmini kaçırma"
+                allAccessModalTitle: "👑 Tam Erişim Pass",
+                aaFeat1: "Sınırsız bölgesel tahmin", aaFeat2: "Sınırsız Jungian analiz",
+                aaFeat3: "Kişisel Rüya Günlüğü", aaFeat4: "Günlük + haftalık e-postalar", aaFeat5: "Öncelikli erişim",
+                allAccessSubBtn: "Abone Ol — 12.99$/ay"
             },
-            es: {
-                backBtn: "← Atrás", mapTitle: "Mapa del Inconsciente", mapSubtitle: "Sueños del inconsciente colectivo", mapHint: "💡 Clic en mapa",
-                timeFilterLabel: "Rango:", filterToday: "Hoy", filterWeek: "Semana", filterMonth: "Mes", filterAll: "Todo", filterCustom: "Custom", applyDateBtn: "Aplicar",
-                allAccessTitle: "Pase Total", allAccessDesc: "Todo ilimitado", allAccessBtn: "$12.99/mes →",
-                statDreams: "Sueños", statSymbols: "IA", statCountries: "Países", statLive: "Vivo",
-                symbolFilterTitle: "Símbolos IA", forecastTitle: "Pronósticos",
-                selectedRegionHint: "💡 Breve. Análisis completo con Pase Total.", unlockFullBtn: "🔓 Completo",
-                forecast1Title: "🌍 Tendencia de Sueños", forecast1Region: "Mundial",
-                forecast2Title: "🌊 Patrón Emergente", forecast2Region: "Temas",
-                forecast3Title: "🔒 Profundo", forecast3Region: "Europa",
-                forecast4Title: "🔒 Futuro", forecast4Region: "Asia",
-                liveFeedTitle: "Feed Vivo",
-                allAccessModalTitle: "👑 Pase Total", allAccessModalDesc: "Todo desbloqueado.",
-                allAccessFeat1: "Pronósticos ilimitados", allAccessFeat2: "Análisis junguianos ilimitados",
-                allAccessFeat3: "Diario personal IA", allAccessFeat4: "Emails diarios + semanales",
-                allAccessFeat5: "Acceso prioritario",
-                allAccessSubBtn: "Suscribirse — $12.99/mes", allAccessCancel: "Cancela cuando quieras.",
-                streakLabel: "días",
-                dailyCardTitle: "Carta de Hoy", dailyCardText: "Clic para revelar tu insight místico...", dailyCardBtn: "Revelar",
-                notifTitle: "Activar Notificaciones", notifDesc: "Recibe insights diarios"
-            },
-            ar: {
-                backBtn: "← رجوع", mapTitle: "خريطة اللاوعي", mapSubtitle: "أحلام من اللاوعي الجمعي", mapHint: "💡 انقر على الخريطة",
-                timeFilterLabel: "النطاق:", filterToday: "اليوم", filterWeek: "أسبوع", filterMonth: "شهر", filterAll: "الكل", filterCustom: "مخصص", applyDateBtn: "تطبيق",
-                allAccessTitle: "الوصول الكامل", allAccessDesc: "كل شيء غير محدود", allAccessBtn: "12.99$/شهر →",
-                statDreams: "أحلام", statSymbols: "IA", statCountries: "دول", statLive: "مباشر",
-                symbolFilterTitle: "رموز IA", forecastTitle: "توقعات",
-                selectedRegionHint: "💡 موجز. كامل مع الوصول الكامل.", unlockFullBtn: "🔓 كامل",
-                forecast1Title: "🌍 اتجاه الأحلام", forecast1Region: "عالمي",
-                forecast2Title: "🌊 نمط ناشئ", forecast2Region: "مواضيع",
-                forecast3Title: "🔒 عميق", forecast3Region: "أوروبا",
-                forecast4Title: "🔒 مستقبل", forecast4Region: "آسيا",
-                liveFeedTitle: "مباشر",
-                allAccessModalTitle: "👑 الوصول الكامل", allAccessModalDesc: "كل شيء مفتوح.",
-                allAccessFeat1: "توقعات غير محدودة", allAccessFeat2: "تحليلات يونغية غير محدودة",
-                allAccessFeat3: "مذكرة شخصية", allAccessFeat4: "إيميلات يومية + أسبوعية",
-                allAccessFeat5: "وصول أولوي",
-                allAccessSubBtn: "اشترك — 12.99$/شهر", allAccessCancel: "ألغِ في أي وقت.",
-                streakLabel: "أيام",
-                dailyCardTitle: "بطاقة اليوم", dailyCardText: "انقر لكشف رؤيتك الصوفية...", dailyCardBtn: "اكشف",
-                notifTitle: "تفعيل الإشعارات", notifDesc: "احصل على رؤى يومية"
-            },
-            hi: {
-                backBtn: "← वापस", mapTitle: "सामूहिक मानचित्र", mapSubtitle: "सामूहिक अवचेतन से सपने", mapHint: "💡 मानचित्र पर क्लिक करें",
-                timeFilterLabel: "समय:", filterToday: "आज", filterWeek: "सप्ताह", filterMonth: "माह", filterAll: "सभी", filterCustom: "कस्टम", applyDateBtn: "लागू",
-                allAccessTitle: "सभी-एक्सेस", allAccessDesc: "सब कुछ असीमित", allAccessBtn: "$12.99/माह →",
-                statDreams: "सपने", statSymbols: "AI", statCountries: "देश", statLive: "लाइव",
-                symbolFilterTitle: "AI", forecastTitle: "पूर्वानुमान",
-                selectedRegionHint: "💡 संक्षिप्त। सभी-एक्सेस से पूर्ण।", unlockFullBtn: "🔓 पूर्ण",
-                forecast1Title: "🌍 स्वप्न प्रवृत्ति", forecast1Region: "विश्व",
-                forecast2Title: "🌊 उभरता पैटर्न", forecast2Region: "विषय",
-                forecast3Title: "🔒 गहरा", forecast3Region: "यूरोप",
-                forecast4Title: "🔒 भविष्य", forecast4Region: "एशिया",
-                liveFeedTitle: "लाइव",
-                allAccessModalTitle: "👑 सभी-एक्सेस", allAccessModalDesc: "सब कुछ अनलॉक।",
-                allAccessFeat1: "असीमित पूर्वानुमान", allAccessFeat2: "असीमित जुंगियान विश्लेषण",
-                allAccessFeat3: "व्यक्तिगत पत्रिका", allAccessFeat4: "दैनिक + साप्ताहिक ईमेल",
-                allAccessFeat5: "प्राथमिकता पहुंच",
-                allAccessSubBtn: "सदस्यता — $12.99/माह", allAccessCancel: "कभी भी रद्द करें।",
-                streakLabel: "दिन",
-                dailyCardTitle: "आज का कार्ड", dailyCardText: "अपनी रहस्यमय अंतर्दृष्टि के लिए क्लिक करें...", dailyCardBtn: "खोलें",
-                notifTitle: "सूचनाएं सक्रिय करें", notifDesc: "दैनिक अंतर्दृष्टि प्राप्त करें"
-            },
-            zh: {
-                backBtn: "← 返回", mapTitle: "集体地图", mapSubtitle: "来自集体潜意识的梦", mapHint: "💡 点击地图",
-                timeFilterLabel: "时间:", filterToday: "今天", filterWeek: "本周", filterMonth: "本月", filterAll: "全部", filterCustom: "自定义", applyDateBtn: "应用",
-                allAccessTitle: "全访问", allAccessDesc: "全部无限", allAccessBtn: "$12.99/月 →",
-                statDreams: "梦", statSymbols: "AI", statCountries: "国家", statLive: "实时",
-                symbolFilterTitle: "AI", forecastTitle: "预测",
-                selectedRegionHint: "💡 简短。全访问获取完整。", unlockFullBtn: "🔓 完整",
-                forecast1Title: "🌍 梦境趋势", forecast1Region: "全球",
-                forecast2Title: "🌊 新兴模式", forecast2Region: "主题",
-                forecast3Title: "🔒 深度", forecast3Region: "欧洲",
-                forecast4Title: "🔒 未来", forecast4Region: "亚太",
-                liveFeedTitle: "实时",
-                allAccessModalTitle: "👑 全访问", allAccessModalDesc: "全部解锁。",
-                allAccessFeat1: "无限预测", allAccessFeat2: "无限荣格分析",
-                allAccessFeat3: "个人日记", allAccessFeat4: "每日 + 每周邮件",
-                allAccessFeat5: "优先访问",
-                allAccessSubBtn: "订阅 — $12.99/月", allAccessCancel: "随时取消。",
-                streakLabel: "天",
-                dailyCardTitle: "今日卡牌", dailyCardText: "点击查看今日神秘洞察...", dailyCardBtn: "揭示",
-                notifTitle: "启用通知", notifDesc: "获取每日洞察"
-            }
+            es: { backBtn: "← Atrás", mapTitle: "Mapa del Inconsciente", mapSubtitle: "Sueños del inconsciente", mapHint: "💡 Clic en mapa", timeFilterLabel: "Rango:", filterToday: "Hoy", filterWeek: "Semana", filterMonth: "Mes", filterAll: "Todo", filterCustom: "Custom", applyDateBtn: "Aplicar", allAccessTitle: "Pase Total", allAccessDesc: "Todo ilimitado", allAccessBtn: "$12.99/mes →", statDreams: "Sueños", statSymbols: "IA", statCountries: "Países", statLive: "Vivo", symbolFilterTitle: "Símbolos IA", forecastTitle: "Pronósticos", selectedRegionHint: "💡 Breve.", unlockFullBtn: "🔓 Completo", forecast1Title: "🌍 Global", forecast1Region: "Mundial", forecast2Title: "🌊 Patrón", forecast2Region: "Temas", forecast3Title: "🔒 Profundo", forecast3Region: "Europa", forecast4Title: "🔒 Futuro", forecast4Region: "Asia", liveFeedTitle: "Feed Vivo", allAccessModalTitle: "👑 Pase Total", aaFeat1: "Ilimitado", aaFeat2: "Ilimitado", aaFeat3: "Diario", aaFeat4: "Emails", aaFeat5: "Prioridad", allAccessSubBtn: "$12.99/mes" },
+            ar: { backBtn: "← رجوع", mapTitle: "خريطة اللاوعي", mapSubtitle: "أحلام من اللاوعي", mapHint: "💡 انقر", timeFilterLabel: "النطاق:", filterToday: "اليوم", filterWeek: "أسبوع", filterMonth: "شهر", filterAll: "الكل", filterCustom: "مخصص", applyDateBtn: "تطبيق", allAccessTitle: "الوصول الكامل", allAccessDesc: "كل شيء", allAccessBtn: "12.99$/شهر →", statDreams: "أحلام", statSymbols: "IA", statCountries: "دول", statLive: "مباشر", symbolFilterTitle: "رموز", forecastTitle: "توقعات", selectedRegionHint: "💡 موجز.", unlockFullBtn: "🔓 كامل", forecast1Title: "🌍 عالمي", forecast1Region: "عالمي", forecast2Title: "🌊 نمط", forecast2Region: "مواضيع", forecast3Title: "🔒 عميق", forecast3Region: "أوروبا", forecast4Title: "🔒 مستقبل", forecast4Region: "آسيا", liveFeedTitle: "مباشر", allAccessModalTitle: "👑 الوصول", aaFeat1: "غير محدود", aaFeat2: "غير محدود", aaFeat3: "مذكرة", aaFeat4: "إيميلات", aaFeat5: "أولوي", allAccessSubBtn: "12.99$/شهر" },
+            hi: { backBtn: "← वापस", mapTitle: "सामूहिक मानचित्र", mapSubtitle: "सपने", mapHint: "💡 क्लिक", timeFilterLabel: "समय:", filterToday: "आज", filterWeek: "सप्ताह", filterMonth: "माह", filterAll: "सभी", filterCustom: "कस्टम", applyDateBtn: "लागू", allAccessTitle: "सभी-एक्सेस", allAccessDesc: "सब", allAccessBtn: "$12.99/माह →", statDreams: "सपने", statSymbols: "AI", statCountries: "देश", statLive: "लाइव", symbolFilterTitle: "AI", forecastTitle: "पूर्वानुमान", selectedRegionHint: "💡", unlockFullBtn: "🔓", forecast1Title: "🌍", forecast1Region: "विश्व", forecast2Title: "🌊", forecast2Region: "विषय", forecast3Title: "🔒", forecast3Region: "यूरोप", forecast4Title: "🔒", forecast4Region: "एशिया", liveFeedTitle: "लाइव", allAccessModalTitle: "👑", aaFeat1: "असीमित", aaFeat2: "असीमित", aaFeat3: "पत्रिका", aaFeat4: "ईमेल", aaFeat5: "प्राथमिकता", allAccessSubBtn: "$12.99/माह" },
+            zh: { backBtn: "← 返回", mapTitle: "集体地图", mapSubtitle: "梦", mapHint: "💡 点击", timeFilterLabel: "时间:", filterToday: "今天", filterWeek: "本周", filterMonth: "本月", filterAll: "全部", filterCustom: "自定义", applyDateBtn: "应用", allAccessTitle: "全访问", allAccessDesc: "全部", allAccessBtn: "$12.99/月 →", statDreams: "梦", statSymbols: "AI", statCountries: "国家", statLive: "实时", symbolFilterTitle: "AI", forecastTitle: "预测", selectedRegionHint: "💡", unlockFullBtn: "🔓", forecast1Title: "🌍", forecast1Region: "全球", forecast2Title: "🌊", forecast2Region: "主题", forecast3Title: "🔒", forecast3Region: "欧洲", forecast4Title: "🔒", forecast4Region: "亚太", liveFeedTitle: "实时", allAccessModalTitle: "👑", aaFeat1: "无限", aaFeat2: "无限", aaFeat3: "日记", aaFeat4: "邮件", aaFeat5: "优先", allAccessSubBtn: "$12.99/月" }
         };
 
         let currentLang = localStorage.getItem('lang') || 'en';
@@ -638,11 +442,22 @@
             document.body.style.direction = currentLang === 'ar' ? 'rtl' : 'ltr';
         }
 
-        // ============ TIME FILTER ============
+        // ============ 📚 ARCHIVE.js KULLANIMI ============
         let currentTimeFilter = 'week';
         let customDateFrom = null;
         let customDateTo = null;
+        let allDreams = [];
+        let markers = [];
+        let allSymbols = {};
 
+        // Archive.js'den rüya çek
+        function loadDreamsFromArchive() {
+            allDreams = window.DreamArchive.getAllDreams();
+            document.getElementById('liveCount').textContent = allDreams.length;
+            return allDreams;
+        }
+
+        // ============ TIME FILTER ============
         function setTimeFilter(filter) {
             currentTimeFilter = filter;
             document.querySelectorAll('.time-filter-btn').forEach(btn => btn.classList.remove('active'));
@@ -667,280 +482,22 @@
             applyTimeFilter();
         }
 
-        function getTimeBounds() {
-            const now = new Date();
-            let fromDate, toDate = now;
+        function applyTimeFilter() {
+            // 📚 ARCHIVE.JS FONKSİYONLARI KULLAN
             switch (currentTimeFilter) {
-                case 'today': fromDate = new Date(now.getFullYear(), now.getMonth(), now.getDate()); break;
-                case 'week': fromDate = new Date(now); fromDate.setDate(now.getDate() - 7); break;
-                case 'month': fromDate = new Date(now); fromDate.setMonth(now.getMonth() - 1); break;
-                case 'all': fromDate = new Date(2000, 0, 1); break;
+                case 'today': allDreams = window.DreamArchive.getTodayDreams(); break;
+                case 'week': allDreams = window.DreamArchive.getWeekDreams(); break;
+                case 'month': allDreams = window.DreamArchive.getMonthDreams(); break;
+                case 'all': allDreams = window.DreamArchive.getAllDreams(); break;
                 case 'custom':
-                    fromDate = customDateFrom || new Date(2000, 0, 1);
-                    toDate = customDateTo || now;
+                    if (customDateFrom && customDateTo) {
+                        allDreams = window.DreamArchive.getDreamsByDateRange(customDateFrom, customDateTo);
+                    }
                     break;
             }
-            return { fromDate, toDate };
-        }
-
-        function applyTimeFilter() {
-            const { fromDate, toDate } = getTimeBounds();
-            const filtered = allDreams.filter(d => {
-                const t = new Date(d.timestamp);
-                return t >= fromDate && t <= toDate;
-            });
-            addDreamsToMap(filtered);
-        }
-
-        // ============ 📡 ÇOKLU KAYNAK + KALICI ARŞİV ============
-        const DREAM_SOURCES = [
-            { name: 'reddit-dreams', url: 'https://www.reddit.com/r/dreams/.json' },
-            { name: 'reddit-dreaminterpretation', url: 'https://www.reddit.com/r/DreamInterpretation/.json' },
-            { name: 'reddit-luciddreaming', url: 'https://www.reddit.com/r/luciddreaming/.json' },
-            { name: 'reddit-nightmares', url: 'https://www.reddit.com/r/Nightmares/.json' },
-            { name: 'tumblr-dreams', url: 'https://api.tumblr.com/v2/tagged?tag=dream&limit=20&api_key='BKdbsFYf3cjlEUktL2fwrJFnrEpUakEspXcRhCjy9K7M5uZtaN' }
-        ];
-
-        let allFeedDreams = [];
-        let allDreams = [];
-        let markers = [];
-        let allSymbols = {};
-
-        // 🆕 KALICI ARŞİV - localStorage'da tutulur
-        function getDreamArchive() {
-            return JSON.parse(localStorage.getItem('dream_archive') || '[]');
-        }
-
-        function saveDreamArchive(dreams) {
-            localStorage.setItem('dream_archive', JSON.stringify(dreams));
-        }
-
-        function addToArchive(newDreams) {
-            const archive = getDreamArchive();
-            const existingIds = new Set(archive.map(d => d.id));
             
-            let addedCount = 0;
-            newDreams.forEach(dream => {
-                if (!existingIds.has(dream.id)) {
-                    archive.push(dream);
-                    existingIds.add(dream.id);
-                    addedCount++;
-                }
-            });
-            
-            saveDreamArchive(archive);
-            console.log(`✅ Added ${addedCount} new dreams to archive. Total: ${archive.length}`);
-            return addedCount;
-        }
-
-        async function fetchSingleSource(source) {
-            try {
-                // For Reddit sources
-                if (source.url.includes('reddit.com')) {
-                    const response = await fetch(source.url);
-                    const data = await response.json();
-                    
-                    if (data.data && data.data.children) {
-                        return data.data.children.map(post => {
-                            const title = post.data.title || '';
-                            const selftext = post.data.selftext || '';
-                            const text = (title + ' ' + selftext).trim();
-                            
-                            if (text.length < 30) return null;
-                            
-                            // Extract location based on user's locale or default to language detection
-                            const lang = detectLanguage(text);
-                            const location = getLocationForLanguage(lang);
-                            
-                            return {
-                                id: `reddit-${post.data.id}`,
-                                text: text.substring(0, 500),
-                                timestamp: new Date(post.data.created_utc * 1000),
-                                language: lang,
-                                lat: location.lat + (Math.random() - 0.5) * 2,
-                                lng: location.lng + (Math.random() - 0.5) * 2,
-                                country: location.country,
-                                source: source.name
-                            };
-                        }).filter(d => d !== null);
-                    }
-                }
-                // For Tumblr sources (requires API key)
-                else if (source.url.includes('tumblr.com')) {
-                    // Note: This requires a valid Tumblr API key
-                    // For demonstration, we'll skip this unless an API key is provided
-                    if (source.url.includes('YOUR_TUMBLR_API_KEY')) {
-                        console.warn('Tumblr API key not set. Skipping Tumblr feed.');
-                        return [];
-                    }
-                    
-                    const response = await fetch(source.url);
-                    const data = await response.json();
-                    
-                    if (data.response) {
-                        return data.response.map(post => {
-                            const text = (post.summary || post.body || post.caption || post.title || '').trim();
-                            
-                            if (!text || text.length < 30) return null;
-                            
-                            const lang = detectLanguage(text);
-                            const location = getLocationForLanguage(lang);
-                            
-                            return {
-                                id: `tumblr-${post.id}`,
-                                text: text.substring(0, 500),
-                                timestamp: new Date(post.timestamp * 1000),
-                                language: lang,
-                                lat: location.lat + (Math.random() - 0.5) * 2,
-                                lng: location.lng + (Math.random() - 0.5) * 2,
-                                country: location.country,
-                                source: source.name
-                            };
-                        }).filter(d => d !== null);
-                    }
-                }
-            } catch (error) {
-                console.warn(`Failed to fetch from ${source.name}:`, error.message);
-            }
-            return [];
-        }
-
-        // 🆕 DIŞ KAYNAK RÜYALARI İÇİN BATCH SEMBOL ÜRETİMİ
-        async function generateSymbolsForDreams(dreams) {
-            const apiKey = localStorage.getItem('groq_api_key');
-            if (!apiKey) return dreams;
-            
-            const unsymbolized = dreams.filter(d => !d.symbols || d.symbols.length === 0);
-            if (unsymbolized.length === 0) return dreams;
-            
-            // Batch: her seferinde max 5 rüya
-            const batch = unsymbolized.slice(0, 5);
-            
-            try {
-                const dreamTexts = batch.map((d, i) => `${i+1}. ${d.text.substring(0, 150)}`).join('\n');
-                
-                const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-                    method: 'POST',
-                    headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        model: 'llama-3.3-70b-versatile',
-                        messages: [
-                            {
-                                role: 'system',
-                                content: `Extract 1-2 key symbols from each dream. Return ONLY valid JSON:
-{
-  "dreams": [
-    {
-      "id": 1,
-      "symbols": [
-        {
-          "name": "symbol_name",
-          "emoji": "emoji",
-          "imagePrompt": "mystical [symbol] spirit, dark purple glow, jungian archetype, digital art"
-        }
-      ]
-    }
-  ]
-}
-Rules: 1-2 symbols per dream, ONLY JSON, imagePrompt in English.`
-                            },
-                            { role: 'user', content: dreamTexts }
-                        ],
-                        temperature: 0.7,
-                        max_tokens: 800,
-                        response_format: { type: 'json_object' }
-                    })
-                });
-                
-                const data = await response.json();
-                if (data.choices && data.choices[0]) {
-                    const parsed = JSON.parse(data.choices[0].message.content);
-                    
-                    parsed.dreams.forEach(dreamResult => {
-                        const originalDream = batch[dreamResult.id - 1];
-                        if (originalDream && dreamResult.symbols) {
-                            originalDream.symbols = dreamResult.symbols.map(s => ({
-                                ...s,
-                                imageUrl: generateImageUrl(s.imagePrompt)
-                            }));
-                        }
-                    });
-                    
-                    // Arşivi güncelle
-                    const archive = getDreamArchive();
-                    batch.forEach(dream => {
-                        const idx = archive.findIndex(d => d.id === dream.id);
-                        if (idx !== -1) {
-                            archive[idx] = dream;
-                        }
-                    });
-                    saveDreamArchive(archive);
-                }
-            } catch (error) {
-                console.warn('Symbol generation failed:', error.message);
-            }
-            
-            return dreams;
-        }
-
-        function generateImageUrl(prompt) {
-            const encodedPrompt = encodeURIComponent(prompt);
-            return `https://image.pollinations.ai/prompt/${encodedPrompt}?width=256&height=256&nologo=true&seed=${Math.random()}`;
-        }
-
-        async function fetchAllDreams() {
-            const promises = DREAM_SOURCES.map(source => fetchSingleSource(source));
-            const results = await Promise.all(promises);
-            
-            let combined = results.flat();
-            
-            // LocalStorage'dan kendi rüyalarımız
-            const localDreams = JSON.parse(localStorage.getItem('dreams') || '[]');
-            localDreams.forEach(dream => {
-                combined.push({
-                    id: 'local-' + dream.timestamp,
-                    text: dream.text,
-                    timestamp: new Date(dream.timestamp),
-                    language: dream.language || 'en',
-                    lat: dream.lat,
-                    lng: dream.lng,
-                    country: dream.country,
-                    symbols: dream.symbols,
-                    source: 'local'
-                });
-            });
-            
-            // 🆕 Arşive ekle
-            addToArchive(combined);
-            
-            // Arşivden yükle (tüm geçmiş)
-            const archive = getDreamArchive();
-            
-            // Duplicate kontrolü
-            const seen = new Set();
-            const unique = archive.filter(dream => {
-                const key = dream.text.substring(0, 100);
-                if (seen.has(key)) return false;
-                seen.add(key);
-                return true;
-            });
-            
-            // YENİDEN ESKİYE sırala
-            unique.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
-            
-            // 🆕 Sembol üretimi (batch)
-            await generateSymbolsForDreams(unique);
-            
-            return unique;
-        }
-
-        function detectLanguage(text) {
-            if (/[\u0600-\u06FF]/.test(text)) return 'ar';
-            if (/[\u4e00-\u9fa5]/.test(text)) return 'zh';
-            if (/[\u0900-\u097F]/.test(text)) return 'hi';
-            if (/[çğıöşüÇĞİÖŞÜ]/.test(text)) return 'tr';
-            if (/[ñáéíóúÑÁÉÍÓÚ]/.test(text)) return 'es';
-            return 'en';
+            addDreamsToMap(allDreams);
+            renderFeed();
         }
 
         // ============ 🌐 ÇEVİRİ ============
@@ -962,27 +519,24 @@ Rules: 1-2 symbols per dream, ONLY JSON, imagePrompt in English.`
             return text;
         }
 
-        // ============ 📡 LIVE FEED ============
-        async function updateLiveFeed() {
-            const container = document.getElementById('liveFeed');
-            container.innerHTML = '<div class="text-center py-8 text-gray-500">Loading dreams from the collective unconscious...</div>';
-            
-            allFeedDreams = await fetchAllDreams();
-            allDreams = allFeedDreams;
-            
-            document.getElementById('liveCount').textContent = allFeedDreams.length;
-            
-            await renderFeed();
+        function detectLanguage(text) {
+            if (/[\u0600-\u06FF]/.test(text)) return 'ar';
+            if (/[\u4e00-\u9fa5]/.test(text)) return 'zh';
+            if (/[\u0900-\u097F]/.test(text)) return 'hi';
+            if (/[çğıöşüÇĞİÖŞÜ]/.test(text)) return 'tr';
+            if (/[ñáéíóúÑÁÉÍÓÚ]/.test(text)) return 'es';
+            return 'en';
         }
 
+        // ============ 📡 LIVE FEED ============
         async function renderFeed() {
             const container = document.getElementById('liveFeed');
             container.innerHTML = '';
             
-            const display = allFeedDreams.slice(0, 25);
+            const display = allDreams.slice(0, 25);
             
             if (display.length === 0) {
-                container.innerHTML = '<div class="text-center py-8 text-gray-500">No dreams flowing yet...</div>';
+                container.innerHTML = '<div class="text-center py-8 text-gray-500">No dreams in this time range...</div>';
                 return;
             }
             
@@ -1075,17 +629,12 @@ Rules: 1-2 symbols per dream, ONLY JSON, imagePrompt in English.`
             return String.fromCodePoint(...codePoints);
         }
 
-        // 🆕 BÖLGESEL FORECAST - HEDEF DİLDE + RÜYA ODAKLI
         async function generateRegionalForecast(regionName, lat, lng) {
             const apiKey = localStorage.getItem('groq_api_key');
-            if (!apiKey) return 'API key not set.';
+            if (!apiKey) return 'API key not set. Add ?admin=1 to URL.';
             
-            const regionDreams = allDreams.filter(d => {
-                if (!d.lat || !d.lng) return false;
-                const distance = Math.sqrt(Math.pow(d.lat - lat, 2) + Math.pow(d.lng - lng, 2));
-                return distance < 15;
-            });
-            
+            // 📚 ARCHIVE.JS'den bölge rüyalarını çek
+            const regionDreams = window.DreamArchive.getDreamsByRegion(lat, lng, 15);
             const dreamCount = regionDreams.length;
             const dreamSample = regionDreams.slice(0, 5).map(d => d.text.substring(0, 100)).join(' | ') || 'No recent dreams';
             
@@ -1104,7 +653,7 @@ Rules: 1-2 symbols per dream, ONLY JSON, imagePrompt in English.`
 
 CRITICAL RULES:
 1. You MUST respond ONLY in ${targetLang}. No other language.
-2. Talk ONLY about DREAMS and their symbols. Do NOT mention astrology, economy, world events, or anything else.
+2. Talk ONLY about DREAMS and their symbols. Do NOT mention astrology, economy, world events.
 3. Be specific about what dreams reveal about this region's collective psyche.
 
 Recent dreams from this region: ${dreamSample}
@@ -1127,7 +676,6 @@ Rules:
             
             let forecast = data.choices[0].message.content;
             
-            // 🆕 FALLBACK: Eğer AI hedef dilde cevap vermediyse, MyMemory ile çevir
             const detectedLang = detectLanguage(forecast);
             if (detectedLang !== currentLang) {
                 forecast = await translateText(forecast, currentLang);
@@ -1136,28 +684,22 @@ Rules:
             return forecast;
         }
 
-        // 🆕 IMPROVED GLOBAL FORECASTS - More impactful predictions
         async function generateGlobalForecasts() {
             const apiKey = localStorage.getItem('groq_api_key');
             if (!apiKey) {
-                document.getElementById('forecast1Content').innerHTML = '<p class="text-gray-400 text-sm">Set API key to generate forecasts.</p>';
-                document.getElementById('forecast2Content').innerHTML = '<p class="text-gray-400 text-sm">Set API key to generate forecasts.</p>';
+                document.getElementById('forecast1Content').innerHTML = '<p class="text-gray-400 text-sm">Set API key.</p>';
+                document.getElementById('forecast2Content').innerHTML = '<p class="text-gray-400 text-sm">Set API key.</p>';
                 return;
             }
             
             const langNames = { en: 'English', tr: 'Turkish', es: 'Spanish', ar: 'Arabic', hi: 'Hindi', zh: 'Chinese' };
             const targetLang = langNames[currentLang] || 'English';
             
-            // Collect recent dreams
-            const last24h = allDreams.filter(d => {
-                const diff = Date.now() - new Date(d.timestamp).getTime();
-                return diff < 86400000;
-            });
-            
+            // 📚 ARCHIVE.JS'den son 24 saat rüyalarını çek
+            const last24h = window.DreamArchive.getLast24hDreams();
             const dreamSample = last24h.slice(0, 15).map(d => d.text.substring(0, 120)).join(' | ') || 'No recent dreams';
             
             try {
-                // Forecast 1: Global Dream Trend - More impactful
                 const response1 = await fetch('https://api.groq.com/openai/v1/chat/completions', {
                     method: 'POST',
                     headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
@@ -1166,47 +708,37 @@ Rules:
                         messages: [
                             {
                                 role: 'system',
-                                content: `You are the DreamPulse Oracle. Analyze these recent dreams and create a PROPHETIC GLOBAL DREAM TREND forecast.
+                                content: `You are the DreamPulse Oracle. Analyze these recent dreams and create a GLOBAL DREAM TREND forecast.
 
 CRITICAL RULES:
-1. Talk ONLY about DREAMS, symbols, and what they reveal about collective psyche.
-2. Include predictions about real-world events based on dream patterns: epidemics, earthquakes, conflicts, economic shifts, fires, coups, etc.
-3. Use metaphors and symbols to hint at these events without being explicit.
+1. Talk ONLY about DREAMS, symbols, and collective psyche.
+2. Do NOT mention astrology, economy, world events.
+3. Be specific: mention actual symbols from the dreams.
 4. RESPOND ONLY in ${targetLang}.
 
 Recent dreams: ${dreamSample}
 
-Rules:
-- Max 100 words
-- 2-3 sentences
-- ONLY about dreams but include symbolic predictions of real events
-- Be cryptic but impactful
-- RESPOND ONLY IN ${targetLang.toUpperCase()}`
+Rules: Max 80 words. 2-3 sentences. ONLY about dreams. RESPOND ONLY IN ${targetLang.toUpperCase()}`
                             },
-                            { role: 'user', content: 'What is the global dream trend and what does it predict?' }
+                            { role: 'user', content: 'What is the global dream trend?' }
                         ],
-                        temperature: 0.9,
-                        max_tokens: 250
+                        temperature: 0.8,
+                        max_tokens: 200
                     })
                 });
                 
                 const data1 = await response1.json();
                 if (data1.choices && data1.choices[0]) {
                     let forecast1 = data1.choices[0].message.content;
-                    
-                    // Fallback translation
                     const detectedLang = detectLanguage(forecast1);
-                    if (detectedLang !== currentLang) {
-                        forecast1 = await translateText(forecast1, currentLang);
-                    }
+                    if (detectedLang !== currentLang) forecast1 = await translateText(forecast1, currentLang);
                     
                     document.getElementById('forecast1Content').innerHTML = `
-                        <p class="text-red-300 mb-3">${forecast1}</p>
+                        <p class="text-gray-300 mb-3">${forecast1}</p>
                         <div class="text-xs text-gray-500">Based on ${last24h.length} dreams • Updated ${new Date().toLocaleTimeString()}</div>
                     `;
                 }
                 
-                // Forecast 2: Emerging Pattern - Focus on societal changes
                 const response2 = await fetch('https://api.groq.com/openai/v1/chat/completions', {
                     method: 'POST',
                     headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
@@ -1215,49 +747,41 @@ Rules:
                         messages: [
                             {
                                 role: 'system',
-                                content: `You are the DreamPulse Oracle. Identify the dominant EMERGING DREAM PATTERN and its implications for society.
+                                content: `You are the DreamPulse Oracle. Identify the dominant EMERGING DREAM PATTERN.
 
 CRITICAL RULES:
-1. Talk ONLY about DREAMS and their symbols.
-2. Connect dream patterns to potential real-world phenomena: health crises, natural disasters, social unrest, economic shifts.
-3. Use symbolic language to describe these possibilities.
+1. Talk ONLY about DREAMS and symbols.
+2. Do NOT mention astrology, economy, world events.
+3. Identify the most recurring symbol or theme.
 4. RESPOND ONLY in ${targetLang}.
 
 Recent dreams: ${dreamSample}
 
-Rules:
-- Max 100 words
-- 2-3 sentences
-- ONLY about dreams but include societal implications
-- Be symbolic and impactful
-- RESPOND ONLY IN ${targetLang.toUpperCase()}`
+Rules: Max 80 words. 2-3 sentences. ONLY about dreams. RESPOND ONLY IN ${targetLang.toUpperCase()}`
                             },
-                            { role: 'user', content: 'What is the emerging dream pattern and its societal impact?' }
+                            { role: 'user', content: 'What is the emerging dream pattern?' }
                         ],
-                        temperature: 0.9,
-                        max_tokens: 250
+                        temperature: 0.8,
+                        max_tokens: 200
                     })
                 });
                 
                 const data2 = await response2.json();
                 if (data2.choices && data2.choices[0]) {
                     let forecast2 = data2.choices[0].message.content;
-                    
                     const detectedLang = detectLanguage(forecast2);
-                    if (detectedLang !== currentLang) {
-                        forecast2 = await translateText(forecast2, currentLang);
-                    }
+                    if (detectedLang !== currentLang) forecast2 = await translateText(forecast2, currentLang);
                     
                     document.getElementById('forecast2Content').innerHTML = `
-                        <p class="text-red-300 mb-3">${forecast2}</p>
+                        <p class="text-gray-300 mb-3">${forecast2}</p>
                         <div class="text-xs text-gray-500">Based on ${last24h.length} dreams • Updated ${new Date().toLocaleTimeString()}</div>
                     `;
                 }
                 
             } catch (error) {
-                console.error('Forecast generation error:', error);
-                document.getElementById('forecast1Content').innerHTML = '<p class="text-red-400 text-sm">Error generating forecast.</p>';
-                document.getElementById('forecast2Content').innerHTML = '<p class="text-red-400 text-sm">Error generating forecast.</p>';
+                console.error('Forecast error:', error);
+                document.getElementById('forecast1Content').innerHTML = '<p class="text-red-400 text-sm">Error.</p>';
+                document.getElementById('forecast2Content').innerHTML = '<p class="text-red-400 text-sm">Error.</p>';
             }
         }
 
@@ -1359,105 +883,12 @@ Rules:
         }
 
         function updateStats(dreams) {
+            const stats = window.DreamArchive.getStats();
             document.getElementById('totalDreams').textContent = dreams.length;
             document.getElementById('totalSymbols').textContent = Object.keys(allSymbols).length;
             document.getElementById('totalCountries').textContent = new Set(dreams.map(d => d.country)).size;
         }
 
-        // ============ 🔥 BAĞIMLILIK MEKANİZMALARI ============
-        
-        // Streak sistemi
-        function updateStreak() {
-            const today = new Date().toDateString();
-            const lastVisit = localStorage.getItem('last_visit_date');
-            let streak = parseInt(localStorage.getItem('visit_streak') || '0');
-            
-            if (lastVisit !== today) {
-                const yesterday = new Date();
-                yesterday.setDate(yesterday.getDate() - 1);
-                
-                if (lastVisit === yesterday.toDateString()) {
-                    streak++;
-                } else if (lastVisit) {
-                    streak = 1;
-                } else {
-                    streak = 1;
-                }
-                
-                localStorage.setItem('last_visit_date', today);
-                localStorage.setItem('visit_streak', streak.toString());
-            }
-            
-            if (streak > 0) {
-                document.getElementById('streakBadge').classList.remove('hidden');
-                document.getElementById('streakCount').textContent = streak;
-            }
-        }
-        
-        // Daily Dream Card
-        function revealDailyCard() {
-            const today = new Date().toDateString();
-            const lastReveal = localStorage.getItem('last_card_reveal');
-            
-            if (lastReveal === today) {
-                alert('You already revealed today\'s card! Come back tomorrow for a new one.');
-                return;
-            }
-            
-            const cards = [
-                { emoji: '🌙', text: 'The moon whispers: Tonight, pay attention to water in your dreams. It holds the key to your emotional truth.' },
-                { emoji: '🗝️', text: 'A key appears: You are closer than you think to unlocking a long-held fear. The door is already open.' },
-                { emoji: '🦋', text: 'Transformation is near. The chrysalis phase ends this week. Prepare for flight.' },
-                { emoji: '🌊', text: 'The ocean of your unconscious is rising. Dreams of water this week carry important messages.' },
-                { emoji: '🔥', text: 'Fire burns away illusion. What you\'ve been avoiding will appear in your dreams tonight. Face it.' },
-                { emoji: '🌳', text: 'Roots grow deeper. Your dreams are connecting you to ancestral wisdom. Listen carefully.' },
-                { emoji: '⚡', text: 'Lightning strikes: A sudden insight is coming. Keep a journal by your bed. You\'ll need it.' },
-                { emoji: '🎭', text: 'Masks fall away. The persona you\'ve been wearing no longer serves you. Authenticity calls.' }
-            ];
-            
-            const card = cards[Math.floor(Math.random() * cards.length)];
-            
-            document.getElementById('dailyCard').innerHTML = `
-                <div class="text-6xl mb-4">${card.emoji}</div>
-                <h3 class="text-xl font-bold mb-3 text-purple-300">Today's Insight</h3>
-                <p class="text-gray-200 text-lg italic leading-relaxed">${card.text}</p>
-                <p class="text-xs text-gray-500 mt-4">Come back tomorrow for a new card</p>
-            `;
-            
-            localStorage.setItem('last_card_reveal', today);
-        }
-        
-        // Notification banner
-        function showNotificationBanner() {
-            if (!localStorage.getItem('notification_dismissed')) {
-                setTimeout(() => {
-                    document.getElementById('notificationBanner').classList.remove('hidden');
-                }, 5000);
-            }
-        }
-        
-        function enableNotifications() {
-            if ('Notification' in window) {
-                Notification.requestPermission().then(permission => {
-                    if (permission === 'granted') {
-                        localStorage.setItem('notifications_enabled', 'true');
-                        new Notification('DreamPulse', {
-                            body: 'You\'ll receive daily dream insights!',
-                            icon: '🌙'
-                        });
-                        alert('✅ Notifications enabled! You\'ll receive daily dream insights.');
-                    }
-                });
-            }
-            dismissNotification();
-        }
-        
-        function dismissNotification() {
-            document.getElementById('notificationBanner').classList.add('hidden');
-            localStorage.setItem('notification_dismissed', 'true');
-        }
-
-        // ============ MODALS ============
         function showAllAccess() {
             if (localStorage.getItem('dp_vip_access_granted') === 'true') {
                 alert('✅ VIP Access: All-Access Pass already active!');
@@ -1467,34 +898,25 @@ Rules:
         }
         function closeAllAccess() { document.getElementById('allAccessModal').classList.add('hidden'); }
         function subscribeAllAccess() {
-            alert('Payment integration coming soon! Contact: subscribe@dreampulse.live');
+            alert('Payment integration coming soon!');
             closeAllAccess();
         }
 
         // ============ INIT ============
         window.addEventListener('DOMContentLoaded', async () => {
             updateUI();
-            updateStreak();
-            showNotificationBanner();
             
-            await updateLiveFeed();
+            // 📚 ARCHIVE.JS'den yükle
+            loadDreamsFromArchive();
             applyTimeFilter();
             
             await generateGlobalForecasts();
             
-            // Her 3 dakimada güncelle
-            setInterval(async () => {
-                await updateLiveFeed();
+            // Her 5 dakikada yenile (sadece localStorage kontrolü için)
+            setInterval(() => {
+                loadDreamsFromArchive();
                 applyTimeFilter();
-            }, 180000);
-            
-            // Her 30 dakimada forecastleri yenile
-            setInterval(generateGlobalForecasts, 1800000);
-            
-            window.addEventListener('storage', async () => {
-                await updateLiveFeed();
-                applyTimeFilter();
-            });
+            }, 300000);
             
             if (window.location.hash === '#forecasts') {
                 setTimeout(() => {
