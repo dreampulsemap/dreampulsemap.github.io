@@ -21,7 +21,7 @@ const DATA_SOURCES = [
 ];
 
 // CORS Proxy (Reddit için gerekli)
-const CORS_PROXY = 'https://api.allorigins.win/raw?url=';
+const CORS_PROXY = 'https://corsproxy.io/?';
 
 // ============================================
 // DİL TESPİTİ
