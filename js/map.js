@@ -336,8 +336,9 @@ function updateStats(dreams) {
 }
 
 // Sayfa Yüklendiğinde
-window.addEventListener('DOMContentLoaded', () => {
-    allDreams = getSampleDreams();
-    addDreamsToMap(allDreams);
-    updateStats(allDreams);
+window.addEventListener('DOMContentLoaded', async () => {
+  allDreams = await getSampleDreams();
+  addDreamsToMap(allDreams);
+  updateStats(allDreams);
 });
+
