@@ -1,344 +1,236 @@
 // ============================================
-// VERİ KAYNAKLARI
+// HARİTA VE GÖRSELLEŞTİRME
 // ============================================
 
-const DATA_SOURCES = [
-  {
-    name: 'Reddit Dreams',
-    url: 'https://www.reddit.com/r/dreams+Dreams+Nightmare.json?limit=20',
-    type: 'reddit'
-  },
-  {
-    name: 'Tumblr Dreams',
-    url: 'https://api.tumblr.com/v2/tagged?tag=dream&limit=20&api_key=BKdbsFYf3cjlEUktL2fwrJFnrEpUakEspXcRhCjy9K7M5uZtaN',
-    type: 'tumblr'
-  },
-  {
-    name: 'Reddit Nightmares',
-    url: 'https://www.reddit.com/r/nightmares.json?limit=20',
-    type: 'reddit'
-  }
-];
+let map;
+let markers = [];
 
-// CORS Proxy (Reddit için gerekli)
-const CORS_PROXY = 'https://corsproxy.io/?';
-
-// ============================================
-// DİL TESPİTİ
-// ============================================
-
-function detectLanguage(text) {
-  if (/[\u0600-\u06FF]/.test(text)) return 'ar';      // Arapça
-  if (/[\u4e00-\u9fa5]/.test(text)) return 'zh';      // Çince
-  if (/[\u0900-\u097F]/.test(text)) return 'hi';      // Hintçe
-  if (/[\u0100-\u024F]/.test(text)) return 'tr';      // Türkçe
-  if (/[\u00C0-\u024F]/.test(text)) return 'es';      // İspanyolca
-  return 'en';
+// Haritayı başlat
+function initMap() {
+  map = L.map('map').setView([20, 0], 2);
+  
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors'
+  }).addTo(map);
 }
 
-// ============================================
-// KONUM BELİRLEME
-// ============================================
+// Rüyaları haritaya ekle
+function addDreamsToMap(dreams) {
+  markers.forEach(marker => map.removeLayer(marker));
+  markers = [];
 
-function getLocationForLanguage(lang) {
-  const locations = {
-    'en': { lat: 40.7128, lng: -74.0060, country: 'USA' },
-    'tr': { lat: 41.0082, lng: 28.9784, country: 'Turkey' },
-    'es': { lat: 40.4168, lng: -3.7038, country: 'Spain' },
-    'ar': { lat: 24.7136, lng: 46.6753, country: 'Saudi Arabia' },
-    'zh': { lat: 31.2304, lng: 121.4737, country: 'China' },
-    'hi': { lat: 28.6139, lng: 77.2090, country: 'India' }
+  dreams.forEach(dream => {
+    const marker = L.circleMarker([dream.lat, dream.lng], {
+      radius: 8,
+      fillColor: getSymbolColor(dream.symbol),
+      color: '#fff',
+      weight: 2,
+      opacity: 1,
+      fillOpacity: 0.8
+    }).addTo(map);
+
+    marker.bindPopup(`
+      <div class="dream-popup">
+        <strong>${dream.country}</strong><br>
+        <em>${dream.language.toUpperCase()}</em><br>
+        <p>${dream.text.substring(0, 200)}...</p>
+        <small>Sembol: ${dream.symbol} | Kaynak: ${dream.source}</small><br>
+        <small>${new Date(dream.timestamp).toLocaleString('tr-TR')}</small>
+      </div>
+    `);
+
+    markers.push(marker);
+  });
+}
+
+// Sembol rengi
+function getSymbolColor(symbol) {
+  const colors = {
+    'water': '#3498db',
+    'flying': '#9b59b6',
+    'falling': '#e74c3c',
+    'chase': '#e67e22',
+    'teeth': '#f39c12',
+    'naked': '#1abc9c',
+    'exam': '#34495e',
+    'snake': '#27ae60',
+    'death': '#2c3e50',
+    'money': '#f1c40f',
+    'animal': '#d35400',
+    'house': '#8e44ad',
+    'car': '#c0392b',
+    'fire': '#e74c3c',
+    'love': '#e91e63',
+    'other': '#95a5a6'
   };
-  return locations[lang] || locations['en'];
+  return colors[symbol] || colors['other'];
+}
+
+// İstatistikleri güncelle
+function updateStats() {
+  const stats = dreamArchive.getStats();
+  
+  document.getElementById('totalDreams').textContent = stats.totalDreams;
+  document.getElementById('totalCountries').textContent = stats.totalCountries;
+  document.getElementById('totalLanguages').textContent = stats.totalLanguages;
+  document.getElementById('commonSymbol').textContent = stats.mostCommonSymbol || '-';
+}
+
+// Canlı akışı güncelle
+function updateLiveFeed() {
+  const feed = document.getElementById('dreamFeed');
+  feed.innerHTML = '';
+
+  const archive = dreamArchive.getAll();
+  const recentDreams = archive
+    .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+    .slice(0, 15);
+
+  recentDreams.forEach(dream => {
+    const item = document.createElement('div');
+    item.className = 'dream-feed-item';
+    item.innerHTML = `
+      <div class="dream-meta">
+        <span class="dream-country">📍 ${dream.country}</span>
+        <span class="dream-language">${dream.language.toUpperCase()}</span>
+        <span class="dream-source">${dream.source}</span>
+      </div>
+      <div class="dream-text">${dream.text.substring(0, 180)}...</div>
+      <div class="dream-footer">
+        <span class="dream-symbol">🔮 ${dream.symbol}</span>
+        <span class="dream-time">${formatTime(dream.timestamp)}</span>
+      </div>
+    `;
+    feed.appendChild(item);
+  });
+}
+
+// Zaman formatı
+function formatTime(timestamp) {
+  const date = new Date(timestamp);
+  const now = new Date();
+  const diff = Math.floor((now - date) / 1000);
+
+  if (diff < 60) return 'Az önce';
+  if (diff < 3600) return `${Math.floor(diff / 60)} dk önce`;
+  if (diff < 86400) return `${Math.floor(diff / 3600)} saat önce`;
+  return `${Math.floor(diff / 86400)} gün önce`;
+}
+
+// Tüm UI'ı güncelle
+function updateUI() {
+  const archive = dreamArchive.getAll();
+  addDreamsToMap(archive);
+  updateStats();
+  updateLiveFeed();
 }
 
 // ============================================
-// VERİ ÇEKME
+// MODAL
 // ============================================
 
-async function fetchSingleSource(source) {
-  try {
-    let url = source.url;
-    
-    // Reddit için CORS proxy ekle
-    if (source.type === 'reddit') {
-      url = CORS_PROXY + encodeURIComponent(source.url);
-    }
-    
-    const response = await fetch(url);
-    
-    if (!response.ok) {
-      console.warn(`Failed to fetch from ${source.name}: ${response.status}`);
-      return [];
-    }
-    
-    const data = await response.json();
-    const dreams = [];
-    
-    if (source.type === 'reddit' && data.data && data.data.children) {
-      data.data.children.forEach(post => {
-        const title = post.data.title || '';
-        const selftext = post.data.selftext || '';
-        const text = (title + ' ' + selftext).trim();
-        
-        if (text.length < 30) return; // Çok kısa rüyaları atla
-        
-        const lang = detectLanguage(text);
-        const location = getLocationForLanguage(lang);
-        
-        dreams.push({
-          id: `reddit-${post.data.id}`,
-          text: text.substring(0, 500),
-          symbol: detectSymbol(text),
-          timestamp: new Date(post.data.created_utc * 1000).toISOString(),
-          language: lang,
-          lat: location.lat + (Math.random() - 0.5) * 2,
-          lng: location.lng + (Math.random() - 0.5) * 2,
-          country: location.country,
-          source: source.name
-        });
-      });
-    }
-    
-    if (source.type === 'tumblr' && data.response) {
-      data.response.forEach(post => {
-        let text = '';
-        if (post.body) text = post.body;
-        else if (post.caption) text = post.caption;
-        else if (post.summary) text = post.summary;
-        
-        text = text.replace(/<[^>]*>/g, '').trim(); // HTML taglerini temizle
-        
-        if (text.length < 30) return;
-        
-        const lang = detectLanguage(text);
-        const location = getLocationForLanguage(lang);
-        
-        dreams.push({
-          id: `tumblr-${post.id}`,
-          text: text.substring(0, 500),
-          symbol: detectSymbol(text),
-          timestamp: new Date(post.timestamp * 1000).toISOString(),
-          language: lang,
-          lat: location.lat + (Math.random() - 0.5) * 2,
-          lng: location.lng + (Math.random() - 0.5) * 2,
-          country: location.country,
-          source: source.name
-        });
-      });
-    }
-    
-    console.log(`✅ ${source.name}: ${dreams.length} dreams fetched`);
-    return dreams;
-    
-  } catch (error) {
-    console.warn(`❌ Error fetching from ${source.name}:`, error.message);
-    return [];
-  }
-}
+const modal = document.getElementById('dreamModal');
+const addDreamBtn = document.getElementById('addDreamBtn');
+const closeBtn = document.querySelector('.close');
+const dreamForm = document.getElementById('dreamForm');
 
-async function fetchAllDreams() {
-  console.log('🔄 Fetching dreams from all sources...');
-  
-  const promises = DATA_SOURCES.map(source => fetchSingleSource(source));
-  const results = await Promise.all(promises);
-  
-  const allDreams = results.flat();
-  console.log(`✅ Total dreams fetched: ${allDreams.length}`);
-  
-  return allDreams;
-}// Harita Başlat
-const map = L.map('map').setView([39, 35], 4); // Türkiye merkezi
-
-// OpenStreetMap Tile Layer (Ücretsiz)
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '© OpenStreetMap contributors',
-    maxZoom: 18
-}).addTo(map);
-
-// Sembol İkonları
-const symbolIcons = {
-    bear: { emoji: '🐻', color: '#8b5cf6' },
-    door: { emoji: '🚪', color: '#3b82f6' },
-    water: { emoji: '💧', color: '#06b6d4' },
-    fall: { emoji: '⬇️', color: '#ef4444' },
-    fly: { emoji: '🕊️', color: '#10b981' },
-    default: { emoji: '🌙', color: '#6366f1' }
+addDreamBtn.onclick = () => modal.style.display = 'block';
+closeBtn.onclick = () => modal.style.display = 'none';
+window.onclick = (e) => {
+  if (e.target === modal) modal.style.display = 'none';
 };
 
-// Örnek Rüya Verileri (Şimdilik localStorage'dan, sonra Supabase'den)
-async function getSampleDreams() {
-  // Önce localStorage'dan al
-  const stored = JSON.parse(localStorage.getItem('dreams') || '[]');
+dreamForm.onsubmit = (e) => {
+  e.preventDefault();
   
-  // Reddit ve Tumblr'dan veri çek
-  const fetchedDreams = await fetchAllDreams();
+  const text = document.getElementById('dreamText').value;
+  const country = document.getElementById('dreamLocation').value;
   
-  // Hepsini birleştir
-  return [...stored, ...fetchedDreams];
-}
-    const stored = JSON.parse(localStorage.getItem('dreams') || '[]');
-    
-    // Örnek veriler (gerçek uygulamada Supabase'den gelecek)
-    const sampleData = [
-        {
-            id: 1,
-            text: "Karanlık ormanda devasa bir ayı gördüm. Bana bakıyordu.",
-            symbol: 'bear',
-            lat: 41.0082,
-            lng: 28.9784,
-            country: 'Türkiye',
-            timestamp: new Date().toISOString()
-        },
-        {
-            id: 2,
-            text: "Kapısız bir odada mahsur kalmıştım. Çıkış arıyordum.",
-            symbol: 'door',
-            lat: 40.7128,
-            lng: -74.0060,
-            country: 'ABD',
-            timestamp: new Date(Date.now() - 86400000).toISOString()
-        },
-        {
-            id: 3,
-            text: "Okyanusun üzerinde uçuyordum. Özgür hissediyordum.",
-            symbol: 'fly',
-            lat: 51.5074,
-            lng: -0.1278,
-            country: 'İngiltere',
-            timestamp: new Date(Date.now() - 172800000).toISOString()
-        },
-        {
-            id: 4,
-            text: "Suyun altında yürüyordum. Nefes alabiliyordum.",
-            symbol: 'water',
-            lat: 48.8566,
-            lng: 2.3522,
-            country: 'Fransa',
-            timestamp: new Date(Date.now() - 259200000).toISOString()
-        },
-        {
-            id: 5,
-            text: "Merdivenlerden düşüyordum. Uçurum yoktu, ama korkuyordum.",
-            symbol: 'fall',
-            lat: 35.6762,
-            lng: 139.6503,
-            country: 'Japonya',
-            timestamp: new Date().toISOString()
-        },
-        {
-            id: 6,
-            text: "Ayı beni kovalıyordu. Ormanın derinliklerine kaçıyordum.",
-            symbol: 'bear',
-            lat: 55.7558,
-            lng: 37.6173,
-            country: 'Rusya',
-            timestamp: new Date(Date.now() - 43200000).toISOString()
-        }
-    ];
-    
-    return [...stored.map(d => ({
-        ...d,
-        symbol: detectSymbol(d.text),
-        lat: 39 + (Math.random() - 0.5) * 10,
-        lng: 35 + (Math.random() - 0.5) * 20,
-        country: 'Türkiye'
-    })), ...sampleData];
-}
+  const lang = dreamFetcher.detectLanguage(text);
+  const location = dreamFetcher.getLocationForLanguage(lang);
+  
+  const newDream = {
+    id: `user-${Date.now()}`,
+    text: text,
+    symbol: dreamFetcher.detectSymbol(text),
+    timestamp: new Date().toISOString(),
+    language: lang,
+    lat: location.lat + (Math.random() - 0.5) * 2,
+    lng: location.lng + (Math.random() - 0.5) * 2,
+    country: country,
+    source: 'Kullanıcı'
+  };
 
-// Sembol Tespit (Basit AI - sonra Groq ile yapacağız)
-function detectSymbol(text) {
-    const lower = text.toLowerCase();
-    if (lower.includes('ayı') || lower.includes('bear')) return 'bear';
-    if (lower.includes('kapı') || lower.includes('door')) return 'door';
-    if (lower.includes('su') || lower.includes('water') || lower.includes('deniz')) return 'water';
-    if (lower.includes('düş') || lower.includes('fall')) return 'fall';
-    if (lower.includes('uç') || lower.includes('fly')) return 'fly';
-    return 'default';
-}
+  dreamArchive.add(newDream);
+  updateUI();
 
-// Harita Üzerine Rüya Ekle
-let markers = [];
-let allDreams = [];
+  modal.style.display = 'none';
+  dreamForm.reset();
+};
 
-function addDreamsToMap(dreams) {
-    // Önceki markerları temizle
-    markers.forEach(m => map.removeLayer(m));
-    markers = [];
-    
-    dreams.forEach(dream => {
-        const iconData = symbolIcons[dream.symbol] || symbolIcons.default;
-        
-        // Özel İkon
-        const icon = L.divIcon({
-            className: 'dream-icon',
-            html: `<div style="background: ${iconData.color}">${iconData.emoji}</div>`,
-            iconSize: [30, 30]
-        });
-        
-        // Marker
-        const marker = L.marker([dream.lat, dream.lng], { icon })
-            .addTo(map)
-            .bindPopup(`
-                <div style="color: #1a1a2e; max-width: 250px;">
-                    <div style="font-size: 24px; margin-bottom: 8px;">${iconData.emoji}</div>
-                    <p style="font-size: 14px; margin-bottom: 8px;">${dream.text}</p>
-                    <small style="color: #666;">
-                        📍 ${dream.country}<br>
-                        🕐 ${new Date(dream.timestamp).toLocaleDateString('tr-TR')}
-                    </small>
-                </div>
-            `);
-        
-        markers.push(marker);
-    });
-}
+// ============================================
+// BUTONLAR
+// ============================================
 
-// Filtreleme
-function filterDreams(symbol) {
-    // Buton stillerini güncelle
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.classList.remove('active');
-    });
-    event.target.classList.add('active');
-    
-    // Filtrele
-    if (symbol === 'all') {
-        addDreamsToMap(allDreams);
-    } else {
-        const filtered = allDreams.filter(d => d.symbol === symbol);
-        addDreamsToMap(filtered);
-    }
-}
+document.getElementById('refreshBtn').onclick = () => {
+  updateUI();
+};
 
-// İstatistikleri Güncelle
-function updateStats(dreams) {
-    document.getElementById('totalDreams').textContent = dreams.length;
-    
-    const countries = new Set(dreams.map(d => d.country));
-    document.getElementById('totalCountries').textContent = countries.size;
-    
-    // En yaygın sembol
-    const symbolCount = {};
-    dreams.forEach(d => {
-        symbolCount[d.symbol] = (symbolCount[d.symbol] || 0) + 1;
-    });
-    const topSymbol = Object.entries(symbolCount).sort((a, b) => b[1] - a[1])[0];
-    if (topSymbol) {
-        const iconData = symbolIcons[topSymbol[0]] || symbolIcons.default;
-        document.getElementById('topSymbol').textContent = iconData.emoji;
-    }
-    
-    // Bugünkü rüyalar
-    const today = new Date().toDateString();
-    const todayDreams = dreams.filter(d => new Date(d.timestamp).toDateString() === today);
-    document.getElementById('todayDreams').textContent = todayDreams.length;
-}
+document.getElementById('fetchBtn').onclick = async () => {
+  const btn = document.getElementById('fetchBtn');
+  btn.disabled = true;
+  btn.textContent = '⏳ Çekiliyor...';
+  
+  try {
+    const result = await dreamFetcher.fetchAndArchive();
+    alert(`✅ ${result.fetched} rüya çekildi, ${result.added} yeni rüya arşive eklendi`);
+    updateUI();
+  } catch (error) {
+    alert('❌ Rüya çekme hatası: ' + error.message);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '📥 Yeni Rüya Çek';
+  }
+};
 
-// Sayfa Yüklendiğinde
+document.getElementById('filterBtn').onclick = () => {
+  const symbol = prompt('Sembol filtrele:\nwater, flying, falling, chase, teeth, naked, exam, snake, death, money, animal, house, car, fire, love, other\n\n(hepsini göstermek için boş bırak)');
+  
+  if (symbol === null) return;
+  
+  if (symbol === '') {
+    updateUI();
+  } else {
+    const filtered = dreamArchive.getBySymbol(symbol);
+    addDreamsToMap(filtered);
+    alert(`${filtered.length} rüya bulundu (${symbol})`);
+  }
+};
+
+// ============================================
+// OTOMATİK YENİLEME
+// ============================================
+
+// Her 30 dakikada yeni rüya çek
+setInterval(async () => {
+  console.log('🔄 Auto-fetching new dreams...');
+  await dreamFetcher.fetchAndArchive();
+  updateUI();
+}, 30 * 60 * 1000);
+
+// ============================================
+// BAŞLAT
+// ============================================
+
 window.addEventListener('DOMContentLoaded', async () => {
-  allDreams = await getSampleDreams();
-  addDreamsToMap(allDreams);
-  updateStats(allDreams);
+  initMap();
+  
+  // İlk yükleme
+  await dreamFetcher.initialLoad();
+  
+  // UI'ı güncelle
+  updateUI();
+  
+  console.log('✅ Dream Pulse Map initialized');
+  console.log(`📊 Archive contains ${dreamArchive.getAll().length} dreams`);
 });
-
