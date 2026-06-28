@@ -167,7 +167,16 @@ const symbolIcons = {
 };
 
 // Örnek Rüya Verileri (Şimdilik localStorage'dan, sonra Supabase'den)
-function getSampleDreams() {
+async function getSampleDreams() {
+  // Önce localStorage'dan al
+  const stored = JSON.parse(localStorage.getItem('dreams') || '[]');
+  
+  // Reddit ve Tumblr'dan veri çek
+  const fetchedDreams = await fetchAllDreams();
+  
+  // Hepsini birleştir
+  return [...stored, ...fetchedDreams];
+}
     const stored = JSON.parse(localStorage.getItem('dreams') || '[]');
     
     // Örnek veriler (gerçek uygulamada Supabase'den gelecek)
