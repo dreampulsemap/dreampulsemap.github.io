@@ -24,10 +24,10 @@ class DreamFetcher {
       { name: 'Reddit r/Onirica', url: 'https://www.reddit.com/r/Onirica.json?limit=15', type: 'reddit', lang: 'es' },
 
       // 🌸 Tumblr (API)
-      { name: 'Tumblr #dream', url: 'https://api.tumblr.com/v2/tagged?tag=dream&limit=20&api_key=BURAYA_TUMBLR_API_KEY_YAPISTIR', type: 'tumblr', lang: 'en' },
-      { name: 'Tumblr #nightmare', url: 'https://api.tumblr.com/v2/tagged?tag=nightmare&limit=20&api_key=BURAYA_TUMBLR_API_KEY_YAPISTIR', type: 'tumblr', lang: 'en' },
-      { name: 'Tumblr #sueños', url: 'https://api.tumblr.com/v2/tagged?tag=sue%C3%B1os&limit=15&api_key=BURAYA_TUMBLR_API_KEY_YAPISTIR', type: 'tumblr', lang: 'es' },
-      { name: 'Tumblr #rüya', url: 'https://api.tumblr.com/v2/tagged?tag=r%C3%BCya&limit=15&api_key=BURAYA_TUMBLR_API_KEY_YAPISTIR', type: 'tumblr', lang: 'tr' },
+      { name: 'Tumblr #dream', url: 'https://api.tumblr.com/v2/tagged?tag=dream&limit=20&api_key=BKdbsFYf3cjlEUktL2fwrJFnrEpUakEspXcRhCjy9K7M5uZtaN', type: 'tumblr', lang: 'en' },
+      { name: 'Tumblr #nightmare', url: 'https://api.tumblr.com/v2/tagged?tag=nightmare&limit=20&api_key=BKdbsFYf3cjlEUktL2fwrJFnrEpUakEspXcRhCjy9K7M5uZtaN', type: 'tumblr', lang: 'en' },
+      { name: 'Tumblr #sueños', url: 'https://api.tumblr.com/v2/tagged?tag=sue%C3%B1os&limit=15&api_key=BKdbsFYf3cjlEUktL2fwrJFnrEpUakEspXcRhCjy9K7M5uZtaN', type: 'tumblr', lang: 'es' },
+      { name: 'Tumblr #rüya', url: 'https://api.tumblr.com/v2/tagged?tag=r%C3%BCya&limit=15&api_key=BKdbsFYf3cjlEUktL2fwrJFnrEpUakEspXcRhCjy9K7M5uZtaN', type: 'tumblr', lang: 'tr' },
 
       // 🌍 RSS/Atom Feed (Dream Forumları & Bloglar)
       // WordPress: /feed/, phpBB/Discourse: genellikle /rss veya /feeds/ endpoint
