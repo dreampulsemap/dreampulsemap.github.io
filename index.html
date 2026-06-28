@@ -689,9 +689,41 @@ Rules:
                         };
                     })
                 );
-                
-                // Display results
-                displayResults(symbolsWithImages, analysis);
+                //display results
+                function displayResults(symbols, analysis) {
+    document.getElementById('analysisText').textContent = analysis;
+    
+    const container = document.getElementById('symbolsContainer');
+    container.innerHTML = '';
+    
+    symbols.forEach(symbol => {
+        const div = document.createElement('div');
+        div.className = 'glass rounded-xl p-4 text-center';
+        div.innerHTML = `
+            <div class="symbol-preview mx-auto mb-3">
+                <img src="${symbol.imageUrl}" alt="${symbol.name}" 
+                     onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect fill=%22%231a1a2e%22 width=%22100%22 height=%22100%22/%3E%3Ctext x=%2250%22 y=%2260%22 font-size=%2240%22 text-anchor=%22middle%22%3E${symbol.emoji}%3C/text%3E%3C/svg%3E'">
+            </div>
+            <div class="text-sm font-semibold">${symbol.emoji} ${symbol.name}</div>
+        `;
+        container.appendChild(div);
+    });
+    
+    document.getElementById('analysisLoading').classList.add('hidden');
+    document.getElementById('analysisContent').classList.remove('hidden');
+    
+    // ✅ HARİTAYI OTOMATİK YENİLE
+    setTimeout(() => {
+        if (window.opener) {
+            window.opener.postMessage({ type: 'NEW_DREAM', dream: getLatestDream() }, '*');
+        }
+    }, 1000);
+}
+
+function getLatestDream() {
+    const dreams = JSON.parse(localStorage.getItem('dreams') || '[]');
+    return dreams[dreams.length - 1];
+}
                 
                 // Save to localStorage
                 const dreams = JSON.parse(localStorage.getItem('dreams') || '[]');
