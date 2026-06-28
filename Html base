@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DreamPulse.live | Kolektif Rüya Haritası</title>
+  <meta name="description" content="Dünyanın ilk bilinçaltının ısı haritası. Rüyalar toplanıyor. Gerçek zamanlı değil. Hâlâ inşa aşamasında." />
+
+  <!-- Minimal CSS -->
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #000;
+      color: #eee;
+      line-height: 1.6;
+      text-align: center;
+      padding: 40px 20px;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 10px;
+      background: linear-gradient(90deg, #a855f7, #4c1d95);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    h2 {
+      font-weight: 400;
+      margin-bottom: 30px;
+      font-size: 1.3rem;
+      color: #aaa;
+    }
+    p {
+      margin: 20px 0;
+      color: #ccc;
+    }
+    .btn {
+      display: inline-block;
+      margin: 30px 10px;
+      padding: 12px 30px;
+      background: #7e22ce;
+      color: white;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+    .btn:hover {
+      background: #9333ea;
+      transform: scale(1.05);
+    }
+    .foot {
+      margin-top: 60px;
+      font-size: 0.9rem;
+      color: #555;
+    }
+    .demo {
+      margin: 40px 0;
+      padding: 20px;
+      background: #111;
+      border-radius: 12px;
+      text-align: left;
+      font-family: 'Courier New', monospace;
+      font-size: 0.95rem;
+      color: #b39dff;
+    }
+  </style>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <div class="container">
+    <h1>DreamPulse.live</h1>
+    <h2>Kolektif Bilinçaltının Isı Haritası</h2>
+    <p>Her gece milyonlar rüya görüyor.<br>Biz onları dinliyoruz.</p>
+
+    <a href="#join" class="btn">Rüyamı Gönder (Beta)</a>
+    <a href="#demo" class="btn" style="background:#333">Nasıl Görünüyor?</a>
+
+    <div class="demo" id="demo">
+      <strong>Örnek Rüya:</strong><br>
+      "Dün karanlık bir koridorda yürüyordum. Uzakta bir ışık vardı ama kapılardan hiçbiri açılmıyordu."<br><br>
+      <strong>AI Analiz:</strong><br>
+      > "Kapalı kapılar, henüz hazır olmadığın içsel alanları temsil ediyor. Ama ışık — farkındalığın ilk adımı — hâlâ var. Bu rüya, bilinçaltının seni bir dönüşüme çağırdığına işaret ediyor."
+    </div>
+
+    <p id="join">
+      <strong>Beta’ya katılmak istiyor musun?</strong><br>
+      İlk 100 katılımcıya özel erişim ve aylık rüya raporu.
+    </p>
+
+    <a href="https://forms.gle/YOUR_GOOGLE_FORM_LINK" class="btn" style="background:#10b981">
+      📝 Beta Listesine Yazıl
+    </a>
+
+    <p class="foot">
+      DreamPulse, AI ve kolektif bilinçaltı üzerine bir denemedir.<br>
+      Veriler anonim, sistem açık kaynak olacak. | <a href="mailto:dream@dreampulse.live">İletişim</a>
+    </p>
+  </div>
+
+</body>
+</html>
