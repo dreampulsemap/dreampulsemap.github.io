@@ -2,11 +2,10 @@
 <html lang="en" translate="no">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-  <title>DreamPulse.live | Global Dream Map</title>
-  <meta name="description" content="The world's first collective unconscious heatmap from dreams of Turkey, India, Japan, Iran, and beyond. AI-powered, anonymous, free." />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DreamPulse.live | The Unconscious Compass</title>
+  <meta name="description" content="Global dream map from collective unconscious. Anonymous AI analysis. Free insight. 11 languages." />
 
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -16,10 +15,8 @@
       --bg: #000;
       --text: #eee;
       --accent: #a855f7;
-      --accent-dark: #7c1db8;
       --btn-bg: #9333ea;
       --btn-hover: #a74ef2;
-      --secondary-text: #9ca3af;
       --section-bg: #111;
       --radius: 16px;
       --gap: 30px;
@@ -35,6 +32,350 @@
       background: var(--bg);
       color: var(--text);
       font-family: 'Inter', sans-serif;
+      line-height: 1.7;
+      padding: 0;
+      margin: 0;
+      text-align: center;
+      font-size: clamp(1rem, 2.5vw, 1.1rem);
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 60px 20px;
+    }
+
+    h1 {
+      font-size: clamp(2.2rem, 5vw, 3.6rem);
+      margin-bottom: 12px;
+      background: linear-gradient(90deg, var(--accent), #6d0bad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 700;
+    }
+
+    .tagline {
+      font-size: clamp(1.1rem, 3vw, 1.4rem);
+      color: #9ca3af;
+      margin-bottom: 30px;
+    }
+
+    .demo-box {
+      margin: 40px auto;
+      padding: clamp(20px, 5vw, 30px);
+      background: var(--section-bg);
+      border-radius: var(--radius);
+      text-align: left;
+      font-family: 'Courier New', monospace;
+      font-size: clamp(0.9rem, 2.5vw, 1rem);
+      color: #b39dff;
+      max-width: 600px;
+      border: 1px solid #333;
+      line-height: 1.6;
+    }
+
+    .btn {
+      display: inline-block;
+      margin: 25px 10px;
+      padding: 15px 36px;
+      background: var(--btn-bg);
+      color: white;
+      border: none;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(106, 0, 255, 0.2);
+    }
+
+    .btn:hover {
+      background: var(--btn-hover);
+      transform: translateY(-3px);
+    }
+
+    .btn.secondary {
+      background: #333;
+    }
+
+    .lang-switch {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #111;
+      border-radius: 8px;
+      padding: 8px 12px;
+      border: 1px solid #444;
+      z-index: 100;
+    }
+
+    .lang-switch select {
+      background: #000;
+      color: var(--accent);
+      border: none;
+      outline: none;
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    .foot {
+      margin-top: 60px;
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 40px 16px;
+      }
+      .btn {
+        width: 90%;
+        max-width: 300px;
+        margin: 15px 0;
+      }
+      .lang-switch {
+        top: 12px;
+        right: 12px;
+        padding: 6px 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Language Switcher -->
+  <div class="lang-switch">
+    <select id="language-select" onchange="changeLang()">
+      <option value="en">🇬🇧 English</option>
+      <option value="tr">🇹🇷 Türkçe</option>
+      <option value="hi">🇮🇳 हिन्दी</option>
+      <option value="ja">🇯🇵 日本語</option>
+      <option value="fa">🇮🇷 فارسی</option>
+      <option value="es">🇪🇸 Español</option>
+      <option value="fr">🇫🇷 Français</option>
+      <option value="ar">🇸🇦 العربية</option>
+      <option value="de">🇩🇪 Deutsch</option>
+      <option value="pt">🇧🇷 Português</option>
+      <option value="ru">🇷🇺 Русский</option>
+    </select>
+  </div>
+
+  <div class="container">
+    <h1>DreamPulse.live</h1>
+    <p class="tagline" id="tagline">The pulse of the collective unconscious</p>
+
+    <p id="intro">
+      Every night, millions dream.<br>
+      We collect, map, and reveal the hidden patterns.<br>
+      <em>Free. Anonymous. AI-powered.</em>
+    </p>
+
+    <a href="#" class="btn" id="btn1">See How It Works</a>
+    <a href="https://forms.gle/YOUR_FORM_LINK" class="btn" id="btn2">✨ Submit Your Dream</a>
+
+    <div class="demo-box">
+      <strong id="demo-dream-label">Dream:</strong><br>
+      <span id="demo-dream">Last night, I walked through a dark corridor. A light far ahead — but no door would open.</span>
+      <br><br>
+      <strong id="demo-insight-label">AI Insight:</strong><br>
+      <span id="demo-insight">
+        > "Closed doors suggest inner areas you're not ready to enter. But the light — a sign of awakening — remains. This dream may signal transformation."
+      </span>
+    </div>
+
+    <p id="beta-text">
+      <strong>Join the Beta</strong><br>
+      First 100 get early access + monthly reports.
+    </p>
+
+    <a href="https://forms.gle/YOUR_FORM_LINK" class="btn secondary" id="btn3">📝 Join Beta List</a>
+
+    <p class="foot">
+      <span id="footer-text">
+        Powered by AI. Inspired by Jung.<br>
+        Data is anonymous. Not medical advice. | 
+        <a href="mailto:dream@dreampulse.live" style="color:#9ca3af">Contact</a>
+      </span>
+    </p>
+  </div>
+
+  <script>
+    // ✅ 11 Dil
+    const translations = {
+      en: {
+        tagline: "The pulse of the collective unconscious",
+        intro: "Every night, millions dream.<br>We collect, map, and reveal the hidden patterns.<br><em>Free. Anonymous. AI-powered.</em>",
+        btn1: "See How It Works",
+        btn2: "✨ Submit Your Dream",
+        btn3: "📝 Join Beta List",
+        demoDreamLabel: "Dream:",
+        demoDream: "Last night, I walked through a dark corridor. A light far ahead — but no door would open.",
+        demoInsightLabel: "AI Insight:",
+        demoInsight: "> \"Closed doors suggest inner areas you're not ready to enter. But the light — a sign of awakening — remains. This dream may signal transformation.\"",
+        betaText: "<strong>Join the Beta</strong><br>First 100 get early access + monthly reports.",
+        footer: "Powered by AI. Inspired by Jung.<br>Data is anonymous. Not medical advice. | <a href='mailto:dream@dreampulse.live' style='color:#9ca3af'>Contact</a>"
+      },
+      tr: {
+        tagline: "Kolektif bilinçaltının nabzı",
+        intro: "Her gece milyonlar rüya görüyor.<br>Gizli kalıpları topluyor, haritalıyor, gösteriyoruz.<br><em>Ücretsiz. Anonim. Yapay zeka güçlü.</em>",
+        btn1: "Nasıl Çalışır?",
+        btn2: "✨ Rüyanı Gönder",
+        btn3: "📝 Beta'ya Katıl",
+        demoDreamLabel: "Rüya:",
+        demoDream: "Dün gece karanlık bir koridorda yürüdüm. Uzakta bir ışık vardı — ama hiçbir kapı açılmadı.",
+        demoInsightLabel: "AI Analiz:",
+        demoInsight: "> \"Kapalı kapılar, henüz içeri girmeye hazır olmadığın alanları gösterir. Ama ışık — farkındalığın habercisi — hâlâ orada. Bu rüya dönüşüm sinyali olabilir.\"",
+        betaText: "<strong>Beta'ya Katıl</strong><br>İlk 100 kişi erken erişim + aylık rapor alır.",
+        footer: "Yapay zeka destekli. Jung'dan ilham aldı.<br>Veriler anonim. Tıbbi tavsiye değil. | <a href='mailto:dream@dreampulse.live' style='color:#9ca3af'>İletişim</a>"
+      },
+      hi: {
+        tagline: "सामूहिक अवचेतन की धड़कन",
+        intro: "हर रात लाखों सपने देखते हैं।<br>हम छिपे पैटर्न को इकट्ठा करते हैं, मैप करते हैं, दिखाते हैं।<br><em>मुफ़्त। गुमनाम। एआई से संचालित।</em>",
+        btn1: "यह कैसे काम करता है?",
+        btn2: "✨ अपना सपना भेजें",
+        btn3: "📝 बीटा में शामिल हों",
+        demoDreamLabel: "सपना:",
+        demoDream: "कल रात मैं एक अंधेरे गलियारे में चल रहा था। आगे एक रोशनी थी — लेकिन कोई दरवाज़ा नहीं खुला।",
+        demoInsightLabel: "एआई विश्लेषण:",
+        demoInsight: "> \"बंद दरवाज़े उन आंतरिक क्षेत्रों को दर्शाते हैं जिनमें आप अभी तैयार नहीं हैं। लेकिन प्रकाश — जागृति का संकेत — अभी भी है। यह सपना परिवर्तन का संकेत हो सकता है।\"",
+        betaText: "<strong>बीटा में शामिल हों</strong><br>पहले 100 को प्री-एक्सेस और मासिक रिपोर्ट मिलेगी।",
+        footer: "एआई द्वारा संचालित। युंग से प्रेरित।<br>डेटा गुमनाम है। चिकित्सा सलाह नहीं। | <a href='mailto:dream@dreampulse.live' style='color:#9ca3af'>संपर्क</a>"
+      },
+      ja: {
+        tagline: "集合的無意識の鼓動",
+        intro: "毎晩、何百万人もの人々が夢を見る。<br>私たちは、隠れたパターンを集め、マップ化し、明らかにする。<br><em>無料。匿名。AI搭載。</em>",
+        btn1: "どのように機能しますか？",
+        btn2: "✨ 夢を送る",
+        btn3: "📝 ベータ版に参加",
+        demoDreamLabel: "夢:",
+        demoDream: "昨夜、私は暗い通路を歩いていた。遠くに光があったが、どのドアも開かなかった。",
+        demoInsightLabel: "AI分析:",
+        demoInsight: "> \"閉ざされたドアは、まだ入る準備が整っていない内面の領域を示している。しかし、光 —— 覚醒の兆し —— はまだ存在する。この夢は変容のサインかもしれない。\"",
+        betaText: "<strong>ベータ版に参加</strong><br>先着100名に早期アクセスと月次レポートを提供。",
+        footer: "AI搭載。ユングのインスピレーション。<br>データは匿名。医療アドバイスではない。| <a href='mailto:dream@dreampulse.live' style='color:#9ca3af'>お問い合わせ</a>"
+      },
+      fa: {
+        tagline: "نبض بی‌آگاهی جمعی",
+        intro: "هر شب میلیون‌ها نفر رویا می‌بینند.<br>ما الگوهای پنهان را جمع‌آوری، نگاشت و نمایش می‌دهیم.<br><em>رایگان. ناشناس. مبتنی بر هوش مصنوعی.</em>",
+        btn1: "چگونه کار می‌کند؟",
+        btn2: "✨ رویای خود را ارسال کنید",
+        btn3: "📝 عضو لیست بتا شوید",
+        demoDreamLabel: "رویا:",
+        demoDream: "دیشب در یک راهروی تاریک قدم می‌زدم. چراغی در دور دست بود — اما هیچ دری باز نمی‌شد.",
+        demoInsightLabel: "تحلیل هوش مصنوعی:",
+        demoInsight: "> \"درهای بسته، حوزه‌های درونی‌ای را نشان می‌دهند که هنوز برای ورود آماده نیستید. اما نور — نشانه‌ای از بیداری — هنوز وجود دارد. این رویا ممکن است نشانه‌ای از تحول باشد.\"",
+        betaText: "<strong>عضو لیست بتا شوید</strong><br>صد نفر اول دسترسی زودهنگام و گزارش‌های ماهانه دریافت می‌کنند.",
+        footer: "قدرت‌گرفته از هوش مصنوعی. الهام‌گرفته از یونگ.<br>داده‌ها ناشناس هستند. توصیه پزشکی نیست. | <a href='mailto:dream@dreampulse.live' style='color:#9ca3af'>تماس</a>"
+      },
+      es: {
+        tagline: "El pulso del inconsciente colectivo",
+        intro: "Cada noche, millones sueñan.<br>Recopilamos, mapeamos y revelamos patrones ocultos.<br><em>Gratis. Anónimo. Potenciado por IA.</em>",
+        btn1: "Cómo funciona",
+        btn2: "✨ Enviar tu sueño",
+        btn3: "📝 Unirse a la Beta",
+        demoDreamLabel: "Sueño:",
+        demoDream: "Anoche caminé por un pasillo oscuro. Había una luz al fondo, pero ninguna puerta se abría.",
+        demoInsightLabel: "Análisis de IA:",
+        demoInsight: "> \"Las puertas cerradas sugieren áreas internas a las que aún no estás listo para entrar. Pero la luz — señal de despertar — sigue ahí. Este sueño podría indicar una transformación.\"",
+        betaText: "<strong>Únete a la Beta</strong><br>Los primeros 100 obtienen acceso anticipado y reportes mensuales.",
+        footer: "Potenciado por IA. Inspirado en Jung.<br>Los datos son anónimos. No es consejo médico. | <a href='mailto:dream@dreampulse.live' style='color:#9ca3af'>Contacto</a>"
+      },
+      fr: {
+        tagline: "Le pouls de l'inconscient collectif",
+        intro: "Chaque nuit, des millions font des rêves.<br>Nous recueillons, cartographions et révélons les schémas cachés.<br><em>Gratuit. Anonyme. Alimenté par l'IA.</em>",
+        btn1: "Comment ça marche ?",
+        btn2: "✨ Envoyez votre rêve",
+        btn3: "📝 Rejoignez la Beta",
+        demoDreamLabel: "Rêve :",
+        demoDream: "Hier soir, j'ai marché dans un couloir sombre. Une lumière au loin — mais aucune porte ne s'ouvrait.",
+        demoInsightLabel: "Analyse IA :",
+        demoInsight: "> « Les portes fermées suggèrent des zones internes auxquelles vous n'êtes pas encore prêt. Mais la lumière — signe d'éveil — est toujours là. Ce rêve pourrait signaler une transformation. »",
+        betaText: "<strong>Rejoignez la Beta</strong><br>Les 100 premiers auront un accès anticipé et des rapports mensuels.",
+        footer: "Propulsé par l'IA. Inspiré de Jung.<br>Les données sont anonymes. Pas un conseil médical. | <a href='mailto:dream@dreampulse.live' style='color:#9ca3af'>Contact</a>"
+      },
+      ar: {
+        tagline: "نبض اللاوعي الجماعي",
+        intro: "كل ليلة، يحلم الملايين.<br>نجمع، نرسم خرائط، ونكشف الأنماط المخفية.<br><em>مجاناً. مجهول. مدعوم بالذكاء الاصطناعي.</em>",
+        btn1: "كيف يعمل؟",
+        btn2: "✨ أرسل حلمك",
+        btn3: "📝 انضم إلى النسخة التجريبية",
+        demoDreamLabel: "الحلم:",
+        demoDream: "ليلة أمس، مشيت عبر ممر مظلم. كانت هناك نافذة ضوء بعيدة — لكن لا بابٍ كان يفتح.",
+        demoInsightLabel: "تحليل الذكاء الاصطناعي:",
+        demoInsight: "> \"تشير الأبواب المغلقة إلى مناطق داخلية لست مستعداً لدخولها بعد. لكن النور — علامة اليقظة — لا يزال هناك. قد يُشير هذا الحلم إلى التحول.\"",
+        betaText: "<strong>انضم إلى النسخة التجريبية</strong><br>أول 100 مشترك يحصلون على وصول مبكر وتقارير شهرية.",
+        footer: "مدعوم بالذكاء الاصطناعي. مستوحى من يونغ.<br>البيانات مجهولة. ليست نصيحة طبية. | <a href='mailto:dream@dreampulse.live' style='color:#9ca3af'>اتصال</a>"
+      },
+      de: {
+        tagline: "Der Puls des kollektiven Unbewussten",
+        intro: "Jede Nacht träumen Millionen.<br>Wir sammeln, kartieren und enthüllen verborgene Muster.<br><em>Kostenlos. Anonym. KI-gestützt.</em>",
+        btn1: "Wie funktioniert es?",
+        btn2: "✨ Träumen Sie ein",
+        btn3: "📝 Beta beitreten",
+        demoDreamLabel: "Traum:",
+        demoDream: "Gestern ging ich durch einen dunklen Flur. Ein Licht in der Ferne — aber keine Tür öffnete sich.",
+        demoInsightLabel: "KI-Analyse:",
+        demoInsight: "> \"Geschlossene Türen deuten auf innere Bereiche hin, für die du noch nicht bereit bist. Aber das Licht — ein Zeichen der Erweckung — bleibt. Dieser Traum könnte eine Verwandlung andeuten.\"",
+        betaText: "<strong>Beta beitreten</strong><br>Die ersten 100 erhalten Vorabzugang und Monatsberichte.",
+        footer: "Angetrieben von KI. Inspiriert von Jung.<br>Daten anonym. Keine medizinische Beratung. | <a href='mailto:dream@dreampulse.live' style='color:#9ca3af'>Kontakt</a>"
+      },
+      pt: {
+        tagline: "O pulso do inconsciente coletivo",
+        intro: "Todas as noites, milhões sonham.<br>Capturamos, mapeamos e revelamos padrões ocultos.<br><em>Grátis. Anônimo. Inteligência Artificial.</em>",
+        btn1: "Como funciona?",
+        btn2: "✨ Envie seu sonho",
+        btn3: "📝 Junte-se à Beta",
+        demoDreamLabel: "Sonho:",
+        demoDream: "Ontem à noite, caminhei por um corredor escuro. Havia uma luz ao longe — mas nenhuma porta se abria.",
+        demoInsightLabel: "Análise de IA:",
+        demoInsight: "> \"Portas fechadas sugerem áreas internas para as quais você ainda não está pronto. Mas a luz — sinal de despertar — permanece. Esse sonho pode indicar transformação.\"",
+        betaText: "<strong>Junte-se à Beta</strong><br>Os 100 primeiros têm acesso antecipado + relatórios mensais.",
+        footer: "Conduzido por IA. Inspirado em Jung.<br>Dados anônimos. Não é conselho médico. | <a href='mailto:dream@dreampulse.live' style='color:#9ca3af'>Contato</a>"
+      },
+      ru: {
+        tagline: "Пульс коллективного бессознательного",
+        intro: "Каждую ночь миллионы людей видят сны.<br>Мы собираем, анализируем и раскрываем скрытые паттерны.<br><em>Бесплатно. Анонимно. На базе ИИ.</em>",
+        btn1: "Как это работает?",
+        btn2: "✨ Отправьте свой сон",
+        btn3: "📝 Присоединиться к бета-тесту",
+        demoDreamLabel: "Сон:",
+        demoDream: "Прошлой ночью я шёл по тёмному коридору. Впереди был свет, но ни одна дверь не открывалась.",
+        demoInsightLabel: "Анализ ИИ:",
+        demoInsight: "> \"Закрытые двери указывают на внутренние области, куда вы ещё не готовы войти. Но свет — признак пробуждения — всё ещё есть. Этот сон может сигнализировать о трансформации.\"",
+        betaText: "<strong>Присоединяйтесь к бета-тесту</strong><br>Первые 100 получат ранний доступ и ежемесячные отчёты.",
+        footer: "На ИИ. Вдохновлено Юнгом.<br>Данные анонимны. Не медицинские рекомендации. | <a href='mailto:dream@dreampulse.live' style='color:#9ca3af'>Контакт</a>"
+      }
+    };
+
+    function changeLang() {
+      const lang = document.getElementById("language-select").value;
+      const t = translations[lang];
+
+      document.getElementById("tagline").textContent = t.tagline;
+      document.getElementById("intro").innerHTML = t.intro;
+      document.getElementById("btn1").textContent = t.btn1;
+      document.getElementById("btn2").textContent = t.btn2;
+      document.getElementById("btn3").textContent = t.btn3;
+      document.getElementById("demo-dream-label").textContent = t.demoDreamLabel;
+      document.getElementById("demo-dream").textContent = t.demoDream;
+      document.getElementById("demo-insight-label").textContent = t.demoInsightLabel;
+      document.getElementById("demo-insight").textContent = t.demoInsight;
+      document.getElementById("beta-text").innerHTML = t.betaText;
+      document.getElementById("footer-text").innerHTML = t.footer;
+
+      // Kullanıcı seçimi hatırlandı
+      localStorage.setItem('dp-lang', lang);
+    }
+
+    // Sayfa yüklendiğinde
+    window.onload = function() {
+      const savedLang = localStorage.getItem('dp-lang') || 'en';
+      document.getElementById("language-select").value = savedLang;
+      changeLang();
+    };
+  </script>
+</body>
+</html>      font-family: 'Inter', sans-serif;
       line-height: 1.7;
       padding: 0;
       margin: 0;
