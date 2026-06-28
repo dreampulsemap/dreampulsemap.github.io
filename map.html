@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DreamPulse - Collective Map</title>
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        * { font-family: 'Cormorant Garamond', serif; }
+        h1, h2, h3, .brand { font-family: 'Cinzel', serif; letter-spacing: 0.1em; }
+        body { background: #0a0a0f; min-height: 100vh; overflow-x: hidden; }
+        
+        .mystic-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2;
+            background: 
+                radial-gradient(ellipse at top, rgba(88, 28, 135, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at bottom, rgba(30, 58, 138, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at center, rgba(15, 23, 42, 0.8) 0%, #0a0a0f 100%);
+        }
+        
+        .glass { background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(20px); border: 1px solid rgba(168, 85, 247, 0.2); }
+        .glass-strong { background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(30px); border: 1px solid rgba(168, 85, 247, 0.3); }
+        .glow-purple { box-shadow: 0 0 40px rgba(168, 85, 247, 0.3); }
+        .text-glow { text-shadow: 0 0 20px rgba(168, 85, 247, 0.5); }
+        
+        .btn-mystic {
+            background: linear-gradient(135deg, rgba(88, 28, 135, 0.8) 0%, rgba(30, 58, 138, 0.8) 100%);
+            border: 1px solid rgba(168, 85, 247, 0.4);
+            transition: all 0.3s;
+        }
+        
+        .btn-mystic:hover {
+            background: linear-gradient(135deg, rgba(126, 34, 206, 0.9) 0%, rgba(37, 99, 235, 0.9) 100%);
+            border-color: rgba(168, 85, 247, 0.8);
+            box-shadow: 0 0 30px rgba(168, 85, 247, 0.5);
+        }
+        
+        #map { height: 600px; border-radius: 12px; box-shadow: 0 0 30px rgba(168, 85, 247, 0.3); }
+        
+        .dream-icon {
+            background: rgba(168, 85, 247, 0.9);
+            border: 3px solid #fff;
+            border-radius: 50%;
+            width: 50px; height: 50px;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.6);
+            transition: all 0.3s;
+        }
+        
+        .dream-icon:hover { transform: scale(1.3); box-shadow: 0 0 30px rgba(168, 85, 247, 1); }
+        .dream-icon img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .symbol-card {
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .symbol-card:hover { transform: translateY(-4px); box-shadow: 0 10px 40px rgba(168, 85, 247, 0.4); }
+        .symbol-card.active { border-color: rgba(168, 85, 247, 0.8); background: rgba(168, 85, 247, 0.2); }
+        
+        .symbol-img {
+            width: 60px; height: 60px;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 2px solid rgba(168, 85, 247, 0.4);
+        }
+        
+        .symbol-img img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .forecast-card { transition: all 0.3s; }
+        .forecast-card:hover { transform: translateY(-4px); box-shadow: 0 10px 40px rgba(168, 85, 247, 0.4); }
+        
+        .locked { position: relative; opacity: 0.6; }
+        .locked::after {
+            content: '🔒';
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 48px; opacity: 0.8;
+        }
+        
+        .live-feed-item { animation: slideIn 0.5s ease-out; }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
+        
+        .pulse { animation: pulse 2s ease-in-out infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.5); }
+        ::-webkit-scrollbar-thumb { background: rgba(168, 85, 247, 0.5); border-radius: 4px; }
+    </style>
+</head>
+<body class="text-white">
+    <div class="mystic-bg"></div>
+
+    <!-- TOP BAR -->
+    <div class="fixed top-0 left-0 right-0 z-50 glass-strong border-b border-purple-500/20">
+        <div class="container mx-auto px-4 py-3 flex items-center justify-between max-w-7xl">
+            <a href="index.html" class="flex items-center gap-3">
+                <span class="text-3xl">🌙</span>
+                <span class="brand text-xl font-semibold text-glow">DreamPulse</span>
+            </a>
+
+            <div class="flex items-center gap-3">
+                <a href="index.html" class="glass px-4 py-2 rounded-lg hover:bg-purple-500/20 transition">
+                    <span id="backBtn">← Back</span>
+                </a>
+                
+                <div class="relative">
+                    <button onclick="toggleLangMenu()" class="glass px-4 py-2 rounded-lg hover:bg-purple-500/20 transition flex items-center gap-2">
+                        <span id="currentLang">🇬🇧 EN</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+                    
+                    <div id="langMenu" class="hidden absolute right-0 mt-2 w-48 glass-strong rounded-xl overflow-hidden">
+                        <button onclick="changeLang('en')" class="w-full px-4 py-3 text-left hover:bg-purple-500/20 transition">🇬🇧 English</button>
+                        <button onclick="changeLang('tr')" class="w-full px-4 py-3 text-left hover:bg-purple-500/20 transition">🇹🇷 Türkçe</button>
+                        <button onclick="changeLang('es')" class="w-full px-4 py-3 text-left hover:bg-purple-500/20 transition">🇪🇸 Español</button>
+                        <button onclick="changeLang('ar')" class="w-full px-4 py-3 text-left hover:bg-purple-500/20 transition">🇸🇦 العربية</button>
+                        <button onclick="changeLang('hi')" class="w-full px-4 py-3 text-left hover:bg-purple-500/20 transition">🇮🇳 हिन्दी</button>
+                        <button onclick="changeLang('zh')" class="w-full px-4 py-3 text-left hover:bg-purple-500/20 transition">🇨🇳 中文</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mx-auto px-4 pt-24 pb-16 max-w-7xl">
+        <div class="text-center mb-8">
+            <h1 class="text-5xl font-bold mb-2 text-glow" id="mapTitle">Collective Unconscious Map</h1>
+            <p class="text-purple-300" id="mapSubtitle">AI-generated symbols from dreams worldwide</p>
+        </div>
+
+        <!-- STATS -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            <div class="glass rounded-xl p-4 text-center">
+                <div class="text-3xl font-bold text-purple-400" id="totalDreams">0</div>
+                <div class="text-sm text-gray-400" id="statDreams">Total Dreams</div>
+            </div>
+            <div class="glass rounded-xl p-4 text-center">
+                <div class="text-3xl font-bold text-blue-400" id="totalSymbols">0</div>
+                <div class="text-sm text-gray-400" id="statSymbols">AI Symbols</div>
+            </div>
+            <div class="glass rounded-xl p-4 text-center">
+                <div class="text-3xl font-bold text-green-400" id="totalCountries">0</div>
+                <div class="text-sm text-gray-400" id="statCountries">Countries</div>
+            </div>
+            <div class="glass rounded-xl p-4 text-center">
+                <div class="text-3xl font-bold text-yellow-400 pulse" id="liveCount">0</div>
+                <div class="text-sm text-gray-400" id="statLive">Live Now</div>
+            </div>
+        </div>
+
+        <!-- DYNAMIC AI SYMBOLS -->
+        <div class="glass rounded-xl p-6 mb-8">
+            <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
+                <span>✨</span>
+                <span id="symbolFilterTitle">AI-Generated Symbols</span>
+            </h3>
+            <div id="symbolFilters" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
+                <!-- Dynamically populated -->
+            </div>
+        </div>
+
+        <!-- MAP -->
+        <div id="map" class="mb-8"></div>
+
+        <!-- FORECASTS -->
+        <div class="glass rounded-xl p-6 mb-8">
+            <h3 class="text-2xl font-bold mb-6 flex items-center gap-2">
+                <span>🔮</span>
+                <span id="forecastTitle">Collective Forecasts</span>
+            </h3>
+            
+            <div class="grid md:grid-cols-2 gap-6" id="forecastContainer">
+                <div class="forecast-card glass rounded-xl p-6">
+                    <div class="flex items-start justify-between mb-4">
+                        <div>
+                            <h4 class="text-xl font-bold mb-1" id="forecast1Title">🌍 Global Trend</h4>
+                            <p class="text-sm text-gray-400" id="forecast1Region">Worldwide</p>
+                        </div>
+                        <span class="text-xs bg-green-500/20 text-green-400 px-3 py-1 rounded-full">FREE</span>
+                    </div>
+                    <p class="text-gray-300 mb-4" id="forecast1Text">
+                        Rising "falling" dreams indicate collective anxiety about loss of control.
+                    </p>
+                    <div class="text-xs text-gray-500" id="forecast1Meta">Based on 1,247 dreams • Updated 2 hours ago</div>
+                </div>
+
+                <div class="forecast-card glass rounded-xl p-6">
+                    <div class="flex items-start justify-between mb-4">
+                        <div>
+                            <h4 class="text-xl font-bold mb-1" id="forecast2Title">🇹🇷 Regional Insight</h4>
+                            <p class="text-sm text-gray-400" id="forecast2Region">Turkey</p>
+                        </div>
+                        <span class="text-xs bg-green-500/20 text-green-400 px-3 py-1 rounded-full">FREE</span>
+                    </div>
+                    <p class="text-gray-300 mb-4" id="forecast2Text">
+                        "Door" symbols increasing by 180%. Collective desire for new opportunities.
+                    </p>
+                    <div class="text-xs text-gray-500" id="forecast2Meta">Based on 342 dreams • Updated 5 hours ago</div>
+                </div>
+
+                <div class="forecast-card glass rounded-xl p-6 locked">
+                    <div class="flex items-start justify-between mb-4">
+                        <div>
+                            <h4 class="text-xl font-bold mb-1" id="forecast3Title">🔒 Deep Analysis</h4>
+                            <p class="text-sm text-gray-400" id="forecast3Region">Europe</p>
+                        </div>
+                        <span class="text-xs bg-purple-500/20 text-purple-400 px-3 py-1 rounded-full">PRO</span>
+                    </div>
+                    <p class="text-gray-300 mb-4">Premium content...</p>
+                </div>
+
+                <div class="forecast-card glass rounded-xl p-6 locked">
+                    <div class="flex items-start justify-between mb-4">
+                        <div>
+                            <h4 class="text-xl font-bold mb-1" id="forecast4Title">🔒 Future Predictions</h4>
+                            <p class="text-sm text-gray-400" id="forecast4Region">Asia-Pacific</p>
+                        </div>
+                        <span class="text-xs bg-purple-500/20 text-purple-400 px-3 py-1 rounded-full">PRO</span>
+                    </div>
+                    <p class="text-gray-300 mb-4">Premium content...</p>
+                </div>
+            </div>
+
+            <div class="text-center mt-6">
+                <button onclick="subscribeForecasts()" class="btn-mystic text-white font-semibold px-8 py-3 rounded-xl">
+                    <span id="subscribeBtn">🔓 Unlock All Forecasts — $9/month</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- LIVE FEED (Reddit RSS) -->
+        <div class="glass rounded-xl p-6">
+            <h3 class="text-2xl font-bold mb-6 flex items-center gap-2">
+                <span class="pulse">📡</span>
+                <span id="liveFeedTitle">Live Dream Feed</span>
+                <span class="text-xs bg-red-500/20 text-red-400 px-3 py-1 rounded-full pulse">LIVE</span>
+            </h3>
+            
+            <div id="liveFeed" class="space-y-3 max-h-96 overflow-y-auto">
+                <div class="text-center py-8 text-gray-500">Loading dreams from Reddit...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SUBSCRIBE MODAL -->
+    <div id="subscribeModal" class="hidden fixed inset-0 bg-black/90 backdrop-blur-md z-50 flex items-center justify-center p-4">
+        <div class="glass-strong rounded-2xl p-8 max-w-md w-full glow-purple">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold" id="subModalTitle">Unlock Premium Forecasts</h3>
+                <button onclick="closeSubscribe()" class="text-gray-400 hover:text-white text-3xl">&times;</button>
+            </div>
+            <div class="text-center mb-6">
+                <div class="text-6xl mb-4">🔮</div>
+                <p class="text-gray-300 mb-6" id="subModalDesc">Unlimited access to all forecasts. $9/month.</p>
+            </div>
+            <button onclick="confirmSubscribe()" class="w-full btn-mystic text-white font-semibold py-4 rounded-xl">
+                <span id="subConfirmBtn">Subscribe — $9/month</span>
+            </button>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <script>
+        // Translations
+        const translations = {
+            en: {
+                backBtn: "← Back",
+                mapTitle: "Collective Unconscious Map",
+                mapSubtitle: "AI-generated symbols from dreams worldwide",
+                statDreams: "Total Dreams", statSymbols: "AI Symbols", statCountries: "Countries", statLive: "Live Now",
+                symbolFilterTitle: "AI-Generated Symbols",
+                forecastTitle: "Collective Forecasts",
+                forecast1Title: "🌍 Global Trend", forecast1Region: "Worldwide",
+                forecast1Text: "Rising \"falling\" dreams indicate collective anxiety about loss of control.",
+                forecast1Meta: "Based on 1,247 dreams • Updated 2 hours ago",
+                forecast2Title: "🇹🇷 Regional Insight", forecast2Region: "Turkey",
+                forecast2Text: "\"Door\" symbols increasing by 180%. Collective desire for new opportunities.",
+                forecast2Meta: "Based on 342 dreams • Updated 5 hours ago",
+                forecast3Title: "🔒 Deep Analysis", forecast3Region: "Europe",
+                forecast4Title: "🔒 Future Predictions", forecast4Region: "Asia-Pacific",
+                subscribeBtn: "🔓 Unlock All Forecasts — $9/month",
+                liveFeedTitle: "Live Dream Feed",
+                subModalTitle: "Unlock Premium Forecasts",
+                subModalDesc: "Unlimited access to all forecasts. $9/month.",
+                subConfirmBtn: "Subscribe — $9/month"
+            },
+            tr: {
+                backBtn: "← Geri",
+                mapTitle: "Kolektif Bilinçaltı Haritası",
+                mapSubtitle: "Dünya çapındaki rüyalardan AI üretilmiş semboller",
+                statDreams: "Toplam Rüya", statSymbols: "AI Sembol", statCountries: "Ülke", statLive: "Canlı",
+                symbolFilterTitle: "AI Tarafından Üretilen Semboller",
+                forecastTitle: "Kolektif Tahminler",
+                forecast1Title: "🌍 Küresel Trend", forecast1Region: "Dünya Geneli",
+                forecast1Text: "Artan \"düşme\" rüyaları, kontrol kaybı konusunda kolektif kaygıyı gösteriyor.",
+                forecast1Meta: "1.247 rüyaya dayalı • 2 saat önce",
+                forecast2Title: "🇹🇷 Bölgesel İçgörü", forecast2Region: "Türkiye",
+                forecast2Text: "\"Kapı\" sembolleri %180 artıyor. Yeni fırsatlar için kolektif arzu.",
+                forecast2Meta: "342 rüyaya dayalı • 5 saat önce",
+                forecast3Title: "🔒 Derin Analiz", forecast3Region: "Avrupa",
+                forecast4Title: "🔒 Gelecek Tahminleri", forecast4Region: "Asya-Pasifik",
+                subscribeBtn: "🔓 Tüm Tahminleri Aç — 9$/ay",
+                liveFeedTitle: "Canlı Rüya Akışı",
+                subModalTitle: "Premium Tahminleri Aç",
+                subModalDesc: "Tüm tahminlere sınırsız erişim. 9$/ay.",
+                subConfirmBtn: "Abone Ol — 9$/ay"
+            },
+            es: { backBtn: "← Atrás", mapTitle: "Mapa del Inconsciente", mapSubtitle: "Símbolos IA de sueños mundiales", statDreams: "Sueños", statSymbols: "Símbolos IA", statCountries: "Países", statLive: "En Vivo", symbolFilterTitle: "Símbolos IA", forecastTitle: "Pronósticos", forecast1Title: "🌍 Global", forecast1Region: "Mundial", forecast1Text: "Sueños de caída aumentan.", forecast1Meta: "1.247 sueños", forecast2Title: "🇹🇷 Regional", forecast2Region: "Turquía", forecast2Text: "Puertas +180%.", forecast2Meta: "342 sueños", forecast3Title: "🔒 Profundo", forecast3Region: "Europa", forecast4Title: "🔒 Futuro", forecast4Region: "Asia", subscribeBtn: "$9/mes", liveFeedTitle: "Feed en Vivo", subModalTitle: "Premium", subModalDesc: "$9/mes", subConfirmBtn: "$9/mes" },
+            ar: { backBtn: "← رجوع", mapTitle: "خريطة اللاوعي", mapSubtitle: "رموز IA من الأحلام", statDreams: "أحلام", statSymbols: "رموز IA", statCountries: "دول", statLive: "مباشر", symbolFilterTitle: "رموز IA", forecastTitle: "توقعات", forecast1Title: "🌍 عالمي", forecast1Region: "عالمي", forecast1Text: "أحلام السقوط تزيد.", forecast1Meta: "1,247 حلم", forecast2Title: "🇹🇷 إقليمي", forecast2Region: "تركيا", forecast2Text: "أبواب +180%.", forecast2Meta: "342 حلم", forecast3Title: "🔒 عميق", forecast3Region: "أوروبا", forecast4Title: "🔒 مستقبل", forecast4Region: "آسيا", subscribeBtn: "9$/شهر", liveFeedTitle: "مباشر", subModalTitle: "مميز", subModalDesc: "9$/شهر", subConfirmBtn: "9$/شهر" },
+            hi: { backBtn: "← वापस", mapTitle: "सामूहिक मानचित्र", mapSubtitle: "AI प्रतीक", statDreams: "सपने", statSymbols: "AI", statCountries: "देश", statLive: "लाइव", symbolFilterTitle: "AI", forecastTitle: "पूर्वानुमान", forecast1Title: "🌍 वैश्विक",
