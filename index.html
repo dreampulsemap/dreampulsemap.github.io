@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DreamPulse - Collective Unconscious Navigation</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        * { font-family: 'Cormorant Garamond', serif; }
+        h1, h2, h3, .brand { font-family: 'Cinzel', serif; letter-spacing: 0.1em; }
+        body { background: #0a0a0f; min-height: 100vh; overflow-x: hidden; }
+        
+        .mystic-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2;
+            background: 
+                radial-gradient(ellipse at top, rgba(88, 28, 135, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at bottom, rgba(30, 58, 138, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at center, rgba(15, 23, 42, 0.8) 0%, #0a0a0f 100%);
+            animation: pulse 8s ease-in-out infinite;
+        }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.85; } }
+        
+        .particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+        .particle {
+            position: absolute; width: 2px; height: 2px;
+            background: rgba(168, 85, 247, 0.6); border-radius: 50%;
+            box-shadow: 0 0 10px rgba(168, 85, 247, 0.8);
+            animation: float 15s infinite linear;
+        }
+        @keyframes float {
+            0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+            10% { opacity: 1; } 90% { opacity: 1; }
+            100% { transform: translateY(-100vh) translateX(100px); opacity: 0; }
+        }
+        
+        .glass { background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(20px); border: 1px solid rgba(168, 85, 247, 0.2); }
+        .glass-strong { background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(30px); border: 1px solid rgba(168, 85, 247, 0.3); }
+        .glow-purple { box-shadow: 0 0 40px rgba(168, 85, 247, 0.3), 0 0 80px rgba(168, 85, 247, 0.1); }
+        .glow-gold { box-shadow: 0 0 40px rgba(251, 191, 36, 0.3); }
+        .text-glow { text-shadow: 0 0 20px rgba(168, 85, 247, 0.5); }
+        
+        .hover-lift { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .hover-lift:hover { transform: translateY(-4px); box-shadow: 0 20px 60px rgba(168, 85, 247, 0.4); }
+        
+        .moon { display: inline-block; animation: moonGlow 4s ease-in-out infinite; }
+        @keyframes moonGlow {
+            0%, 100% { filter: drop-shadow(0 0 20px rgba(168, 85, 247, 0.6)); }
+            50% { filter: drop-shadow(0 0 40px rgba(168, 85, 247, 0.9)); }
+        }
+        
+        .btn-mystic {
+            background: linear-gradient(135deg, rgba(88, 28, 135, 0.8) 0%, rgba(30, 58, 138, 0.8) 100%);
+            border: 1px solid rgba(168, 85, 247, 0.4); transition: all 0.3s;
+        }
+        .btn-mystic:hover {
+            background: linear-gradient(135deg, rgba(126, 34, 206, 0.9) 0%, rgba(37, 99, 235, 0.9) 100%);
+            border-color: rgba(168, 85, 247, 0.8); box-shadow: 0 0 30px rgba(168, 85, 247, 0.5);
+        }
+        
+        .btn-gold {
+            background: linear-gradient(135deg, rgba(180, 83, 9, 0.8) 0%, rgba(146, 64, 14, 0.8) 100%);
+            border: 1px solid rgba(251, 191, 36, 0.5); transition: all 0.3s;
+        }
+        .btn-gold:hover {
+            background: linear-gradient(135deg, rgba(217, 119, 6, 0.9) 0%, rgba(180, 83, 9, 0.9) 100%);
+            border-color: rgba(251, 191, 36, 0.9); box-shadow: 0 0 30px rgba(251, 191, 36, 0.5);
+        }
+        
+        .btn-map {
+            background: linear-gradient(135deg, rgba(5, 150, 105, 0.8) 0%, rgba(6, 95, 70, 0.8) 100%);
+            border: 1px solid rgba(16, 185, 129, 0.5); transition: all 0.3s;
+        }
+        .btn-map:hover {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.9) 0%, rgba(5, 150, 105, 0.9) 100%);
+            box-shadow: 0 0 30px rgba(16, 185, 129, 0.5);
+        }
+        
+        .btn-app {
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.8) 0%, rgba(168, 85, 247, 0.8) 100%);
+            border: 1px solid rgba(236, 72, 153, 0.5); transition: all 0.3s;
+        }
+        .btn-app:hover {
+            background: linear-gradient(135deg, rgba(244, 114, 182, 0.9) 0%, rgba(192, 132, 252, 0.9) 100%);
+            box-shadow: 0 0 30px rgba(236, 72, 153, 0.5);
+        }
+        
+        .menu-dropdown { transform-origin: top; animation: menuSlide 0.3s ease-out; }
+        @keyframes menuSlide { from { opacity: 0; transform: scaleY(0.8); } to { opacity: 1; transform: scaleY(1); } }
+        
+        .symbol-preview { display: inline-block; width: 80px; height: 80px; border-radius: 12px; overflow: hidden; border: 2px solid rgba(168, 85, 247, 0.4); background: rgba(15, 23, 42, 0.5); }
+        .symbol-preview img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .loading-spinner { border: 3px solid rgba(168, 85, 247, 0.2); border-top: 3px solid rgba(168, 85, 247, 0.8); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        .forecast-badge {
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.2) 0%, rgba(217, 119, 6, 0.2) 100%);
+            border: 1px solid rgba(251, 191, 36, 0.4); animation: glow 3s ease-in-out infinite;
+        }
+        @keyframes glow { 0%, 100% { box-shadow: 0 0 20px rgba(251, 191, 36, 0.3); } 50% { box-shadow: 0 0 40px rgba(251, 191, 36, 0.6); } }
+        
+        .pulse-dot { width: 8px; height: 8px; border-radius: 50%; background: #10b981; animation: pulseDot 2s ease-in-out infinite; }
+        @keyframes pulseDot { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.3); } }
+        
+        .all-access-card {
+            background: linear-gradient(135deg, rgba(180, 83, 9, 0.15) 0%, rgba(88, 28, 135, 0.15) 100%);
+            border: 2px solid rgba(251, 191, 36, 0.5); position: relative; overflow: hidden;
+        }
+        .all-access-card::before {
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(251, 191, 36, 0.1), transparent);
+            animation: shimmer 3s infinite;
+        }
+        @keyframes shimmer { 0% { transform: translateX(-100%) translateY(-100%); } 100% { transform: translateX(100%) translateY(100%); } }
+        
+        /* BAĞIMLILIK */
+        .streak-badge { background: linear-gradient(135deg, rgba(251, 191, 36, 0.3), rgba(217, 119, 6, 0.3)); border: 2px solid rgba(251, 191, 36, 0.6); animation: streakPulse 2s infinite; }
+        @keyframes streakPulse { 0%, 100% { box-shadow: 0 0 20px rgba(251, 191, 36, 0.4); } 50% { box-shadow: 0 0 40px rgba(251, 191, 36, 0.8); } }
+        
+        .daily-card {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(59, 130, 246, 0.2));
+            border: 2px solid rgba(168, 85, 247, 0.5); cursor: pointer; transition: all 0.3s;
+        }
+        .daily-card:hover { transform: scale(1.02); box-shadow: 0 10px 40px rgba(168, 85, 247, 0.6); }
+        
+        .achievement-badge { animation: achieveGlow 2s ease-in-out infinite; }
+        @keyframes achieveGlow { 0%, 100% { filter: brightness(1); } 50% { filter: brightness(1.3); } }
+        
+        .progress-bar { height: 6px; border-radius: 3px; background: rgba(168, 85, 247, 0.2); overflow: hidden; }
+        .progress-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, #8b5cf6, #06b6d4); transition: width 0.5s; }
+        
+        .fomo-banner {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(217, 119, 6, 0.2));
+            border: 1px solid rgba(239, 68, 68, 0.4); animation: fomoPulse 3s infinite;
+        }
+        @keyframes fomoPulse { 0%, 100% { border-color: rgba(239, 68, 68, 0.4); } 50% { border-color: rgba(239, 68, 68, 0.8); } }
+        
+        .app-card {
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.15), rgba(168, 85, 247, 0.15));
+            border: 2px solid rgba(236, 72, 153, 0.4); position: relative; overflow: hidden;
+        }
+        .app-card::before {
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(236, 72, 153, 0.08), transparent);
+            animation: shimmer 4s infinite;
+        }
+        
+        .notification-banner {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.2));
+            border: 1px solid rgba(16, 185, 129, 0.5); animation: slideDown 0.5s ease-out;
+        }
+        @keyframes slideDown { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        
+        .confetti { position: fixed; pointer-events: none; z-index: 9999; animation: confettiFall 3s forwards; }
+        @keyframes confettiFall {
+            0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+        }
+        
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.5); }
+        ::-webkit-scrollbar-thumb { background: rgba(168, 85, 247, 0.5); border-radius: 4px; }
+    </style>
+</head>
+<body class="text-white">
+    <div class="mystic-bg"></div>
+    <div class="particles" id="particles"></div>
+
+    <!-- NOTIFICATION BANNER -->
+    <div id="notificationBanner" class="hidden fixed top-16 left-0 right-0 z-40 notification-banner px-4 py-3">
+        <div class="container mx-auto max-w-6xl flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <span class="text-2xl">🔔</span>
+                <div>
+                    <div class="font-semibold text-green-300" id="notifTitle">Enable Notifications</div>
+                    <div class="text-sm text-green-200/70" id="notifDesc">Never miss your daily dream insight</div>
+                </div>
+            </div>
+            <div class="flex gap-2">
+                <button onclick="enableNotifications()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-semibold">Enable</button>
+                <button onclick="dismissNotif()" class="bg-slate-700 text-white px-4 py-2 rounded-lg text-sm">Later</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOMO BANNER (Bağımlılık) -->
+    <div id="fomoBanner" class="hidden fixed bottom-0 left-0 right-0 z-40 fomo-banner px-4 py-3">
+        <div class="container mx-auto max-w-6xl flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <span class="text-2xl">⏰</span>
+                <div>
+                    <div class="font-semibold text-red-300" id="fomoTitle">Your streak is about to expire!</div>
+                    <div class="text-sm text-red-200/70" id="fomoDesc">Share a dream today to keep your 🔥 streak alive</div>
+                </div>
+            </div>
+            <button onclick="showDreamFlow(); document.getElementById('fomoBanner').classList.add('hidden');" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-semibold">Dream Now</button>
+        </div>
+    </div>
+
+    <!-- TOP BAR -->
+    <div class="fixed top-0 left-0 right-0 z-50 glass-strong border-b border-purple-500/20">
+        <div class="container mx-auto px-4 py-3 flex items-center justify-between max-w-6xl">
+            <div class="flex items-center gap-3">
+                <span class="moon text-3xl">🌙</span>
+                <span class="brand text-xl font-semibold text-glow">DreamPulse</span>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <!-- STREAK -->
+                <div id="streakBadge" class="hidden streak-badge px-3 py-1 rounded-full flex items-center gap-2">
+                    <span>🔥</span>
+                    <span class="font-bold text-amber-300" id="streakCount">0</span>
+                </div>
+                
+                <!-- ACHIEVEMENTS -->
+                <button onclick="showAchievements()" class="glass px-3 py-2 rounded-lg hover:bg-purple-500/20 transition hidden" id="achieveBtn">
+                    <span id="achieveCount">🏆 0</span>
+                </button>
+                
+                <!-- USER STATUS -->
+                <div id="userSection">
+                    <!-- Giriş yapmamışsa -->
+                    <div id="guestSection">
+                        <button onclick="showAuthModal()" class="btn-mystic text-white px-4 py-2 rounded-lg text-sm font-semibold">
+                            <span id="loginBtn">Sign In</span>
+                        </button>
+                    </div>
+                    <!-- Giriş yapmışsa -->
+                    <div id="loggedInSection" class="hidden flex items-center gap-2">
+                        <div class="glass px-3 py-2 rounded-lg text-sm">
+                            <span id="userName">User</span>
+                            <span class="text-xs text-purple-300 ml-1" id="userCredits">• 1 free left</span>
+                        </div>
+                        <button onclick="logout()" class="text-gray-400 hover:text-white text-sm px-2 py-2">
+                            <span id="logoutBtn">Sign Out</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- HAMBURGER MENU -->
+                <div class="relative">
+                    <button onclick="toggleMenu()" class="glass px-4 py-2 rounded-lg hover:bg-purple-500/20 transition flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                    
+                    <div id="mainMenu" class="hidden menu-dropdown absolute right-0 mt-2 w-64 glass-strong rounded-xl overflow-hidden">
+                        <a href="map.html" class="block px-5 py-4 hover:bg-purple-500/20 transition border-b border-purple-500/10">
+                            <div class="flex items-center gap-3"><span class="text-2xl">🌍</span><div><div class="font-semibold" id="menuMap">Collective Map</div><div class="text-xs text-gray-400" id="menuMapDesc">Explore global dreams</div></div></div>
+                        </a>
+                        <button onclick="showAllAccess()" class="w-full text-left px-5 py-4 hover:bg-purple-500/20 transition border-b border-purple-500/10">
+                            <div class="flex items-center gap-3"><span class="text-2xl">👑</span><div><div class="font-semibold text-amber-300" id="menuAllAccess">All-Access Pass</div><div class="text-xs text-amber-200/70" id="menuAllAccessDesc">$12.99/month</div></div></div>
+                        </button>
+                        <button onclick="showDeepAnalysisInfo()" class="w-full text-left px-5 py-4 hover:bg-purple-500/20 transition border-b border-purple-500/10">
+                            <div class="flex items-center gap-3"><span class="text-2xl">📜</span><div><div class="font-semibold" id="menuDeep">Deep Analysis</div><div class="text-xs text-gray-400" id="menuDeepDesc">$2.99 per report</div></div></div>
+                        </button>
+                        <button onclick="showDreamJournal()" class="w-full text-left px-5 py-4 hover:bg-purple-500/20 transition border-b border-purple-500/10">
+                            <div class="flex items-center gap-3"><span class="text-2xl">📔</span><div><div class="font-semibold" id="menuJournal">Dream Journal</div><div class="text-xs text-gray-400" id="menuJournalDesc">$6.99/month</div></div></div>
+                        </button>
+                        <button onclick="showAppModal()" class="w-full text-left px-5 py-4 hover:bg-pink-500/20 transition">
+                            <div class="flex items-center gap-3"><span class="text-2xl">📱</span><div><div class="font-semibold text-pink-300" id="menuApp">Get the App</div><div class="text-xs text-pink-200/70" id="menuAppDesc">Coming soon — Join waitlist</div></div></div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- LANGUAGE -->
+                <div class="relative">
+                    <button onclick="toggleLangMenu()" class="glass px-4 py-2 rounded-lg hover:bg-purple-500/20 transition flex items-center gap-2">
+                        <span id="currentLang">🇬🇧 EN</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div id="langMenu" class="hidden menu-dropdown absolute right-0 mt-2 w-48 glass-strong rounded-xl overflow-hidden">
+                        <button onclick="changeLang('en')" class="w-full px-4 py-3 text-left hover:bg-purple-500/20 transition">🇬🇧 English</button>
+                        <button onclick="changeLang('tr')" class="w-full px-4 py-3 text-left hover:bg-purple-500/20 transition">🇹🇷 Türkçe</button>
+                        <button onclick="changeLang('es')" class="w-full px-4 py-3 text-left hover:bg-purple-500/20 transition">🇪🇸 Español</button>
+                        <button onclick="changeLang('ar')" class="w-full px-4 py-3 text-left hover:bg-purple-500/20 transition">🇸🇦 العربية</button>
+                        <button onclick="changeLang('hi')" class="w-full px-4 py-3 text-left hover:bg-purple-500/20 transition">🇮🇳 हिन्दी</button>
+                        <button onclick="changeLang('zh')" class="w-full px-4 py-3 text-left hover:bg-purple-500/20 transition">🇨🇳 中文</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="container mx-auto px-4 pt-28 pb-16 max-w-5xl">
+        
+        <!-- HERO BUTTONS -->
+        <div class="grid md:grid-cols-2 gap-4 mb-8">
+            <a href="map.html" class="btn-map text-white font-bold text-xl px-8 py-6 rounded-2xl glow-purple hover-lift flex items-center justify-between group">
+                <div class="flex items-center gap-4"><span class="text-5xl">🌍</span><div class="text-left"><div class="text-2xl font-bold" id="heroMapTitle">Collective Map</div><div class="text-sm opacity-80" id="heroMapDesc">Explore global dreams</div></div></div>
+                <svg class="w-8 h-8 group-hover:translate-x-2 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+            </a>
+            <a href="map.html#forecasts" class="btn-gold text-white font-bold text-xl px-8 py-6 rounded-2xl glow-gold hover-lift flex items-center justify-between group">
+                <div class="flex items-center gap-4"><span class="text-5xl">🔮</span><div class="text-left"><div class="text-2xl font-bold" id="heroForecastTitle">Forecasts</div><div class="text-sm opacity-80" id="heroForecastDesc">Dreams → future</div></div></div>
+                <svg class="w-8 h-8 group-hover:translate-x-2 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+            </a>
+        </div>
+
+        <!-- 📱 GET THE APP CARD -->
+        <div class="app-card rounded-2xl p-6 mb-8 relative z-10">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-4">
+                    <div class="text-5xl">📱</div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-pink-300" id="appTitle">DreamPulse App</h3>
+                        <p class="text-sm text-pink-200/70" id="appDesc">Dream journal, notifications, AI forecasts in your pocket. Coming soon.</p>
+                    </div>
+                </div>
+                <button onclick="showAppModal()" class="btn-app text-white font-bold px-8 py-3 rounded-xl whitespace-nowrap">
+                    <span id="appBtn">Join Waitlist →</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- ALL-ACCESS PASS -->
+        <div class="all-access-card rounded-2xl p-6 mb-8 relative z-10">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-4">
+                    <div class="text-5xl">👑</div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-amber-300" id="allAccessTitle">All-Access Pass</h3>
+                        <p class="text-sm text-amber-200/70" id="allAccessDesc">Unlimited everything — one subscription</p>
+                    </div>
+                </div>
+                <button onclick="showAllAccess()" class="btn-gold text-white font-bold px-8 py-3 rounded-xl whitespace-nowrap">
+                    <span id="allAccessBtn">$12.99/month →</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- FORECAST ENGINE STATUS -->
+        <div class="forecast-badge rounded-2xl p-5 mb-8 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="pulse-dot"></div>
+                <div>
+                    <div class="font-bold text-amber-300" id="forecastStatusTitle">🔮 AI Forecast Engine Active</div>
+                    <div class="text-sm text-amber-200/70" id="forecastStatusDesc">Analyzing dreams worldwide</div>
+                </div>
+            </div>
+            <div class="text-right">
+                <div class="text-2xl font-bold text-amber-300" id="forecastCount">7</div>
+                <div class="text-xs text-amber-200/70" id="forecastCountLabel">Active</div>
+            </div>
+        </div>
+
+        <!-- 🔥 PROGRESS BAR (Bağımlılık) -->
+        <div class="glass rounded-2xl p-5 mb-8">
+            <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-semibold" id="progressTitle">🌙 Dream Explorer Level</span>
+                <span class="text-sm text-purple-300" id="progressLevel">Level 1</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+            </div>
+            <div class="flex items-center justify-between mt-2 text-xs text-gray-400">
+                <span id="progressText">0 / 5 dreams shared</span>
+                <span id="nextReward">Next: 🏆 Dream Seeker badge</span>
+            </div>
+        </div>
+
+        <!-- TITLE -->
+        <div class="text-center mb-12">
+            <div class="moon text-7xl mb-4">🌙</div>
+            <h1 class="text-5xl md:text-6xl font-bold mb-4 text-glow">DreamPulse</h1>
+            <p class="text-xl text-purple-300 italic mb-3" id="subtitle">The Collective Unconscious Speaks</p>
+        </div>
+
+        <!-- MAIN CTA -->
+        <div class="text-center mb-16">
+            <button onclick="handleShareDream()" class="btn-mystic text-white font-semibold text-xl px-16 py-6 rounded-2xl glow-purple hover-lift inline-block">
+                <span class="text-3xl block mb-2">🔮</span>
+                <span id="mainCta">Share Your Dream & Receive Analysis</span>
+            </button>
+            <p class="text-sm text-gray-500 mt-4" id="mainCtaDesc">First analysis is FREE for registered users</p>
+        </div>
+
+        <!-- 🎴 DAILY DREAM CARD (Bağımlılık) -->
+        <div class="daily-card rounded-2xl p-6 mb-12 text-center" onclick="revealDailyCard()">
+            <div class="text-5xl mb-3">🎴</div>
+            <h3 class="text-xl font-bold mb-2" id="dailyCardTitle">Today's Dream Card</h3>
+            <p class="text-gray-300 mb-4" id="dailyCardText">Tap to reveal your mystical insight for today...</p>
+            <button onclick="event.stopPropagation(); revealDailyCard();" class="btn-mystic text-white font-semibold px-6 py-2 rounded-xl">
+                <span id="dailyCardBtn">Reveal Card</span>
+            </button>
+        </div>
+
+        <!-- EMAIL SIGNUP -->
+        <div class="glass rounded-2xl p-8 mb-12 text-center">
+            <div class="text-5xl mb-4">📧</div>
+            <h3 class="text-2xl font-bold mb-3" id="emailTitle">Join the Dream Community</h3>
+            <p class="text-gray-400 mb-6" id="emailDesc">Daily & weekly AI forecasts delivered to your inbox.</p>
+            <div class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+                <input type="email" id="emailInput" placeholder="your@email.com" class="flex-1 bg-slate-900/50 border border-purple-500/30 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-purple-500">
+                <button onclick="subscribeEmail()" class="btn-mystic text-white font-semibold px-6 py-3 rounded-xl whitespace-nowrap"><span id="emailBtn">Subscribe Free</span></button>
+            </div>
+        </div>
+
+        <!-- CARDS -->
+        <div class="grid md:grid-cols-3 gap-6 mb-16">
+            <button onclick="showDreamJournal()" class="glass rounded-2xl p-8 hover-lift cursor-pointer">
+                <div class="text-center"><div class="text-5xl mb-4">📔</div><h3 class="text-xl font-bold mb-2" id="card2Title">Dream Journal</h3><p class="text-gray-400 text-sm" id="card2Desc">$6.99/mo</p></div>
+            </button>
+            <button onclick="showDeepAnalysisInfo()" class="glass rounded-2xl p-8 hover-lift cursor-pointer">
+                <div class="text-center"><div class="text-5xl mb-4">📜</div><h3 class="text-xl font-bold mb-2" id="card3Title">Deep Analysis</h3><p class="text-gray-400 text-sm" id="card3Desc">$2.99</p></div>
+            </button>
+            <button onclick="showPartnerships()" class="glass rounded-2xl p-8 hover-lift cursor-pointer">
+                <div class="text-center"><div class="text-5xl mb-4">🤝</div><h3 class="text-xl font-bold mb-2" id="card4Title">Partnerships</h3><p class="text-gray-400 text-sm" id="card4Desc">Collaborate</p></div>
+            </button>
+        </div>
+
+        <div id="adminPanel" class="hidden text-center mt-12">
+            <button onclick="showApiKeyInput()" class="text-purple-400 hover:text-purple-300 underline text-sm">⚙️ Admin: Set Groq API Key</button>
+        </div>
+    </div>
+
+    <!-- ============ AUTH MODAL ============ -->
+    <div id="authModal" class="hidden fixed inset-0 bg-black/90 backdrop-blur-md z-50 flex items-center justify-center p-4">
+        <div class="glass-strong rounded-2xl p-8 max-w-md w-full glow-purple">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold" id="authTitle">Welcome to DreamPulse</h3>
+                <button onclick="closeAuth()" class="text-gray-400 hover:text-white text-3xl">&times;</button>
+            </div>
+            
+            <div class="flex gap-2 mb-6">
+                <button onclick="showLoginTab()" id="loginTab" class="flex-1 py-2 rounded-lg font-semibold btn-mystic">Sign In</button>
+                <button onclick="showSignupTab()" id="signupTab" class="flex-1 py-2 rounded-lg font-semibold glass">Sign Up</button>
+            </div>
+            
+            <!-- Login Form -->
+            <div id="loginForm">
+                <input type="email" id="loginEmail" placeholder="Email" class="w-full bg-slate-900/50 border border-purple-500/30 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 mb-3">
+                <input type="password" id="loginPassword" placeholder="Password" class="w-full bg-slate-900/50 border border-purple-500/30 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 mb-4">
+                <button onclick="login()" class="w-full btn-mystic text-white font-semibold py-3 rounded-xl" id="loginSubmitBtn">Sign In</button>
+            </div>
+            
+            <!-- Signup Form -->
+            <div id="signupForm" class="hidden">
+                <input type="text" id="signupName" placeholder="Your name" class="w-full bg-slate-900/50 border border-purple-500/30 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 mb-3">
+                <input type="email" id="signupEmail" placeholder="Email" class="w-full bg-slate-900/50 border border-purple-500/30 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 mb-3">
+                <input type="password" id="signupPassword" placeholder="Password" class="w-full bg-slate-900/50 border border-purple-500/30 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 mb-4">
+                <button onclick="signup()" class="w-full btn-mystic text-white font-semibold py-3 rounded-xl" id="signupSubmitBtn">Create Account — Get 1 Free Analysis</button>
+                <p class="text-xs text-gray-500 mt-3 text-center" id="signupHint">✨ Sign up and get your first deep analysis FREE</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ APP WAITLIST MODAL ============ -->
+    <div id="appModal" class="hidden fixed inset-0 bg-black/90 backdrop-blur-md z-50 flex items-center justify-center p-4">
+        <div class="glass-strong rounded-2xl p-8 max-w-md w-full" style="border-color: rgba(236, 72, 153, 0.5);">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-pink-300" id="appModalTitle">📱 DreamPulse App</h3>
+                <button onclick="closeAppModal()" class="text-gray-400 hover:text-white text-3xl">&times;</button>
+            </div>
+            
+            <div class="text-center mb-6">
+                <div class="text-6xl mb-4">📱</div>
+                <p class="text-gray-300 mb-2" id="appModalDesc">Your dreams, your pocket. Coming soon for iOS & Android.</p>
+                <div class="text-sm text-gray-400" id="appModalFeatures">
+                    • Push notification dream reminders<br>
+                    • Offline dream journal<br>
+                    • Daily AI forecast cards<br>
+                    • Voice-to-dream recording
+                </div>
+            </div>
+            
+            <input type="email" id="appEmail" placeholder="your@email.com" class="w-full bg-slate-900/50 border border-pink-500/30 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-pink-500 mb-4">
+            <button onclick="joinAppWaitlist()" class="w-full btn-app text-white font-bold py-3 rounded-xl">
+                <span id="appWaitlistBtn">Join Waitlist — Get Early Access</span>
+            </button>
+            <p class="text-xs text-gray-500 mt-3 text-center" id="appWaitlistHint">🎁 Waitlist members get 1 month free when we launch</p>
+        </div>
+    </div>
+
+    <!-- ALL-ACCESS MODAL -->
+    <div id="allAccessModal" class="hidden fixed inset-0 bg-black/90 backdrop-blur-md z-50 flex items-center justify-center p-4">
+        <div class="glass-strong rounded-2xl p-8 max-w-lg w-full glow-gold">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-amber-300" id="allAccessModalTitle">👑 All-Access Pass</h3>
+                <button onclick="closeAllAccess()" class="text-gray-400 hover:text-white text-3xl">&times;</button>
+            </div>
+            <div class="text-center mb-6">
+                <div class="text-6xl mb-4">👑</div>
+                <div class="text-4xl font-bold text-amber-300 mb-2">$12.99<span class="text-lg text-amber-200/70">/month</span></div>
+            </div>
+            <div class="bg-slate-900/50 rounded-xl p-6 mb-6 space-y-3">
+                <div class="flex items-center gap-3"><span class="text-green-400">✓</span><span class="text-gray-200" id="aaFeat1">Unlimited regional forecasts</span></div>
+                <div class="flex items-center gap-3"><span class="text-green-400">✓</span><span class="text-gray-200" id="aaFeat2">Unlimited Jungian analyses</span></div>
+                <div class="flex items-center gap-3"><span class="text-green-400">✓</span><span class="text-gray-200" id="aaFeat3">Personal Dream Journal</span></div>
+                <div class="flex items-center gap-3"><span class="text-green-400">✓</span><span class="text-gray-200" id="aaFeat4">Daily + weekly emails</span></div>
+                <div class="flex items-center gap-3"><span class="text-green-400">✓</span><span class="text-gray-200" id="aaFeat5">Priority features</span></div>
+            </div>
+            <button onclick="subscribeAllAccess()" class="w-full btn-gold text-white font-bold py-4 rounded-xl"><span id="allAccessSubBtn">Subscribe Now — $12.99/month</span></button>
+        </div>
+    </div>
+
+    <!-- DREAM FLOW MODAL -->
+    <div id="dreamFlowModal" class="hidden fixed inset-0 bg-black/90 backdrop-blur-md z-50 flex items-center justify-center p-4">
+        <div class="glass-strong rounded-2xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto glow-purple">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold" id="flowTitle">Share Your Dream</h3>
+                <button onclick="closeDreamFlow()" class="text-gray-400 hover:text-white text-3xl">&times;</button>
+            </div>
+            <p class="text-gray-300 mb-6" id="flowDesc">Write your dream. AI will extract symbols, generate images, analyze, and forecast.</p>
+            <textarea id="dreamInput" rows="8" placeholder="Last night I dreamed..." class="w-full bg-slate-900/50 border border-purple-500/30 rounded-xl p-4 text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 mb-4"></textarea>
+            <button onclick="confirmDreamSubmission()" class="w-full btn-mystic text-white font-semibold py-4 rounded-xl"><span id="flowContinueBtn">Continue →</span></button>
+        </div>
+    </div>
+
+    <!-- CONSENT MODAL -->
+    <div id="consentModal" class="hidden fixed inset-0 bg-black/90 backdrop-blur-md z-50 flex items-center justify-center p-4">
+        <div class="glass-strong rounded-2xl p-8 max-w-2xl w-full glow-blue">
+            <div class="text-center mb-6"><div class="text-5xl mb-4">⚠️</div><h3 class="text-2xl font-bold mb-4" id="consentTitle">Before We Begin</h3></div>
+            <div class="bg-slate-900/50 rounded-xl p-6 mb-6">
+                <ul class="text-gray-400 space-y-2 text-sm">
+                    <li id="consentLi1">• AI will analyze your dream using Jungian psychology</li>
+                    <li id="consentLi2">• Symbols and mystical images will be generated</li>
+                    <li id="consentLi3">• Your dream joins the collective map anonymously</li>
+                </ul>
+            </div>
+            <div class="flex gap-3">
+                <button onclick="proceedToAnalysis()" class="flex-1 btn-mystic text-white font-semibold py-3 rounded-xl"><span id="consentAcceptBtn">I Understand & Continue</span></button>
+                <button onclick="closeConsent()" class="px-6 bg-slate-700 text-white font-semibold py-3 rounded-xl"><span id="consentCancelBtn">Cancel</span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ANALYSIS RESULT MODAL -->
+    <div id="analysisModal" class="hidden fixed inset-0 bg-black/90 backdrop-blur-md z-50 flex items-center justify-center p-4">
+        <div class="glass-strong rounded-2xl p-8 max-w-3xl w-full max-h-[90vh] overflow-y-auto glow-purple">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold" id="analysisModalTitle">Your Dream Reading</h3>
+                <button onclick="closeAnalysis()" class="text-gray-400 hover:text-white text-3xl">&times;</button>
+            </div>
+            <div id="analysisLoading" class="text-center py-12">
+                <div class="loading-spinner mx-auto mb-4"></div>
+                <p class="text-gray-400 mb-2" id="loadingStep1">🔮 Extracting symbols...</p>
+                <p class="text-gray-500 text-sm hidden" id="loadingStep2">🎨 Generating images...</p>
+                <p class="text-gray-500 text-sm hidden" id="loadingStep3">⭐ Creating forecast...</p>
+            </div>
+            <div id="analysisContent" class="hidden">
+                <div class="mb-6">
+                    <h4 class="text-lg font-bold mb-3"><span>✨</span> <span id="symbolsTitle">AI-Discovered Symbols</span></h4>
+                    <div id="symbolsContainer" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
+                </div>
+                <div class="bg-slate-900/50 rounded-xl p-6 mb-6">
+                    <h4 class="text-lg font-bold mb-3"><span>🧠</span> <span id="jungianTitle">Jungian Analysis</span></h4>
+                    <div id="analysisText" class="text-gray-200 leading-relaxed text-lg italic"></div>
+                </div>
+                <div class="forecast-badge rounded-xl p-6 mb-6">
+                    <h4 class="text-lg font-bold mb-3 text-amber-300"><span>🔮</span> <span id="forecastTitle">Your Personal Forecast</span></h4>
+                    <div id="forecastText" class="text-amber-100 leading-relaxed"></div>
+                </div>
+                <div class="bg-gradient-to-br from-purple-900/30 to-blue-900/30 border border-purple-500/30 rounded-xl p-6 text-center">
+                    <div class="text-3xl mb-3">🔓</div>
+                    <h4 class="text-xl font-bold mb-2" id="upsellTitle">Unlock Full Jungian Report</h4>
+                    <p class="text-gray-400 text-sm mb-4" id="upsellDesc">Shadow, anima/animus, archetypes, transformation stage.</p>
+                    <button onclick="buyDeepAnalysis()" class="btn-mystic text-white font-semibold px-8 py-3 rounded-xl"><span id="upsellBtn">Get Full Report — $2.99</span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ACHIEVEMENTS MODAL -->
+    <div id="achieveModal" class="hidden fixed inset-0 bg-black/90 backdrop-blur-md z-50 flex items-center justify-center p-4">
+        <div class="glass-strong rounded-2xl p-8 max-w-md w-full glow-purple">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold">🏆 <span id="achieveModalTitle">Achievements</span></h3>
+                <button onclick="closeAchievements()" class="text-gray-400 hover:text-white text-3xl">&times;</button>
+            </div>
+            <div id="achieveList" class="space-y-3"></div>
+        </div>
+    </div>
+
+    <!-- Other modals -->
+    <div id="journalModal" class="hidden fixed inset-0 bg-black/90 backdrop-blur-md z-50 flex items-center justify-center p-4">
+        <div class="glass-strong rounded-2xl p-8 max-w-2xl w-full glow-blue">
+            <div class="flex justify-between items-center mb-6"><h3 class="text-2xl font-bold" id="journalTitle">Dream Journal</h3><button onclick="closeJournal()" class="text-gray-400 hover:text-white text-3xl">&times;</button></div>
+            <div class="text-center mb-6"><div class="text-6xl mb-4">📔</div><p class="text-gray-300" id="journalDesc">$6.99/month</p></div>
+            <button onclick="subscribeJournal()" class="w-full btn-mystic text-white font-semibold py-4 rounded-xl"><span id="journalSubBtn">Subscribe — $6.99/month</span></button>
+        </div>
+    </div>
+    <div id="deepInfoModal" class="hidden fixed inset-0 bg-black/90 backdrop-blur-md z-50 flex items-center justify-center p-4">
+        <div class="glass-strong rounded-2xl p-8 max-w-2xl w-full glow-purple">
+            <div class="flex justify-between items-center mb-6"><h3 class="text-2xl font-bold" id="deepInfoTitle">Deep Analysis</h3><button onclick="closeDeepInfo()" class="text-gray-400 hover:text-white text-3xl">&times;</button></div>
+            <div class="text-center mb-6"><div class="text-6xl mb-4">📜</div><p class="text-gray-300" id="deepInfoDesc">$2.99 per report</p></div>
+            <button onclick="buyDeepAnalysis()" class="w-full btn-mystic text-white font-semibold py-4 rounded-xl"><span id="deepInfoBuyBtn">Purchase — $2.99</span></button>
+        </div>
+    </div>
+    <div id="partnersModal" class="hidden fixed inset-0 bg-black/90 backdrop-blur-md z-50 flex items-center justify-center p-4">
+        <div class="glass-strong rounded-2xl p-8 max-w-2xl w-full glow-blue">
+            <div class="flex justify-between items-center mb-6"><h3 class="text-2xl font-bold" id="partnersTitle">Partnerships</h3><button onclick="closePartners()" class="text-gray-400 hover:text-white text-3xl">&times;</button></div>
+            <p class="text-gray-300">Contact: partnerships@dreampulse.live</p>
+        </div>
+    </div>
+    <div id="apiKeyModal" class="hidden fixed inset-0 bg-black/90 backdrop-blur-md z-50 flex items-center justify-center p-4">
+        <div class="glass-strong rounded-2xl p-8 max-w-md w-full">
+            <h3 class="text-xl font-bold mb-4">Groq API Key</h3>
+            <input type="password" id="apiKeyInput" placeholder="gsk_..." class="w-full bg-slate-900/50 border border-purple-500/30 rounded-xl p-3 text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 mb-4">
+            <div class="flex gap-3">
+                <button onclick="saveApiKey()" class="flex-1 bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded-xl">Save</button>
+                <button onclick="closeApiKeyModal()" class="px-6 bg-slate-700 text-white font-semibold py-2 rounded-xl">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Particles
+        (function(){ const c=document.getElementById('particles'); for(let i=0;i<30;i++){const p=document.createElement('div');p.className='particle';p.style.left=Math.random()*100+'%';p.style.animationDelay=Math.random()*15+'s';p.style.animationDuration=(Math.random()*10+10)+'s';c.appendChild(p);}})();
+
+        // Admin check
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('admin') === '1') document.getElementById('adminPanel').classList.remove('hidden');
+
+        // VIP Access
+        const validCodes = ['dreamweaver_shadow_pulse_2026','jung_oracle_∞_unconscious','dp_vip_777_shadow_key','lunar_weaver_2026_∞','oracle_pulse_dream_777'];
+        const accessCode = urlParams.get('access');
+        if (accessCode && validCodes.includes(accessCode)) {
+            localStorage.setItem('dp_vip_access_granted', 'true');
+        }
+
+        // Translations (kısaltılmış - önceki sürümlerden aynı)
+        const translations = {
+            en: {
+                loginBtn: "Sign In", logoutBtn: "Sign Out",
+                heroMapTitle: "Collective Map", heroMapDesc: "Explore global dreams",
+                heroForecastTitle: "Forecasts", heroForecastDesc: "Dreams → future",
+                appTitle: "DreamPulse App", appDesc: "Dreams in your pocket. Coming soon.", appBtn: "Join Waitlist →",
+                allAccessTitle: "All-Access Pass", allAccessDesc: "Unlimited everything — one subscription", allAccessBtn: "$12.99/month →",
+                forecastStatusTitle: "🔮 AI Forecast Engine Active", forecastStatusDesc: "Analyzing dreams worldwide", forecastCountLabel: "Active",
+                progressTitle: "🌙 Dream Explorer Level", nextReward: "Next: 🏆 Dream Seeker",
+                subtitle: "The Collective Unconscious Speaks",
+                mainCta: "Share Your Dream & Receive Analysis", mainCtaDesc: "First analysis is FREE for registered users",
+                dailyCardTitle: "Today's Dream Card", dailyCardText: "Tap to reveal your mystical insight...", dailyCardBtn: "Reveal Card",
+                emailTitle: "Join the Dream Community", emailDesc: "Daily & weekly AI forecasts.", emailBtn: "Subscribe Free",
+                card2Title: "Dream Journal", card2Desc: "$6.99/mo", card3Title: "Deep Analysis", card3Desc: "$2.99", card4Title: "Partnerships", card4Desc: "Collaborate",
+                menuMap: "Collective Map", menuMapDesc: "Explore global dreams",
+                menuAllAccess: "All-Access Pass", menuAllAccessDesc: "$12.99/month",
+                menuDeep: "Deep Analysis", menuDeepDesc: "$2.99",
+                menuJournal: "Dream Journal", menuJournalDesc: "$6.99/month",
+                menuApp: "Get the App", menuAppDesc: "Coming soon — Join waitlist",
+                flowTitle: "Share Your Dream", flowDesc: "AI will analyze, extract symbols, and forecast.", flowContinueBtn: "Continue →",
+                consentTitle: "Before We Begin", consentLi1: "• AI Jungian analysis", consentLi2: "• Symbols generated", consentLi3: "• Added to collective map", consentAcceptBtn: "Continue", consentCancelBtn: "Cancel",
+                analysisModalTitle: "Your Dream Reading", loadingStep1: "🔮 Extracting symbols...", loadingStep2: "🎨 Generating images...", loadingStep3: "⭐ Creating forecast...",
+                symbolsTitle: "AI-Discovered Symbols", jungianTitle: "Jungian Analysis", forecastTitle: "Your Personal Forecast",
+                upsellTitle: "Unlock Full Report", upsellDesc: "Shadow, anima/animus, archetypes.", upsellBtn: "Get Full Report — $2.99",
+                authTitle: "Welcome to DreamPulse", loginSubmitBtn: "Sign In", signupSubmitBtn: "Create Account — 1 Free Analysis", signupHint: "✨ First deep analysis FREE",
+                appModalTitle: "📱 DreamPulse App", appModalDesc: "Coming soon for iOS & Android.", appWaitlistBtn: "Join Waitlist", appWaitlistHint: "🎁 1 month free for waitlist members",
+                allAccessModalTitle: "👑 All-Access Pass", allAccessSubBtn: "Subscribe — $12.99/month",
+                aaFeat1: "Unlimited regional forecasts", aaFeat2: "Unlimited Jungian analyses", aaFeat3: "Personal Dream Journal", aaFeat4: "Daily + weekly emails", aaFeat5: "Priority features",
+                journalTitle: "Dream Journal", journalDesc: "$6.99/month", journalSubBtn: "$6.99/month",
+                deepInfoTitle: "Deep Analysis", deepInfoDesc: "$2.99", deepInfoBuyBtn: "$2.99",
+                partnersTitle: "Partnerships", achieveModalTitle: "Achievements",
+                fomoTitle: "Your streak is about to expire!", fomoDesc: "Share a dream today to keep your 🔥 streak alive",
+                notifTitle: "Enable Notifications", notifDesc: "Never miss your daily dream insight",
+                placeholder: "Last night I dreamed..."
+            },
+            tr: {
+                loginBtn: "Giriş Yap", logoutBtn: "Çıkış",
+                heroMapTitle: "Kolektif Harita", heroMapDesc: "Küresel rüyaları keşfet",
+                heroForecastTitle: "Tahminler", heroForecastDesc: "Rüyalar → gelecek",
+                appTitle: "DreamPulse Uygulama", appDesc: "Rüyalar cebinizde. Yakında.", appBtn: "Bekleme Listesine Katıl →",
+                allAccessTitle: "Tam Erişim Pass", allAccessDesc: "Sınırsız her şey", allAccessBtn: "12.99$/ay →",
+                forecastStatusTitle: "🔮 AI Tahmin Motoru Aktif", forecastStatusDesc: "Dünya çapında rüya analizi", forecastCountLabel: "Aktif",
+                progressTitle: "🌙 Rüya Kaşifi Seviye", nextReward: "Sonraki: 🏆 Rüya Arayan",
+                subtitle: "Kolektif Bilinçaltı Konuşuyor",
+                mainCta: "Rüyanı Paylaş & Analiz Al", mainCtaDesc: "Kayıtlı kullanıcılar için ilk analiz ÜCRETSİZ",
+                dailyCardTitle: "Bugünün Rüya Kartı", dailyCardText: "Mistik içgörünü görmek için dokun...", dailyCardBtn: "Kartı Aç",
+                emailTitle: "Rüya Topluluğuna Katıl", emailDesc: "Günlük ve haftalık tahminler.", emailBtn: "Ücretsiz Abone Ol",
+                card2Title: "Rüya Günlüğü", card2Desc: "6.99$/ay", card3Title: "Derin Analiz", card3Desc: "2.99$", card4Title: "Ortaklıklar", card4Desc: "İşbirliği",
+                menuMap: "Kolektif Harita", menuMapDesc: "Keşfet",
+                menuAllAccess: "Tam Erişim", menuAllAccessDesc: "12.99$/ay",
+                menuDeep: "Derin Analiz", menuDeepDesc: "2.99$",
+                menuJournal: "Rüya Günlüğü", menuJournalDesc: "6.99$/ay",
+                menuApp: "Uygulamayı İndir", menuAppDesc: "Yakında — Bekleme listesine katıl",
+                flowTitle: "Rüyanı Paylaş", flowDesc: "AI analiz edecek.", flowContinueBtn: "Devam →",
+                consentTitle: "Başlamadan Önce", consentLi1: "• AI Jungian analizi", consentLi2: "• Semboller üretilir", consentLi3: "• Haritaya eklenir", consentAcceptBtn: "Devam Et", consentCancelBtn: "İptal",
+                analysisModalTitle: "Rüya Okuman", loadingStep1: "🔮 Semboller...", loadingStep2: "🎨 İmajlar...", loadingStep3: "⭐ Tahmin...",
+                symbolsTitle: "AI Semboller", jungianTitle: "Jungian Analiz", forecastTitle: "Kişisel Tahmin",
+                upsellTitle: "Tam Raporu Aç", upsellDesc: "Gölge, anima/animus.", upsellBtn: "2.99$",
+                authTitle: "Hoşgeldin", loginSubmitBtn: "Giriş Yap", signupSubmitBtn: "Hesap Oluştur — 1 Ücretsiz", signupHint: "✨ İlk analiz ÜCRETSİZ",
+                appModalTitle: "📱 Uygulama", appModalDesc: "Yakında iOS & Android.", appWaitlistBtn: "Bekleme Listesi", appWaitlistHint: "🎁 1 ay ücretsiz",
+                allAccessModalTitle: "👑 Tam Erişim", allAccessSubBtn: "12.99$/ay",
+                aaFeat1: "Sınırsız tahmin", aaFeat2: "Sınırsız analiz", aaFeat3: "Rüya Günlüğü", aaFeat4: "E-postalar", aaFeat5: "Öncelik",
+                journalTitle: "Rüya Günlüğü", journalDesc: "6.99$/ay", journalSubBtn: "6.99$/ay",
+                deepInfoTitle: "Derin Analiz", deepInfoDesc: "2.99$", deepInfoBuyBtn: "2.99$",
+                partnersTitle: "Ortaklıklar", achieveModalTitle: "Başarılar",
+                fomoTitle: "Seri sona eriyor!", fomoDesc: "Bugün rüya paylaş",
+                notifTitle: "Bildirimleri Aç", notifDesc: "Günlük içgörü al",
+                placeholder: "Dün gece rüyamda..."
+            }
+        };
+
+        let currentLang = localStorage.getItem('lang') || 'en';
+
+        function toggleMenu() { document.getElementById('mainMenu').classList.toggle('hidden'); document.getElementById('langMenu').classList.add('hidden'); }
+        function toggleLangMenu() { document.getElementById('langMenu').classList.toggle('hidden'); document.getElementById('mainMenu').classList.add('hidden'); }
+        
+        function changeLang(lang) { currentLang = lang; localStorage.setItem('lang', lang); updateUI(); toggleLangMenu(); }
+        
+        function updateUI() {
+            const t = translations[currentLang] || translations.en;
+            const langNames = { en: '🇬🇧 EN', tr: '🇹🇷 TR', es: '🇪🇸 ES', ar: '🇸🇦 AR', hi: '🇮🇳 HI', zh: '🇨🇳 ZH' };
+            document.getElementById('currentLang').textContent = langNames[currentLang] || '🇬🇧 EN';
+            Object.keys(t).forEach(key => { const el = document.getElementById(key); if (el) el.textContent = t[key]; });
+            document.getElementById('dreamInput').placeholder = t.placeholder || 'Last night I dreamed...';
+            document.body.style.direction = currentLang === 'ar' ? 'rtl' : 'ltr';
+        }
+
+        // ============ 🔐 AUTH SYSTEM ============
+        function showAuthModal() { document.getElementById('authModal').classList.remove('hidden'); }
+        function closeAuth() { document.getElementById('authModal').classList.add('hidden'); }
+        function showLoginTab() { document.getElementById('loginForm').classList.remove('hidden'); document.getElementById('signupForm').classList.add('hidden'); document.getElementById('loginTab').className='flex-1 py-2 rounded-lg font-semibold btn-mystic'; document.getElementById('signupTab').className='flex-1 py-2 rounded-lg font-semibold glass'; }
+        function showSignupTab() { document.getElementById('signupForm').classList.remove('hidden'); document.getElementById('loginForm').classList.add('hidden'); document.getElementById('signupTab').className='flex-1 py-2 rounded-lg font-semibold btn-mystic'; document.getElementById('loginTab').className='flex-1 py-2 rounded-lg font-semibold glass'; }
+
+        function signup() {
+            const name = document.getElementById('signupName').value.trim();
+            const email = document.getElementById('signupEmail').value.trim();
+            const pass = document.getElementById('signupPassword').value;
+            if (!name || !email || !pass) { alert('Please fill all fields.'); return; }
+            
+            const users = JSON.parse(localStorage.getItem('dp_users') || '{}');
+            if (users[email]) { alert('Account already exists. Sign in.'); return; }
+            
+            users[email] = { name, password: pass, dreamsShared: 0, joined: new Date().toISOString() };
+            localStorage.setItem('dp_users', JSON.stringify(users));
+            
+            localStorage.setItem('dp_logged_in', email);
+            closeAuth();
+            updateLoginState();
+            triggerConfetti();
+            checkAchievements();
+        }
+
+        function login() {
+            const email = document.getElementById('loginEmail').value.trim();
+            const pass = document.getElementById('loginPassword').value;
+            const users = JSON.parse(localStorage.getItem('dp_users') || '{}');
+            
+            if (!users[email] || users[email].password !== pass) { alert('Invalid email or password.'); return; }
+            
+            localStorage.setItem('dp_logged_in', email);
+            closeAuth();
+            updateLoginState();
+        }
+
+        function logout() {
+            localStorage.removeItem('dp_logged_in');
+            updateLoginState();
+        }
+
+        function getUser() {
+            const email = localStorage.getItem('dp_logged_in');
+            if (!email) return null;
+            const users = JSON.parse(localStorage.getItem('dp_users') || '{}');
+            return users[email] ? { email, ...users[email] } : null;
+        }
+
+        function updateUser(updates) {
+            const email = localStorage.getItem('dp_logged_in');
+            if (!email) return;
+            const users = JSON.parse(localStorage.getItem('dp_users') || '{}');
+            if (users[email]) {
+                Object.assign(users[email], updates);
+                localStorage.setItem('dp_users', JSON.stringify(users));
+            }
+        }
+
+        function updateLoginState() {
+            const user = getUser();
+            if (user) {
+                document.getElementById('guestSection').classList.add('hidden');
+                document.getElementById('loggedInSection').classList.remove('hidden');
+                document.getElementById('userName').textContent = user.name;
+                document.getElementById('achieveBtn').classList.remove('hidden');
+            } else {
+                document.getElementById('guestSection').classList.remove('hidden');
+                document.getElementById('loggedInSection').classList.add('hidden');
+                document.getElementById('achieveBtn').classList.add('hidden');
+            }
+            updateProgress();
+        }
+
+        // ============ 🔥 BAĞIMLILIK ============
+        
+        // Streak
+        function updateStreak() {
+            const today = new Date().toDateString();
+            const last = localStorage.getItem('dp_last_visit');
+            let streak = parseInt(localStorage.getItem('dp_streak') || '0');
+            
+            if (last !== today) {
+                const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
+                if (last === yesterday.toDateString()) streak++;
+                else if (last) streak = 1;
+                else streak = 1;
+                localStorage.setItem('dp_last_visit', today);
+                localStorage.setItem('dp_streak', streak.toString());
+            }
+            
+            if (streak > 0) {
+                document.getElementById('streakBadge').classList.remove('hidden');
+                document.getElementById('streakCount').textContent = streak;
+            }
+        }
+        
+        // FOMO
+        function checkFomo() {
+            const last = localStorage.getItem('dp_last_dream_date');
+            if (last) {
+                const hoursSince = (Date.now() - new Date(last).getTime()) / 3600000;
+                if (hoursSince > 20 && hoursSince < 28) {
+                    document.getElementById('fomoBanner').classList.remove('hidden');
+                }
+            }
+        }
+        
+        // Progress
+        function updateProgress() {
+            const user = getUser();
+            const dreams = user ? (user.dreamsShared || 0) : 0;
+            const level = Math.floor(dreams / 5) + 1;
+            const progress = (dreams % 5) / 5 * 100;
+            
+            document.getElementById('progressLevel').textContent = `Level ${level}`;
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progressText').textContent = `${dreams} / ${level * 5} dreams shared`;
+            
+            const badges = ['🏆 Dream Seeker', '🌙 Night Walker', '🔮 Oracle', '👁️ Third Eye', '🌌 Cosmic Dreamer'];
+            document.getElementById('nextReward').textContent = `Next: ${badges[Math.min(level-1, badges.length-1)]}`;
+        }
+        
+        // Achievements
+        const ALL_ACHIEVEMENTS = [
+            { id: 'first_dream', emoji: '🌙', name: 'First Dream', desc: 'Share your first dream', condition: d => d >= 1 },
+            { id: 'five_dreams', emoji: '⭐', name: 'Dream Seeker', desc: 'Share 5 dreams', condition: d => d >= 5 },
+            { id: 'ten_dreams', emoji: '🔮', name: 'Oracle', desc: 'Share 10 dreams', condition: d => d >= 10 },
+            { id: 'streak_3', emoji: '🔥', name: 'On Fire', desc: '3 day streak', condition: (d, s) => s >= 3 },
+            { id: 'streak_7', emoji: '💎', name: 'Diamond Dreamer', desc: '7 day streak', condition: (d, s) => s >= 7 },
+            { id: 'twenty_five', emoji: '👁️', name: 'Third Eye', desc: 'Share 25 dreams', condition: d => d >= 25 }
+        ];
+
+        function checkAchievements() {
+            const user = getUser();
+            if (!user) return;
+            const dreams = user.dreamsShared || 0;
+            const streak = parseInt(localStorage.getItem('dp_streak') || '0');
+            const earned = JSON.parse(localStorage.getItem('dp_achievements') || '[]');
+            
+            ALL_ACHIEVEMENTS.forEach(a => {
+                if (!earned.includes(a.id) && a.condition(dreams, streak)) {
+                    earned.push(a.id);
+                    localStorage.setItem('dp_achievements', JSON.stringify(earned));
+                    triggerConfetti();
+                }
+            });
+            
+            document.getElementById('achieveCount').textContent = `🏆 ${earned.length}`;
+        }
+        
+        function showAchievements() {
+            const earned = JSON.parse(localStorage.getItem('dp_achievements') || '[]');
+            const list = document.getElementById('achieveList');
+            list.innerHTML = '';
+            
+            ALL_ACHIEVEMENTS.forEach(a => {
+                const unlocked = earned.includes(a.id);
+                const div = document.createElement('div');
+                div.className = `glass rounded-xl p-4 flex items-center gap-4 ${unlocked ? '' : 'opacity-40'}`;
+                div.innerHTML = `
+                    <div class="text-3xl ${unlocked ? 'achievement-badge' : ''}">${a.emoji}</div>
+                    <div>
+                        <div class="font-bold">${a.name}</div>
+                        <div class="text-sm text-gray-400">${a.desc}</div>
+                    </div>
+                    ${unlocked ? '<span class="ml-auto text-green-400">✓</span>' : '<span class="ml-auto text-gray-600">🔒</span>'}
+                `;
+                list.appendChild(div);
+            });
+            
+            document.getElementById('achieveModal').classList.remove('hidden');
+        }
+        function closeAchievements() { document.getElementById('achieveModal').classList.add('hidden'); }
+        
+        // Daily Card
+        function revealDailyCard() {
+            const today = new Date().toDateString();
+            if (localStorage.getItem('dp_last_card') === today) { alert('Come back tomorrow!'); return; }
+            
+            const cards = [
+                { emoji: '🌙', text: 'The moon whispers: Water in your dreams tonight holds the key to your emotional truth.' },
+                { emoji: '🗝️', text: 'A key appears: You are closer than you think to unlocking a long-held fear.' },
+                { emoji: '🦋', text: 'Transformation is near. The chrysalis phase ends this week.' },
+                { emoji: '🌊', text: 'The ocean of your unconscious is rising. Pay attention to water dreams.' },
+                { emoji: '🔥', text: 'Fire burns away illusion. What you avoid will appear tonight. Face it.' },
+                { emoji: '🌳', text: 'Roots grow deeper. Your dreams connect you to ancestral wisdom.' },
+                { emoji: '⚡', text: 'A sudden insight is coming. Keep a journal by your bed tonight.' },
+                { emoji: '🎭', text: 'Masks fall away. The persona you wear no longer serves you.' }
+            ];
+            
+            const card = cards[Math.floor(Math.random() * cards.length)];
+            const el = document.getElementById('dailyCard');
+            el.innerHTML = `<div class="text-6xl mb-4">${card.emoji}</div><h3 class="text-xl font-bold mb-3 text-purple-300">Today's Insight</h3><p class="text-gray-200 text-lg italic leading-relaxed">${card.text}</p><p class="text-xs text-gray-500 mt-4">Come back tomorrow</p>`;
+            localStorage.setItem('dp_last_card', today);
+        }
+        
+        // Notifications
+        function enableNotifications() { if ('Notification' in window) Notification.requestPermission(); dismissNotif(); }
+        function dismissNotif() { document.getElementById('notificationBanner').classList.add('hidden'); localStorage.setItem('dp_notif_dismissed', 'true'); }
+        
+        // Confetti
+        function triggerConfetti() {
+            const colors = ['#8b5cf6', '#f59e0b', '#10b981', '#ec4899', '#3b82f6'];
+            for (let i = 0; i < 30; i++) {
+                const el = document.createElement('div');
+                el.className = 'confetti';
+                el.style.left = Math.random() * 100 + 'vw';
+                el.style.top = '-10px';
+                el.style.width = '8px'; el.style.height = '8px';
+                el.style.background = colors[Math.floor(Math.random() * colors.length)];
+                el.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+                el.style.animationDelay = Math.random() * 2 + 's';
+                document.body.appendChild(el);
+                setTimeout(() => el.remove(), 5000);
+            }
+        }
+
+        // ============ SHARE DREAM (Auth check) ============
+        function handleShareDream() {
+            const user = getUser();
+            if (!user) {
+                showAuthModal();
+                showSignupTab();
+                return;
+            }
+            showDreamFlow();
+        }
+
+        function showDreamFlow() { document.getElementById('dreamFlowModal').classList.remove('hidden'); }
+        function closeDreamFlow() { document.getElementById('dreamFlowModal').classList.add('hidden'); }
+        function closeConsent() { document.getElementById('consentModal').classList.add('hidden'); }
+        function closeAnalysis() { document.getElementById('analysisModal').classList.add('hidden'); }
+        function showDreamJournal() { document.getElementById('journalModal').classList.remove('hidden'); document.getElementById('mainMenu').classList.add('hidden'); }
+        function closeJournal() { document.getElementById('journalModal').classList.add('hidden'); }
+        function showDeepAnalysisInfo() { document.getElementById('deepInfoModal').classList.remove('hidden'); document.getElementById('mainMenu').classList.add('hidden'); }
+        function closeDeepInfo() { document.getElementById('deepInfoModal').classList.add('hidden'); }
+        function showPartnerships() { document.getElementById('partnersModal').classList.remove('hidden'); document.getElementById('mainMenu').classList.add('hidden'); }
+        function closePartners() { document.getElementById('partnersModal').classList.add('hidden'); }
+        function showApiKeyInput() { document.getElementById('apiKeyModal').classList.remove('hidden'); }
+        function closeApiKeyModal() { document.getElementById('apiKeyModal').classList.add('hidden'); }
+        function showAllAccess() { if (localStorage.getItem('dp_vip_access_granted')==='true'){alert('✅ VIP Active!');return;} document.getElementById('allAccessModal').classList.remove('hidden'); document.getElementById('mainMenu').classList.add('hidden'); }
+        function closeAllAccess() { document.getElementById('allAccessModal').classList.add('hidden'); }
+        function showAppModal() { document.getElementById('appModal').classList.remove('hidden'); document.getElementById('mainMenu').classList.add('hidden'); }
+        function closeAppModal() { document.getElementById('appModal').classList.add('hidden'); }
+
+        function confirmDreamSubmission() {
+            if (!document.getElementById('dreamInput').value.trim()) { alert('Please write your dream.'); return; }
+            closeDreamFlow();
+            document.getElementById('consentModal').classList.remove('hidden');
+        }
+
+        function proceedToAnalysis() {
+            closeConsent();
+            document.getElementById('analysisModal').classList.remove('hidden');
+            document.getElementById('analysisLoading').classList.remove('hidden');
+            document.getElementById('analysisContent').classList.add('hidden');
+            document.getElementById('loadingStep2').classList.add('hidden');
+            document.getElementById('loadingStep3').classList.add('hidden');
+            analyzeDream();
+        }
+
+        // Groq
+        const GROQ = 'https://api.groq.com/openai/v1/chat/completions';
+        function getApiKey() { return localStorage.getItem('groq_api_key'); }
+        function saveApiKey() { const k=document.getElementById('apiKeyInput').value.trim(); if(k){localStorage.setItem('groq_api_key',k);alert('✅ Saved!');closeApiKeyModal();} }
+
+        async function extractSymbols(text, key) {
+            const r = await fetch(GROQ, { method:'POST', headers:{'Authorization':`Bearer ${key}`,'Content-Type':'application/json'}, body: JSON.stringify({ model:'llama-3.3-70b-versatile', messages:[{role:'system',content:'Extract 2-4 symbols. Return ONLY JSON: {"symbols":[{"name":"name","emoji":"e","imagePrompt":"mystical [x] spirit, dark purple glow, jungian archetype"}]} 2-4 max.'},{role:'user',content:text}], temperature:0.7, max_tokens:500, response_format:{type:'json_object'}}) });
+            const d = await r.json(); if(d.error) throw new Error(d.error.message); return JSON.parse(d.choices[0].message.content);
+        }
+
+        async function generateAnalysis(text, key) {
+            const r = await fetch(GROQ, { method:'POST', headers:{'Authorization':`Bearer ${key}`,'Content-Type':'application/json'}, body: JSON.stringify({ model:'llama-3.3-70b-versatile', messages:[{role:'system',content:'Carl Jung spirit AI. ONE poetic paragraph analyzing this dream. Max 150 words. Respond in user language.'},{role:'user',content:text}], temperature:0.7, max_tokens:400 }) });
+            const d = await r.json(); if(d.error) throw new Error(d.error.message); return d.choices[0].message.content;
+        }
+
+        async function generateForecast(text, symbols, key) {
+            const today = new Date().toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+            const r = await fetch(GROQ, { method:'POST', headers:{'Authorization':`Bearer ${key}`,'Content-Type':'application/json'}, body: JSON.stringify({ model:'llama-3.3-70b-versatile', messages:[{role:'system',content:`DreamPulse Oracle. Personal forecast from dream symbols ONLY. No astrology/economy. Today:${today}. 3 paragraphs. Max 300 words.`},{role:'user',content:`Dream:"${text}" Symbols:${symbols.map(s=>s.name).join(', ')}`}], temperature:0.8, max_tokens:600 }) });
+            const d = await r.json(); if(d.error) throw new Error(d.error.message); return d.choices[0].message.content;
+        }
+
+        function generateImageUrl(p) { return `https://image.pollinations.ai/prompt/${encodeURIComponent(p)}?width=256&height=256&nologo=true&seed=${Math.random()}`; }
+
+        async function analyzeDream() {
+            const text = document.getElementById('dreamInput').value.trim();
+            const key = getApiKey();
+            if (!key) { alert('Set API Key: ?admin=1'); return; }
+
+            try {
+                const symbols = await extractSymbols(text, key);
+                document.getElementById('loadingStep2').classList.remove('hidden');
+                const analysis = await generateAnalysis(text, key);
+                document.getElementById('loadingStep3').classList.remove('hidden');
+                const forecast = await generateForecast(text, symbols.symbols, key);
+                
+                const withImages = symbols.symbols.map(s => ({...s, imageUrl: generateImageUrl(s.imagePrompt)}));
+                
+                // Display
+                document.getElementById('analysisText').textContent = analysis;
+                document.getElementById('forecastText').textContent = forecast;
+                const container = document.getElementById('symbolsContainer');
+                container.innerHTML = '';
+                withImages.forEach(s => {
+                    const div = document.createElement('div');
+                    div.className = 'glass rounded-xl p-4 text-center';
+                    div.innerHTML = `<div class="symbol-preview mx-auto mb-3"><img src="${s.imageUrl}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect fill=%22%231a1a2e%22 width=%22100%22 height=%22100%22/%3E%3Ctext x=%2250%22 y=%2260%22 font-size=%2240%22 text-anchor=%22middle%22%3E${s.emoji}%3C/text%3E%3C/svg%3E'"></div><div class="text-sm font-semibold">${s.emoji} ${s.name}</div>`;
+                    container.appendChild(div);
+                });
+                
+                document.getElementById('analysisLoading').classList.add('hidden');
+                document.getElementById('analysisContent').classList.remove('hidden');
+                
+                // Save dream
+                const dreams = JSON.parse(localStorage.getItem('dreams') || '[]');
+                dreams.push({ text, symbols: withImages, analysis, forecast, timestamp: new Date().toISOString(), language: currentLang, lat: 39+(Math.random()-0.5)*10, lng: 35+(Math.random()-0.5)*20, country:'Global' });
+                localStorage.setItem('dreams', JSON.stringify(dreams));
+                
+                // Update user dreams count
+                const user = getUser();
+                if (user) {
+                    updateUser({ dreamsShared: (user.dreamsShared || 0) + 1 });
+                }
+                
+                localStorage.setItem('dp_last_dream_date', new Date().toISOString());
+                updateProgress();
+                checkAchievements();
+                triggerConfetti();
+                
+            } catch (e) { alert('Error: ' + e.message); document.getElementById('analysisLoading').classList.add('hidden'); }
+        }
+
+        function buyDeepAnalysis() {
+            if (localStorage.getItem('dp_vip_access_granted')==='true') { alert('✅ VIP: Unlocked!'); return; }
+            alert('Payment coming soon! contact@dreampulse.live');
+        }
+        function subscribeJournal() { alert('Payment coming soon!'); }
+        function subscribeAllAccess() { alert('Payment coming soon!'); closeAllAccess(); }
+        function subscribeEmail() {
+            const e = document.getElementById('emailInput').value.trim();
+            if (!e || !e.includes('@')) { alert('Valid email required.'); return; }
+            const emails = JSON.parse(localStorage.getItem('email_subscribers') || '[]');
+            if (emails.includes(e)) { alert('Already subscribed!'); return; }
+            emails.push(e);
+            localStorage.setItem('email_subscribers', JSON.stringify(emails));
+            alert('✅ Welcome! Daily forecasts coming your way.');
+            document.getElementById('emailInput').value = '';
+        }
+        function joinAppWaitlist() {
+            const e = document.getElementById('appEmail').value.trim();
+            if (!e || !e.includes('@')) { alert('Valid email required.'); return; }
+            const list = JSON.parse(localStorage.getItem('dp_app_waitlist') || '[]');
+            if (list.includes(e)) { alert('Already on waitlist!'); return; }
+            list.push(e);
+            localStorage.setItem('dp_app_waitlist', JSON.stringify(list));
+            alert('✅ You\'re on the waitlist! We\'ll notify you first.');
+            closeAppModal();
+        }
+
+        // Init
+        window.addEventListener('DOMContentLoaded', () => {
+            updateUI();
+            updateStreak();
+            updateLoginState();
+            checkAchievements();
+            checkFomo();
+            if (!localStorage.getItem('dp_notif_dismissed')) setTimeout(() => document.getElementById('notificationBanner').classList.remove('hidden'), 5000);
+            if (!getApiKey()) setTimeout(() => { if(confirm('Set Groq API Key?')) showApiKeyInput(); }, 1000);
+        });
+
+        document.addEventListener('click', e => { if (!e.target.closest('.relative')) { document.getElementById('mainMenu').classList.add('hidden'); document.getElementById('langMenu').classList.add('hidden'); } });
+    </script>
+</body>
+</html>
