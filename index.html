@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,19 +8,14 @@
     <style>
         :root {
             --bg-deep: #0b0c10;
-            --accent-neon: #a855f7; /* Mistik Neon Mor */
+            --accent-neon: #a855f7;
             --accent-glow: rgba(168, 85, 247, 0.4);
             --text-light: #f3f4f6;
             --glass-bg: rgba(255, 255, 255, 0.03);
             --glass-border: rgba(255, 255, 255, 0.08);
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             background-color: var(--bg-deep);
             color: var(--text-light);
@@ -29,37 +24,77 @@
             background-image: radial-gradient(circle at 50% 30%, rgba(168, 85, 247, 0.15), transparent 60%);
         }
 
+        /* Üst Menü ve Dil Seçimi */
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 2rem 5%;
+            padding: 1.5rem 5%;
             border-bottom: 1px solid var(--glass-border);
             backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
         .logo {
             font-family: 'Syne', sans-serif;
             font-size: 1.8rem;
             font-weight: 700;
-            letter-spacing: -1px;
             background: linear-gradient(to right, #fff, var(--accent-neon));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            text-decoration: none;
         }
 
-        /* Hero & Canlı Rüya Dünyası Küresi */
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #9ca3af;
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover { color: var(--accent-neon); }
+
+        .lang-select {
+            background: rgba(0,0,0,0.5);
+            color: white;
+            border: 1px solid var(--glass-border);
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        /* Streak & Üye Bilgisi Üst Barı */
+        .user-status-bar {
+            background: rgba(168, 85, 247, 0.1);
+            padding: 0.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+        }
+
+        /* Hero Düzeni */
         .hero-section {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 4rem;
-            padding: 5rem 5%;
+            padding: 4rem 5%;
             align-items: center;
         }
 
         @media (max-width: 968px) {
             .hero-section { grid-template-columns: 1fr; text-align: center; }
             .map-container { margin: 0 auto; }
+            .nav-links { display: none; } /* Mobil için basitleştirme */
         }
 
         .hero-text h1 {
@@ -69,18 +104,13 @@
             margin-bottom: 1.5rem;
         }
 
-        .hero-text p {
-            color: #9ca3af;
-            font-size: 1.1rem;
-            margin-bottom: 2rem;
-            line-height: 1.6;
-        }
+        .hero-text p { color: #9ca3af; font-size: 1.1rem; margin-bottom: 2rem; line-height: 1.6; }
 
-        /* Küresel Rüya Haritası (Soyut Tasarım) */
+        /* İnteraktif Harita Küresi & Linki */
         .map-container {
             position: relative;
-            width: 400px;
-            height: 400px;
+            width: 320px;
+            height: 320px;
             background: var(--glass-bg);
             border: 1px solid var(--glass-border);
             border-radius: 50%;
@@ -88,18 +118,23 @@
             justify-content: center;
             align-items: center;
             box-shadow: 0 0 50px var(--accent-glow);
-            animation: pulseGlow 4s infinite alternate;
+            text-decoration: none;
+            color: white;
+            transition: transform 0.3s;
+        }
+
+        .map-container:hover {
+            transform: scale(1.03);
         }
 
         .map-sphere {
-            width: 85%;
-            height: 85%;
+            width: 85%; height: 85%;
             border: 1px dashed rgba(168, 85, 247, 0.3);
             border-radius: 50%;
             animation: spin 60s linear infinite;
         }
 
-        /* Canlı Rüya Akışı (Live Feed) */
+        /* Bağımlılık Yapıcı Özellik 1: Canlı Rüya Akışı */
         .live-feed-panel {
             grid-column: 1 / -1;
             background: var(--glass-bg);
@@ -107,8 +142,7 @@
             backdrop-filter: blur(12px);
             border-radius: 16px;
             padding: 1.5rem;
-            margin-top: 2rem;
-            overflow: hidden;
+            margin-top: 1rem;
         }
 
         .feed-header {
@@ -117,45 +151,35 @@
             gap: 10px;
             font-family: 'Syne', sans-serif;
             margin-bottom: 1rem;
-            font-size: 1.1rem;
         }
 
         .live-dot {
-            width: 8px;
-            height: 8px;
+            width: 8px; height: 8px;
             background-color: #10b981;
             border-radius: 50%;
             animation: liveBlink 1.5s infinite;
         }
 
-        .feed-scroller {
-            height: 80px;
-            overflow: hidden;
-            position: relative;
-        }
+        .feed-container { max-height: 120px; overflow-y: auto; }
+        .feed-item { padding: 0.5rem; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; }
+        .feed-source { font-size: 0.75rem; padding: 2px 6px; border-radius: 4px; background: #ff4500; color: white; margin-right: 10px; }
 
-        .feed-track {
-            position: absolute;
-            width: 100%;
-            animation: scrollFeed 12s linear infinite;
+        /* Bağımlılık Yapıcı Özellik 2: Günlük Rüya Kartı Mekaniği */
+        .dream-card-section {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            max-width: 400px;
+            margin: 2rem auto;
+            cursor: pointer;
+            transition: all 0.3s;
         }
+        .dream-card-section:hover { border-color: var(--accent-neon); box-shadow: 0 0 20px var(--accent-glow); }
+        .card-inner { font-size: 1.1rem; font-style: italic; color: #a855f7; margin-top: 1rem; }
 
-        .feed-item {
-            padding: 0.5rem 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            font-size: 0.95rem;
-            color: #d1d5db;
-        }
-
-        .feed-source {
-            font-size: 0.8rem;
-            padding: 2px 6px;
-            border-radius: 4px;
-            background: rgba(255,255,255,0.1);
-            margin-right: 8px;
-        }
-
-        /* Rüya Giriş Formu (UX Odaklı) */
+        /* Ana Rüya Giriş Paneli */
         .dream-input-card {
             background: rgba(15, 12, 23, 0.6);
             border: 1px solid var(--glass-border);
@@ -163,174 +187,276 @@
             border-radius: 24px;
             padding: 2.5rem;
             max-width: 700px;
-            margin: 4rem auto;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-        }
-
-        .input-wrapper {
-            position: relative;
-            margin-top: 1.5rem;
+            margin: 3rem auto;
         }
 
         textarea {
-            width: 100%;
-            height: 150px;
+            width: 100%; height: 120px;
             background: rgba(0, 0, 0, 0.3);
             border: 1px solid var(--glass-border);
             border-radius: 12px;
-            padding: 1rem;
-            color: var(--text-light);
-            font-family: inherit;
-            font-size: 1rem;
-            resize: none;
-            transition: border 0.3s;
+            padding: 1rem; color: var(--text-light);
+            font-family: inherit; resize: none;
         }
 
-        textarea:focus {
-            outline: none;
-            border-color: var(--accent-neon);
-            box-shadow: 0 0 10px var(--accent-glow);
-        }
+        .action-bar { display: flex; justify-content: space-between; margin-top: 1rem; }
+        .btn-voice { background: transparent; border: 1px solid rgba(255,255,255,0.2); color: white; padding: 0.6rem 1rem; border-radius: 50px; cursor: pointer; }
+        .btn-submit { background: var(--accent-neon); color: white; border: none; padding: 0.6rem 1.5rem; border-radius: 50px; cursor: pointer; font-weight: 600; }
 
-        /* Sesli Kayıt ve Gönder Butonları */
-        .action-bar {
+        /* Fiyatlandırma ve Teklif Kartları (Para Kazanma Bölümü) */
+        .pricing-section {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 1rem;
+            justify-content: center;
+            gap: 2rem;
+            padding: 4rem 5%;
+            flex-wrap: wrap;
         }
 
-        .btn-voice {
-            background: transparent;
-            border: 1px solid rgba(255,255,255,0.2);
-            color: white;
-            padding: 0.75rem 1.2rem;
-            border-radius: 50px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.3s;
+        .price-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2rem;
+            width: 280px;
+            text-align: center;
+            transition: transform 0.3s;
         }
+        .price-card:hover { transform: translateY(-5px); border-color: var(--accent-neon); }
+        .price-card h3 { font-family: 'Syne'; margin-bottom: 0.5rem; }
+        .price-card .cost { font-size: 1.8rem; font-weight: bold; margin: 1rem 0; color: var(--accent-neon); }
+        .price-card button { background: transparent; border: 1px solid var(--accent-neon); color: white; padding: 0.5rem 1.5rem; border-radius: 50px; cursor: pointer; width: 100%; }
+        .price-card button:hover { background: var(--accent-neon); }
 
-        .btn-voice:hover {
-            border-color: #ef4444;
-            box-shadow: 0 0 10px rgba(239, 68, 68, 0.3);
+        /* Ortak Modal Tasarımı */
+        .modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;
         }
-
-        .btn-submit {
-            background: var(--accent-neon);
-            color: white;
-            border: none;
-            padding: 0.75rem 2rem;
-            border-radius: 50px;
-            font-weight: 600;
-            cursor: pointer;
-            box-shadow: 0 4px 15px var(--accent-glow);
-            transition: transform 0.2s;
+        .modal-content {
+            background: #12131a; border: 1px solid var(--glass-border); padding: 2.5rem; border-radius: 20px; max-width: 500px; width: 90%; text-align: center;
         }
+        .close-btn { float: right; cursor: pointer; font-size: 1.5rem; color: #9ca3af; }
 
-        .btn-submit:hover {
-            transform: translateY(-2px);
-        }
-
-        /* Animasyonlar */
         @keyframes spin { 100% { transform: rotate(360deg); } }
-        @keyframes pulseGlow { 0% { box-shadow: 0 0 30px rgba(168, 85, 247, 0.2); } 100% { box-shadow: 0 0 60px var(--accent-glow); } }
         @keyframes liveBlink { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
-        @keyframes scrollFeed {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(-160px); }
-        }
     </style>
 </head>
 <body>
 
+    <div class="user-status-bar">
+        <div>🔥 <span id="streakTxt">Your streak is active! Share today.</span></div>
+        <div>🏆 <span id="lvlTxt">Dream Explorer Level 1</span></div>
+    </div>
+
     <header>
-        <div class="logo">DreamPulse</div>
-        <div style="color: #9ca3af;">🌐 Küresel Kolektif Bilinçaltı Aktif</div>
+        <a href="index.html" class="logo">DreamPulse</a>
+        <nav class="nav-links">
+            <a href="map.html" id="navMap">🌍 Collective Map</a>
+            <a href="map.html#forecasts" id="navForecast">🔮 Forecasts</a>
+            <a href="#" onclick="openModal('passModal')" id="navPass">👑 All-Access</a>
+        </nav>
+        <select class="lang-select" id="langSelect" onchange="changeLanguage()">
+            <option value="en">🇬🇧 English</option>
+            <option value="tr">🇹🇷 Türkçe</option>
+            <option value="es">🇪🇸 Español</option>
+        </select>
     </header>
 
     <main class="hero-section">
         <div class="hero-text">
-            <h1>Kolektif Bilinçaltının Akışını Keşfet</h1>
-            <p>Dünya üzerindeki rüyaların gerçek zamanlı arketiplerini, sembollerini ve Jungian analiz haritasını inceleyin. Kendi rüyanızı bırakarak küresel haritaya katkıda bulunun.</p>
+            <h1 id="heroTitle">Navigate the Collective Unconscious</h1>
+            <p id="heroDesc">Extract symbols, visual patterns, and Jungian archetypes from your dreams. Join a globally synchronized map of human consciousness entirely for free.</p>
         </div>
 
-        <div class="map-container">
+        <a href="map.html" class="map-container">
             <div class="map-sphere"></div>
             <div style="position: absolute; text-align: center;">
-                <span style="font-size: 2.5rem;">🔮</span>
-                <div style="font-family:'Syne'; font-weight:700; margin-top:5px;">8,241 Aktif Rüya</div>
+                <span style="font-size: 2rem;">🔮</span>
+                <div style="font-family:'Syne'; font-weight:700; margin-top:5px;" id="totalDreams">8,241 Active Dreams</div>
             </div>
-        </div>
+        </a>
 
         <div class="live-feed-panel">
             <div class="feed-header">
                 <div class="live-dot"></div>
-                <span>Dünyadan Canlı Rüya Akışı (Reddit, X, Tumblr, Bloglar)</span>
+                <span id="feedTitle">Live Dream Feed Sync (Reddit, Global Data)</span>
             </div>
-            <div class="feed-scroller">
-                <div class="feed-track" id="feedTrack">
-                    <div class="feed-item"><span class="feed-source" style="color:#ff4500;">r/Dreams</span> "Sürekli devasa kütüphanelerde kaybolduğumu ve çıkışı bulamadığımı görüyorum..."</div>
-                    <div class="feed-item"><span class="feed-source" style="color:#1da1f2;">Twitter</span> "Bu gece rüyamda gökyüzünden mor aurora ışıklarının döküldüğünü gördüm, büyüleyiciydi."</div>
-                    <div class="feed-item"><span class="feed-source" style="color:#35465c;">Tumblr</span> "Arketipler devrede: Gölgemle karanlık bir ormanda satranç oynuyordum."</div>
-                    <div class="feed-item"><span class="feed-source" style="color:#a855f7;">DreamPulse</span> Adana'dan bir kullanıcı az önce 'Gölge' temalı rüya paylaştı.</div>
-                </div>
+            <div class="feed-container" id="feedContainer">
+                <div class="feed-item">Synchronizing digital dream realms...</div>
             </div>
         </div>
     </main>
 
+    <section class="dream-card-section" onclick="revealDreamCard()">
+        <h3 id="cardTitle">🎴 Today's Dream Card</h3>
+        <p id="cardPrompt" style="color:#9ca3af; margin-top:0.5rem;">Tap to reveal your mystical insight for today...</p>
+        <div id="cardResult" class="card-inner"></div>
+    </section>
+
     <section class="dream-input-card">
-        <h2 style="font-family:'Syne'; text-align:center;">Bilinçaltını Kaydet</h2>
-        <div class="input-wrapper">
-            <textarea id="dreamText" placeholder="Uyanır uyanmaz hatırladığınız sembolleri, hisleri veya tüm hikayeyi buraya yazın..."></textarea>
-        </div>
+        <h2 style="font-family:'Syne'; text-align:center; margin-bottom:1rem;" id="inputTitle">Log Your Subconscious</h2>
+        <textarea id="dreamText" placeholder="Write or record your dream symbols here..."></textarea>
         <div class="action-bar">
-            <button class="btn-voice" id="voiceBtn">
-                <span>🎤</span> Sesle Rüya Anlat
-            </button>
-            <button class="btn-submit">Analiz Et & Haritaya Kat</button>
+            <button class="btn-voice" id="voiceBtn">🎤 Voice Input</button>
+            <button class="btn-submit" onclick="triggerAnalysis()" id="submitBtn">Analyze & Map</button>
         </div>
     </section>
 
+    <section class="pricing-section">
+        <div class="price-card">
+            <h3 id="p1Title">Deep Analysis</h3>
+            <div class="cost">$2.99</div>
+            <p style="color:#9ca3af; font-size:0.85rem; margin-bottom:1rem;" id="p1Desc">Per report. Full Jungian breakdown.</p>
+            <button onclick="openModal('analysisModal')">Purchase</button>
+        </div>
+        <div class="price-card" style="border-color: var(--accent-neon);">
+            <h3 id="p2Title">All-Access Pass</h3>
+            <div class="cost">$12.99/mo</div>
+            <p style="color:#9ca3af; font-size:0.85rem; margin-bottom:1rem;" id="p2Desc">Unlimited insights & forecasting.</p>
+            <button onclick="openModal('passModal')">Subscribe</button>
+        </div>
+        <div class="price-card">
+            <h3 id="p3Title">Dream Journal</h3>
+            <div class="cost">$6.99/mo</div>
+            <p style="color:#9ca3af; font-size:0.85rem; margin-bottom:1rem;" id="p3Desc">Keep an encrypted personal log.</p>
+            <button onclick="openModal('journalModal')">Subscribe</button>
+        </div>
+    </section>
+
+    <div id="analysisModal" class="modal"><div class="modal-content"><span class="close-btn" onclick="closeModal('analysisModal')">&times;</span><h2>Deep Analysis Report</h2><p style="margin:1rem 0;">Get shadow, anima/animus, and archetype charts for $2.99.</p><button class="btn-submit">Unlock Report</button></div></div>
+    <div id="passModal" class="modal"><div class="modal-content"><span class="close-btn" onclick="closeModal('passModal')">&times;</span><h2>👑 All-Access Pass</h2><p style="margin:1rem 0;">Unlock unlimited global forecasts, priority features, and email charts for $12.99/month.</p><button class="btn-submit">Activate Pass</button></div></div>
+    <div id="journalModal" class="modal"><div class="modal-content"><span class="close-btn" onclick="closeModal('journalModal')">&times;</span><h2>Encrypted Dream Journal</h2><p style="margin:1rem 0;">Your personal archive secured for $6.99/month.</p><button class="btn-submit">Open Journal</button></div></div>
+    <div id="loadingModal" class="modal"><div class="modal-content"><h2>🔮 Mapping Consciousness...</h2><p style="margin-top:1rem;">AI is parsing archetypes and syncing to the global map.</p></div></div>
+
     <script>
-        // Basit Ses Kayıt Arayüzü Tetikleyicisi (Web Speech API)
-        const voiceBtn = document.getElementById('voiceBtn');
-        const dreamText = document.getElementById('dreamText');
+        // Dil Paketi Veri Sözlüğü (Orijinal Çoklu Dil Altyapısı)
+        const langData = {
+            en: {
+                heroTitle: "Navigate the Collective Unconscious",
+                heroDesc: "Extract symbols, visual patterns, and Jungian archetypes from your dreams. Join a globally synchronized map of human consciousness entirely for free.",
+                feedTitle: "Live Dream Feed Sync (Reddit, Global Data)",
+                cardTitle: "🎴 Today's Dream Card",
+                cardPrompt: "Tap to reveal your mystical insight for today...",
+                inputTitle: "Log Your Subconscious",
+                submitBtn: "Analyze & Map",
+                streak: "Your streak is active! Share today.",
+                lvl: "Dream Explorer Level 1"
+            },
+            tr: {
+                heroTitle: "Kolektif Bilinçaltını Keşfet",
+                heroDesc: "Rüyalarınızdan sembolleri, görsel kalıpları ve Jungian arketipleri çıkarın. İnsan bilincinin küresel olarak senkronize edilmiş haritasına tamamen ücretsiz katılın.",
+                feedTitle: "Canlı Rüya Akışı Senkronizasyonu (Reddit, Küresel Veri)",
+                cardTitle: "🎴 Bugünün Rüya Kartı",
+                cardPrompt: "Bugüne ait mistik içgörüyü ortaya çıkarmak için dokunun...",
+                inputTitle: "Bilinçaltını Kaydet",
+                submitBtn: "Analiz Et & Haritalandır",
+                streak: "Seriniz aktif! Bugün bir rüya paylaşın.",
+                lvl: "Rüya Kaşifi Seviye 1"
+            },
+            es: {
+                heroTitle: "Navegar el Inconsciente Colectivo",
+                heroDesc: "Extrae símbolos, patrones visuales y arquetipos junguianos de tus sueños. Únete a un mapa de la conciencia humana sincronizado globalmente de forma gratuita.",
+                feedTitle: "Sincronización de Sueños en Vivo (Reddit, Datos Globales)",
+                cardTitle: "🎴 Carta de Sueño de Hoy",
+                cardPrompt: "Toca para revelar tu visión mística de hoy...",
+                inputTitle: "Registra tu Subconsciente",
+                submitBtn: "Analizar y Mapear",
+                streak: "¡Tu racha está activa! Comparte hoy.",
+                lvl: "Explorador de Sueños Nivel 1"
+            }
+        };
 
-        if ('webkitSpeechRecognition' in window) {
-            const recognition = new webkitSpeechRecognition();
-            recognition.lang = 'tr-TR';
-            recognition.continuous = false;
+        function changeLanguage() {
+            const lang = document.getElementById('langSelect').value;
+            const data = langData[lang] || langData['en'];
             
-            voiceBtn.addEventListener('click', () => {
-                recognition.start();
-                voiceBtn.style.borderColor = '#10b981';
-                voiceBtn.innerHTML = '🎧 Dinleniyor...';
-            });
-
-            recognition.onresult = (event) => {
-                const result = event.results[0][0].transcript;
-                dreamText.value += result;
-                voiceBtn.innerHTML = '🎤 Sesle Rüya Anlat';
-                voiceBtn.style.borderColor = 'rgba(255,255,255,0.2)';
-            };
-        } else {
-            voiceBtn.style.display = 'none'; // Tarayıcı desteklemiyorsa gizle
+            document.getElementById('heroTitle').innerText = data.heroTitle;
+            document.getElementById('heroDesc').innerText = data.heroDesc;
+            document.getElementById('feedTitle').innerText = data.feedTitle;
+            document.getElementById('cardTitle').innerText = data.cardTitle;
+            if(document.getElementById('cardPrompt')) document.getElementById('cardPrompt').innerText = data.cardPrompt;
+            document.getElementById('inputTitle').innerText = data.inputTitle;
+            document.getElementById('submitBtn').innerText = data.submitBtn;
+            document.getElementById('streakTxt').innerText = data.streak;
+            document.getElementById('lvlTxt').innerText = data.lvl;
         }
 
-        // Arka plandan (Backend) canlı verileri çekmek için fonksiyon yapısı
-        async function fetchLiveDreams() {
+        // Oyunlaştırma: Rüya Kartı Açma Ritüeli
+        function revealDreamCard() {
+            const insights = [
+                "The Shadow demands integration today. Look at what you are avoiding.",
+                "Anima/Animus alignment: Creative forces are flowing in your subconscious.",
+                "The Archetype of the Wise Old Man appears. Trust your inner guide.",
+                "A transformation stage is imminent. Water symbols indicate deep emotional sorting."
+            ];
+            const randomInsight = insights[Math.floor(Math.random() * insights.length)];
+            const promptEl = document.getElementById('cardPrompt');
+            if(promptEl) promptEl.remove();
+            document.getElementById('cardResult').innerText = randomInsight;
+        }
+
+        // Modalları Açma / Kapatma Fonksiyonları
+        function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+        // Rüya Analiz Tetikleyicisi & Yükleme Ekranı
+        function triggerAnalysis() {
+            const txt = document.getElementById('dreamText').value;
+            if(!txt) return;
+            openModal('loadingModal');
+            setTimeout(() => {
+                closeModal('loadingModal');
+                openModal('analysisModal'); // Analiz bitince satın alma veya detay modalını aç
+                document.getElementById('dreamText').value = '';
+            }, 3000);
+        }
+
+        // ÜCRETSİZ SOSYAL MEDYA MOTORU (Reddit Verilerini Canlı Çeker)
+        async function fetchRedditDreams() {
+            const container = document.getElementById('feedContainer');
+            const totalDreams = document.getElementById('totalDreams');
+            const proxy = 'https://api.allorigins.win/get?url=';
+            const target = encodeURIComponent('https://www.reddit.com/r/Dreams/new.json?limit=5');
+
             try {
-                const response = await fetch('http://localhost:3000/api/dreams');
-                const data = await response.json();
-                // Gelen verileri feedTrack elementine basacak kod buraya eklenebilir.
-            } catch (err) {
-                console.log("Lokal backend henüz aktif değil, simülasyon çalışıyor.");
+                const res = await fetch(`${proxy}${target}`);
+                const data = await res.json();
+                const parsed = JSON.parse(data.contents);
+                const posts = parsed.data.children;
+
+                container.innerHTML = '';
+                posts.forEach(post => {
+                    const title = post.data.title;
+                    const cleanText = post.data.selftext.substring(0, 100) + '...';
+                    const item = document.createElement('div');
+                    item.className = 'feed-item';
+                    item.innerHTML = `<span class="feed-source">Reddit</span> <strong>${title}:</strong> ${cleanText}`;
+                    container.appendChild(item);
+                });
+                
+                totalDreams.innerText = Math.floor(Math.random() * (9000 - 8000) + 8000) + " Active Dreams";
+            } catch (e) {
+                container.innerHTML = '<div class="feed-item">Syncing from fallback local archive nodes...</div>';
             }
         }
-        setInterval(fetchLiveDreams, 30000); // 30 saniyede bir güncelle
+
+        // Ses Tanıma Altyapısı
+        if ('webkitSpeechRecognition' in window) {
+            const recognition = new webkitSpeechRecognition();
+            recognition.lang = 'en-US';
+            const voiceBtn = document.getElementById('voiceBtn');
+            voiceBtn.addEventListener('click', () => {
+                recognition.start();
+                voiceBtn.innerText = '🎧 Listening...';
+            });
+            recognition.onresult = (e) => {
+                document.getElementById('dreamText').value += e.results[0][0].transcript;
+                voiceBtn.innerText = '🎤 Voice Input';
+            };
+        }
+
+        // Başlangıç tetiği
+        fetchRedditDreams();
     </script>
 </body>
 </html>
