@@ -11,7 +11,6 @@
     <style>
         :root {
             --deep-night: #0B0C10;
-            --neon-violet: #C3073F;
             --aurora-green: #4EFFF3;
             --mystic-purple: #A855F7;
         }
@@ -34,8 +33,18 @@
             border: 1px solid rgba(168, 85, 247, 0.2);
         }
         
+        .glass-strong {
+            background: rgba(31, 40, 51, 0.7);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+        }
+        
         .neon-glow {
             box-shadow: 0 0 20px rgba(168, 85, 247, 0.5);
+        }
+        
+        .neon-text {
+            text-shadow: 0 0 10px rgba(168, 85, 247, 0.8);
         }
         
         #map {
@@ -66,36 +75,93 @@
         .btn-primary:hover {
             box-shadow: 0 0 30px rgba(168, 85, 247, 0.6);
         }
+        
+        .lang-dropdown {
+            transform-origin: top;
+            animation: dropIn 0.3s ease-out;
+        }
+        
+        @keyframes dropIn {
+            from { opacity: 0; transform: scaleY(0.8); }
+            to { opacity: 1; transform: scaleY(1); }
+        }
+        
+        .lang-btn {
+            transition: all 0.2s;
+        }
+        
+        .lang-btn:hover {
+            background: rgba(168, 85, 247, 0.2);
+            transform: translateX(4px);
+        }
     </style>
 </head>
 <body>
-    <div class="container mx-auto px-4 py-8 max-w-7xl">
-        <!-- HEADER -->
-        <div class="flex items-center justify-between mb-8">
+    <!-- TOP BAR -->
+    <div class="fixed top-0 left-0 right-0 z-50 glass-strong border-b border-purple-500/20">
+        <div class="container mx-auto px-4 py-3 flex items-center justify-between max-w-7xl">
             <a href="index.html" class="flex items-center gap-3">
                 <span class="text-3xl">🌙</span>
-                <span class="text-2xl font-bold">DreamPulse</span>
+                <span class="text-2xl font-bold neon-text">DreamPulse</span>
             </a>
-            <a href="index.html" class="glass px-4 py-2 rounded-lg hover:bg-purple-500/20">← Back</a>
+            
+            <div class="flex items-center gap-3">
+                <!-- Language Selector -->
+                <div class="relative">
+                    <button onclick="toggleLangMenu()" class="glass px-4 py-2 rounded-lg hover:bg-purple-500/20 transition flex items-center gap-2">
+                        <span id="currentLang">🇬🇧 EN</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+                    
+                    <div id="langMenu" class="hidden lang-dropdown absolute right-0 mt-2 w-48 glass-strong rounded-xl overflow-hidden shadow-2xl">
+                        <button onclick="changeLang('en')" class="lang-btn w-full px-4 py-3 text-left flex items-center gap-3">
+                            <span class="text-xl">🇬🇧</span><span>English</span>
+                        </button>
+                        <button onclick="changeLang('tr')" class="lang-btn w-full px-4 py-3 text-left flex items-center gap-3">
+                            <span class="text-xl">🇹🇷</span><span>Türkçe</span>
+                        </button>
+                        <button onclick="changeLang('es')" class="lang-btn w-full px-4 py-3 text-left flex items-center gap-3">
+                            <span class="text-xl">🇪🇸</span><span>Español</span>
+                        </button>
+                        <button onclick="changeLang('ar')" class="lang-btn w-full px-4 py-3 text-left flex items-center gap-3">
+                            <span class="text-xl">🇸🇦</span><span>العربية</span>
+                        </button>
+                        <button onclick="changeLang('hi')" class="lang-btn w-full px-4 py-3 text-left flex items-center gap-3">
+                            <span class="text-xl">🇮🇳</span><span>हिन्दी</span>
+                        </button>
+                        <button onclick="changeLang('zh')" class="lang-btn w-full px-4 py-3 text-left flex items-center gap-3">
+                            <span class="text-xl">🇨🇳</span><span>中文</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <a href="index.html" class="glass px-4 py-2 rounded-lg hover:bg-purple-500/20">
+                    <span id="backBtn">← Back</span>
+                </a>
+            </div>
         </div>
+    </div>
 
+    <div class="container mx-auto px-4 pt-24 pb-16 max-w-7xl">
         <!-- STATS -->
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
             <div class="glass rounded-xl p-4 text-center neon-glow">
                 <div class="text-3xl font-bold text-purple-400" id="totalDreams">0</div>
-                <div class="text-sm text-gray-400">Total Dreams</div>
+                <div class="text-sm text-gray-400" id="statTotal">Total Dreams</div>
             </div>
             <div class="glass rounded-xl p-4 text-center">
                 <div class="text-3xl font-bold text-blue-400" id="totalCountries">0</div>
-                <div class="text-sm text-gray-400">Countries</div>
+                <div class="text-sm text-gray-400" id="statCountries">Countries</div>
             </div>
             <div class="glass rounded-xl p-4 text-center">
                 <div class="text-3xl font-bold text-green-400" id="totalLanguages">0</div>
-                <div class="text-sm text-gray-400">Languages</div>
+                <div class="text-sm text-gray-400" id="statLanguages">Languages</div>
             </div>
             <div class="glass rounded-xl p-4 text-center">
                 <div class="text-3xl font-bold text-yellow-400" id="todayDreams">0</div>
-                <div class="text-sm text-gray-400">Today</div>
+                <div class="text-sm text-gray-400" id="statToday">Today</div>
             </div>
         </div>
 
@@ -104,21 +170,112 @@
 
         <!-- FORECASTS -->
         <div id="forecasts" class="glass rounded-xl p-6 mb-8">
-            <h3 class="text-2xl font-bold mb-6">🔮 Regional Forecasts</h3>
+            <h3 class="text-2xl font-bold mb-6" id="forecastTitle">🔮 Regional Forecasts</h3>
             <div id="forecastContent" class="text-gray-300">
-                <p class="text-center text-gray-500">Click anywhere on the map to generate a forecast</p>
+                <p class="text-center text-gray-500" id="forecastHint">Click anywhere on the map to generate a forecast</p>
             </div>
         </div>
 
         <!-- LIVE FEED -->
         <div class="glass rounded-xl p-6">
-            <h3 class="text-2xl font-bold mb-6">📡 Live Dream Feed</h3>
+            <h3 class="text-2xl font-bold mb-6" id="feedTitle">📡 Live Dream Feed</h3>
             <div id="liveFeed" class="space-y-3 max-h-96 overflow-y-auto"></div>
         </div>
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
+        // ============ 🌍 TRANSLATIONS ============
+        const translations = {
+            en: {
+                backBtn: "← Back",
+                statTotal: "Total Dreams",
+                statCountries: "Countries",
+                statLanguages: "Languages",
+                statToday: "Today",
+                forecastTitle: "🔮 Regional Forecasts",
+                forecastHint: "Click anywhere on the map to generate a forecast",
+                feedTitle: "📡 Live Dream Feed"
+            },
+            tr: {
+                backBtn: "← Geri",
+                statTotal: "Toplam Rüya",
+                statCountries: "Ülke",
+                statLanguages: "Dil",
+                statToday: "Bugün",
+                forecastTitle: "🔮 Bölgesel Tahminler",
+                forecastHint: "Tahmin oluşturmak için haritaya tıkla",
+                feedTitle: "📡 Canlı Rüya Akışı"
+            },
+            es: {
+                backBtn: "← Atrás",
+                statTotal: "Sueños Totales",
+                statCountries: "Países",
+                statLanguages: "Idiomas",
+                statToday: "Hoy",
+                forecastTitle: "🔮 Pronósticos Regionales",
+                forecastHint: "Haz clic en el mapa para generar un pronóstico",
+                feedTitle: "📡 Feed en Vivo"
+            },
+            ar: {
+                backBtn: "← رجوع",
+                statTotal: "إجمالي الأحلام",
+                statCountries: "الدول",
+                statLanguages: "اللغات",
+                statToday: "اليوم",
+                forecastTitle: "🔮 التوقعات الإقليمية",
+                forecastHint: "انقر على الخريطة لإنشاء توقع",
+                feedTitle: "📡 البث المباشر"
+            },
+            hi: {
+                backBtn: "← वापस",
+                statTotal: "कुल सपने",
+                statCountries: "देश",
+                statLanguages: "भाषाएँ",
+                statToday: "आज",
+                forecastTitle: "🔮 क्षेत्रीय पूर्वानुमान",
+                forecastHint: "पूर्वानुमान के लिए मानचित्र पर क्लिक करें",
+                feedTitle: "📡 लाइव फ़ीड"
+            },
+            zh: {
+                backBtn: "← 返回",
+                statTotal: "总梦境",
+                statCountries: "国家",
+                statLanguages: "语言",
+                statToday: "今天",
+                forecastTitle: "🔮 区域预测",
+                forecastHint: "点击地图生成预测",
+                feedTitle: "📡 实时流"
+            }
+        };
+
+        let currentLang = localStorage.getItem('lang') || 'en';
+
+        function toggleLangMenu() {
+            document.getElementById('langMenu').classList.toggle('hidden');
+        }
+
+        function changeLang(lang) {
+            currentLang = lang;
+            localStorage.setItem('lang', lang);
+            updateUI();
+            toggleLangMenu();
+        }
+
+        function updateUI() {
+            const t = translations[currentLang];
+            const langNames = { en: '🇬🇧 EN', tr: '🇹🇷 TR', es: '🇪🇸 ES', ar: '🇸🇦 AR', hi: '🇮🇳 HI', zh: '🇨🇳 ZH' };
+            
+            document.getElementById('currentLang').textContent = langNames[currentLang];
+            
+            Object.keys(t).forEach(key => {
+                const el = document.getElementById(key);
+                if (el) el.textContent = t[key];
+            });
+            
+            document.body.style.direction = currentLang === 'ar' ? 'rtl' : 'ltr';
+        }
+
         // ============ MAP ============
         const map = L.map('map').setView([30, 20], 2);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -222,6 +379,9 @@
             const regionDreams = dreamArchive.getByRegion(lat, lng, 15);
             const dreamSample = regionDreams.slice(0, 3).map(d => d.text).join(' | ') || 'No recent dreams';
             
+            const langNames = { en: 'English', tr: 'Turkish', es: 'Spanish', ar: 'Arabic', hi: 'Hindi', zh: 'Chinese' };
+            const targetLang = langNames[currentLang] || 'English';
+            
             try {
                 const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
                     method: 'POST',
@@ -234,7 +394,7 @@
                         messages: [
                             {
                                 role: 'system',
-                                content: `You are the DreamPulse Oracle. Generate a short forecast (2-3 sentences, max 60 words) for ${region} based on these dreams: ${dreamSample}. Talk ONLY about dreams and symbols.`
+                                content: `You are the DreamPulse Oracle. Generate a short forecast (2-3 sentences, max 60 words) for ${region} based on these dreams: ${dreamSample}. Talk ONLY about dreams and symbols. RESPOND ONLY in ${targetLang}.`
                             }
                         ],
                         temperature: 0.8,
@@ -252,7 +412,14 @@
 
         // ============ INIT ============
         window.addEventListener('DOMContentLoaded', () => {
+            updateUI();
             loadDreams();
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.relative')) {
+                document.getElementById('langMenu').classList.add('hidden');
+            }
         });
     </script>
 </body>
