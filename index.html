@@ -11,9 +11,7 @@
         :root {
             --deep-night: #0B0C10;
             --midnight-blue: #1F2833;
-            --neon-violet: #C3073F;
             --aurora-green: #4EFFF3;
-            --electric-blue: #6FFFE9;
             --mystic-purple: #A855F7;
         }
         
@@ -29,7 +27,6 @@
             color: #E5E7EB;
         }
         
-        /* Glassmorphism */
         .glass {
             background: rgba(31, 40, 51, 0.4);
             backdrop-filter: blur(20px);
@@ -42,7 +39,6 @@
             border: 1px solid rgba(168, 85, 247, 0.3);
         }
         
-        /* Neon Glow */
         .neon-glow {
             box-shadow: 0 0 20px rgba(168, 85, 247, 0.5), 0 0 40px rgba(168, 85, 247, 0.3);
         }
@@ -54,8 +50,8 @@
         /* 3D Globe */
         .globe-container {
             perspective: 1000px;
-            width: 400px;
-            height: 400px;
+            width: 350px;
+            height: 350px;
             margin: 0 auto;
         }
         
@@ -98,7 +94,7 @@
             50% { opacity: 0.5; transform: scale(1.5); }
         }
         
-        /* Live Ticker */
+        /* Ticker */
         .ticker {
             overflow: hidden;
             white-space: nowrap;
@@ -114,21 +110,7 @@
             to { transform: translateX(-100%); }
         }
         
-        /* Dream Input Focus */
-        .dream-input-container {
-            transition: all 0.5s ease;
-        }
-        
-        .dream-input-container:focus-within {
-            transform: scale(1.02);
-        }
-        
-        .dream-input-container:focus-within ~ * {
-            opacity: 0.3;
-            filter: blur(2px);
-        }
-        
-        /* Microphone Pulse */
+        /* Microphone */
         .mic-button {
             position: relative;
             width: 80px;
@@ -139,7 +121,6 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: all 0.3s;
         }
         
         .mic-button::before {
@@ -167,12 +148,12 @@
         }
         
         .archetype-card:hover {
-            transform: translateY(-10px) rotateY(5deg);
+            transform: translateY(-10px);
             border-color: var(--aurora-green);
             box-shadow: 0 20px 60px rgba(78, 255, 243, 0.3);
         }
         
-        /* Loading Animation */
+        /* Loading */
         .loading-dream {
             position: relative;
             width: 100px;
@@ -220,18 +201,83 @@
             box-shadow: 0 0 30px rgba(245, 158, 11, 0.6);
         }
         
-        /* Scrollbar */
+        /* Language Dropdown */
+        .lang-dropdown {
+            transform-origin: top;
+            animation: dropIn 0.3s ease-out;
+        }
+        
+        @keyframes dropIn {
+            from { opacity: 0; transform: scaleY(0.8); }
+            to { opacity: 1; transform: scaleY(1); }
+        }
+        
+        .lang-btn {
+            transition: all 0.2s;
+        }
+        
+        .lang-btn:hover {
+            background: rgba(168, 85, 247, 0.2);
+            transform: translateX(4px);
+        }
+        
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: rgba(11, 12, 16, 0.5); }
         ::-webkit-scrollbar-thumb { background: rgba(168, 85, 247, 0.5); border-radius: 4px; }
     </style>
 </head>
 <body>
-    <!-- LIVE TICKER -->
+    <!-- TOP BAR with LANGUAGE SELECTOR -->
     <div class="fixed top-0 left-0 right-0 z-50 glass-strong border-b border-purple-500/20">
-        <div class="ticker py-2">
-            <div class="ticker-content text-sm text-purple-300">
-                <span class="mx-8">🌙 3 minutes ago - User from Turkey shared a "Shadow Archetype" dream</span>
+        <div class="container mx-auto px-4 py-2 flex items-center justify-between max-w-7xl">
+            <!-- Logo -->
+            <div class="flex items-center gap-2">
+                <span class="text-2xl">🌙</span>
+                <span class="brand text-lg font-bold neon-text">DreamPulse</span>
+            </div>
+            
+            <!-- Language Selector -->
+            <div class="relative">
+                <button onclick="toggleLangMenu()" class="glass px-4 py-2 rounded-lg hover:bg-purple-500/20 transition flex items-center gap-2">
+                    <span id="currentLang">🇬🇧 EN</span>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+                
+                <div id="langMenu" class="hidden lang-dropdown absolute right-0 mt-2 w-48 glass-strong rounded-xl overflow-hidden shadow-2xl">
+                    <button onclick="changeLang('en')" class="lang-btn w-full px-4 py-3 text-left flex items-center gap-3">
+                        <span class="text-xl">🇬🇧</span>
+                        <span>English</span>
+                    </button>
+                    <button onclick="changeLang('tr')" class="lang-btn w-full px-4 py-3 text-left flex items-center gap-3">
+                        <span class="text-xl">🇹🇷</span>
+                        <span>Türkçe</span>
+                    </button>
+                    <button onclick="changeLang('es')" class="lang-btn w-full px-4 py-3 text-left flex items-center gap-3">
+                        <span class="text-xl">🇪🇸</span>
+                        <span>Español</span>
+                    </button>
+                    <button onclick="changeLang('ar')" class="lang-btn w-full px-4 py-3 text-left flex items-center gap-3">
+                        <span class="text-xl">🇸🇦</span>
+                        <span>العربية</span>
+                    </button>
+                    <button onclick="changeLang('hi')" class="lang-btn w-full px-4 py-3 text-left flex items-center gap-3">
+                        <span class="text-xl">🇮🇳</span>
+                        <span>हिन्दी</span>
+                    </button>
+                    <button onclick="changeLang('zh')" class="lang-btn w-full px-4 py-3 text-left flex items-center gap-3">
+                        <span class="text-xl">🇨🇳</span>
+                        <span>中文</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Ticker -->
+        <div class="ticker py-2 border-t border-purple-500/10">
+            <div class="ticker-content text-sm text-purple-300" id="tickerContent">
+                <span class="mx-8">🌙 3 minutes ago - User shared a "Shadow Archetype" dream</span>
                 <span class="mx-8">✨ Last hour - Dreams with "water" symbols increased 14%</span>
                 <span class="mx-8">🔮 Global forecast updated - Collective anxiety rising</span>
                 <span class="mx-8">🌍 847 dreams analyzed today from 42 countries</span>
@@ -239,70 +285,66 @@
         </div>
     </div>
 
-    <div class="container mx-auto px-4 pt-20 pb-16 max-w-6xl">
-        <!-- HERO SECTION -->
-        <div class="text-center mb-16">
+    <div class="container mx-auto px-4 pt-32 pb-16 max-w-6xl">
+        <!-- HERO -->
+        <div class="text-center mb-12">
             <h1 class="text-6xl md:text-7xl font-bold mb-4 neon-text">DreamPulse</h1>
-            <p class="text-xl text-purple-300 mb-12">The Collective Unconscious Speaks</p>
+            <p class="text-xl text-purple-300 mb-12" id="heroSubtitle">The Collective Unconscious Speaks</p>
             
             <!-- 3D GLOBE -->
             <div class="globe-container mb-12">
                 <div class="globe">
-                    <div class="globe-sphere">
-                        <!-- Dream points will be added dynamically -->
-                    </div>
+                    <div class="globe-sphere"></div>
                 </div>
             </div>
         </div>
 
         <!-- DREAM INPUT -->
-        <div class="dream-input-container glass rounded-2xl p-8 mb-12 neon-glow">
+        <div class="glass rounded-2xl p-8 mb-12 neon-glow">
             <div class="text-center mb-6">
-                <h2 class="text-3xl font-bold mb-2">Share Your Dream</h2>
-                <p class="text-gray-400">Enter the collective unconscious</p>
+                <h2 class="text-3xl font-bold mb-2" id="shareTitle">Share Your Dream</h2>
+                <p class="text-gray-400" id="shareDesc">Enter the collective unconscious</p>
             </div>
             
             <textarea id="dreamInput" rows="6" placeholder="Describe your dream in detail..." 
                 class="w-full bg-slate-900/50 border border-purple-500/30 rounded-xl p-6 text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 mb-6 text-lg"></textarea>
             
-            <div class="flex items-center justify-center gap-6">
-                <!-- Microphone Button -->
+            <div class="flex items-center justify-center gap-6 flex-wrap">
                 <button onclick="startVoiceInput()" class="mic-button">
                     <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
                     </svg>
                 </button>
                 
-                <!-- Analyze Button -->
-                <button onclick="analyzeDream()" class="btn-primary text-white font-semibold text-xl px-12 py-4 rounded-xl">
+                <button onclick="analyzeDream()" class="btn-primary text-white font-semibold text-xl px-12 py-4 rounded-xl" id="analyzeBtn">
                     🔮 Analyze Dream
                 </button>
             </div>
         </div>
 
-        <!-- ARCHETYPE CARDS -->
+        <!-- ARCHETYPES -->
         <div class="mb-16">
-            <h3 class="text-3xl font-bold text-center mb-8">Jungian Archetypes</h3>
+            <h3 class="text-3xl font-bold text-center mb-8" id="archetypeTitle">Jungian Archetypes</h3>
             <div class="grid md:grid-cols-4 gap-6">
                 <div class="archetype-card rounded-xl p-6 text-center">
                     <div class="text-5xl mb-4">🌑</div>
-                    <h4 class="text-xl font-bold mb-2">Shadow</h4>
-                    <p class="text-sm text-gray-400">The hidden self</p>
+                    <h4 class="text-xl font-bold mb-2" id="archShadow">Shadow</h4>
+                    <p class="text-sm text-gray-400" id="archShadowDesc">The hidden self</p>
                 </div>
                 <div class="archetype-card rounded-xl p-6 text-center">
                     <div class="text-5xl mb-4">👁️</div>
-                    <h4 class="text-xl font-bold mb-2">Anima</h4>
-                    <p class="text-sm text-gray-400">The inner feminine</p>
+                    <h4 class="text-xl font-bold mb-2" id="archAnima">Anima</h4>
+                    <p class="text-sm text-gray-400" id="archAnimaDesc">The inner feminine</p>
                 </div>
                 <div class="archetype-card rounded-xl p-6 text-center">
                     <div class="text-5xl mb-4">🧙</div>
-                    <h4 class="text-xl font-bold mb-2">Wise Old Man</h4>
-                    <p class="text-sm text-gray-400">The guide</p>
+                    <h4 class="text-xl font-bold mb-2" id="archWise">Wise Old Man</h4>
+                    <p class="text-sm text-gray-400" id="archWiseDesc">The guide</p>
                 </div>
                 <div class="archetype-card rounded-xl p-6 text-center">
                     <div class="text-5xl mb-4">🦸</div>
-                    <h4 class="text-xl font-bold mb-2">Hero</h4>
-                    <p class="text-sm text-gray-400">The seeker</p>
+                    <h4 class="text-xl font-bold mb-2" id="archHero">Hero</h4>
+                    <p class="text-sm text-gray-400" id="archHeroDesc">The seeker</p>
                 </div>
             </div>
         </div>
@@ -311,13 +353,13 @@
         <div class="grid md:grid-cols-2 gap-6 mb-12">
             <a href="map.html" class="glass rounded-2xl p-8 hover:scale-105 transition block text-center neon-glow">
                 <div class="text-5xl mb-4">🌍</div>
-                <h3 class="text-2xl font-bold mb-2">Collective Map</h3>
-                <p class="text-gray-400">Explore dreams worldwide</p>
+                <h3 class="text-2xl font-bold mb-2" id="navMapTitle">Collective Map</h3>
+                <p class="text-gray-400" id="navMapDesc">Explore dreams worldwide</p>
             </a>
             <a href="map.html#forecasts" class="glass rounded-2xl p-8 hover:scale-105 transition block text-center neon-glow">
                 <div class="text-5xl mb-4">🔮</div>
-                <h3 class="text-2xl font-bold mb-2">Forecasts</h3>
-                <p class="text-gray-400">AI-powered predictions</p>
+                <h3 class="text-2xl font-bold mb-2" id="navForecastTitle">Forecasts</h3>
+                <p class="text-gray-400" id="navForecastDesc">AI-powered predictions</p>
             </a>
         </div>
 
@@ -325,45 +367,40 @@
         <div id="adminPanel" class="hidden glass rounded-xl p-6 mb-8">
             <h3 class="font-bold mb-4 text-lg">⚙️ Admin Panel</h3>
             <div class="flex gap-3 flex-wrap">
-                <button onclick="scanWebForDreams()" class="btn-primary text-white px-6 py-3 rounded-xl">🔍 Scan Web for Dreams</button>
-                <button onclick="showApiKeyInput()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl">🔑 Set API Key</button>
-                <button onclick="clearArchive()" class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-xl">🗑️ Clear Archive</button>
+                <button onclick="scanWebForDreams()" class="btn-primary text-white px-6 py-3 rounded-xl" id="scanBtn">🔍 Scan Web for Dreams</button>
+                <button onclick="showApiKeyInput()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl" id="keyBtn">🔑 Set API Key</button>
+                <button onclick="clearArchive()" class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-xl" id="clearBtn">🗑️ Clear Archive</button>
             </div>
-            <p class="text-sm text-gray-400 mt-3">Total dreams: <span id="archiveCount" class="text-purple-300 font-bold">0</span></p>
+            <p class="text-sm text-gray-400 mt-3"><span id="totalLabel">Total dreams</span>: <span id="archiveCount" class="text-purple-300 font-bold">0</span></p>
         </div>
     </div>
 
-    <!-- ANALYSIS RESULT MODAL -->
+    <!-- RESULT MODAL -->
     <div id="resultModal" class="hidden fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4">
         <div class="glass-strong rounded-2xl p-8 max-w-4xl w-full max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center mb-6">
-                <h3 class="text-3xl font-bold">Your Dream Analysis</h3>
+                <h3 class="text-3xl font-bold" id="resultTitle">Your Dream Analysis</h3>
                 <button onclick="closeResult()" class="text-gray-400 hover:text-white text-3xl">&times;</button>
             </div>
             
-            <!-- Loading State -->
             <div id="loadingState" class="text-center py-12">
                 <div class="loading-dream mx-auto mb-6"></div>
                 <p class="text-purple-300 text-lg" id="loadingText">Scanning the unconscious...</p>
             </div>
             
-            <!-- Result State -->
             <div id="resultState" class="hidden">
-                <!-- Archetype Card -->
                 <div class="archetype-card rounded-xl p-8 mb-6 text-center">
                     <div class="text-6xl mb-4" id="archetypeEmoji">🌑</div>
                     <h4 class="text-2xl font-bold mb-2" id="archetypeName">Shadow</h4>
                     <p class="text-gray-400" id="archetypeDesc">The hidden self emerges</p>
                 </div>
                 
-                <!-- Analysis Text -->
                 <div class="glass rounded-xl p-6 mb-6">
                     <p class="text-lg leading-relaxed" id="analysisText"></p>
                 </div>
                 
-                <!-- Share Button -->
-                <button onclick="shareToStory()" class="w-full btn-gold text-white font-semibold py-4 rounded-xl">
-                    📱 Share to Story (9:16)
+                <button onclick="shareToStory()" class="w-full btn-gold text-white font-semibold py-4 rounded-xl" id="shareStoryBtn">
+                    📱 Share to Story
                 </button>
             </div>
         </div>
@@ -382,7 +419,172 @@
     </div>
 
     <script>
-        // ============ WEB SCANNING (Reddit JSON API) ============
+        // ============ 🌍 TRANSLATIONS ============
+        const translations = {
+            en: {
+                heroSubtitle: "The Collective Unconscious Speaks",
+                shareTitle: "Share Your Dream",
+                shareDesc: "Enter the collective unconscious",
+                analyzeBtn: "🔮 Analyze Dream",
+                archetypeTitle: "Jungian Archetypes",
+                archShadow: "Shadow", archShadowDesc: "The hidden self",
+                archAnima: "Anima", archAnimaDesc: "The inner feminine",
+                archWise: "Wise Old Man", archWiseDesc: "The guide",
+                archHero: "Hero", archHeroDesc: "The seeker",
+                navMapTitle: "Collective Map", navMapDesc: "Explore dreams worldwide",
+                navForecastTitle: "Forecasts", navForecastDesc: "AI-powered predictions",
+                scanBtn: "🔍 Scan Web for Dreams",
+                keyBtn: "🔑 Set API Key",
+                clearBtn: "🗑️ Clear Archive",
+                totalLabel: "Total dreams",
+                resultTitle: "Your Dream Analysis",
+                shareStoryBtn: "📱 Share to Story",
+                dreamPlaceholder: "Describe your dream in detail...",
+                loadingTexts: ["Scanning the unconscious...", "Identifying archetypes...", "Decoding symbols...", "Generating insight..."]
+            },
+            tr: {
+                heroSubtitle: "Kolektif Bilinçaltı Konuşuyor",
+                shareTitle: "Rüyanı Paylaş",
+                shareDesc: "Kolektif bilinçaltına gir",
+                analyzeBtn: "🔮 Rüyanı Analiz Et",
+                archetypeTitle: "Jungian Arketipler",
+                archShadow: "Gölge", archShadowDesc: "Gizli benlik",
+                archAnima: "Anima", archAnimaDesc: "İçsel dişil",
+                archWise: "Bilge İhtiyar", archWiseDesc: "Rehber",
+                archHero: "Kahraman", archHeroDesc: "Arayıcı",
+                navMapTitle: "Kolektif Harita", navMapDesc: "Dünya çapında rüyaları keşfet",
+                navForecastTitle: "Tahminler", navForecastDesc: "AI destekli kehanetler",
+                scanBtn: "🔍 Web'de Rüya Tara",
+                keyBtn: "🔑 API Anahtarı",
+                clearBtn: "🗑️ Arşivi Temizle",
+                totalLabel: "Toplam rüya",
+                resultTitle: "Rüya Analizin",
+                shareStoryBtn: "📱 Hikayede Paylaş",
+                dreamPlaceholder: "Rüyanı detaylı anlat...",
+                loadingTexts: ["Bilinçaltı taranıyor...", "Arketipler belirleniyor...", "Semboller çözülüyor...", "İçgörü üretiliyor..."]
+            },
+            es: {
+                heroSubtitle: "El Inconsciente Colectivo Habla",
+                shareTitle: "Comparte tu Sueño",
+                shareDesc: "Entra al inconsciente colectivo",
+                analyzeBtn: "🔮 Analizar Sueño",
+                archetypeTitle: "Arquetipos Junguianos",
+                archShadow: "Sombra", archShadowDesc: "El yo oculto",
+                archAnima: "Anima", archAnimaDesc: "Lo femenino interior",
+                archWise: "Anciano Sabio", archWiseDesc: "El guía",
+                archHero: "Héroe", archHeroDesc: "El buscador",
+                navMapTitle: "Mapa Colectivo", navMapDesc: "Explora sueños mundiales",
+                navForecastTitle: "Pronósticos", navForecastDesc: "Predicciones con IA",
+                scanBtn: "🔍 Escanear Web",
+                keyBtn: "🔑 Clave API",
+                clearBtn: "🗑️ Limpiar Archivo",
+                totalLabel: "Sueños totales",
+                resultTitle: "Análisis de tu Sueño",
+                shareStoryBtn: "📱 Compartir en Historia",
+                dreamPlaceholder: "Describe tu sueño en detalle...",
+                loadingTexts: ["Escaneando el inconsciente...", "Identificando arquetipos...", "Decodificando símbolos...", "Generando visión..."]
+            },
+            ar: {
+                heroSubtitle: "اللاوعي الجمعي يتكلم",
+                shareTitle: "شارك حلمك",
+                shareDesc: "ادخل إلى اللاوعي الجمعي",
+                analyzeBtn: "🔮 حلل الحلم",
+                archetypeTitle: "الأصول اليونغية",
+                archShadow: "الظل", archShadowDesc: "الذات الخفية",
+                archAnima: "الأنيما", archAnimaDesc: "الأنوثة الداخلية",
+                archWise: "الشيخ الحكيم", archWiseDesc: "المرشد",
+                archHero: "البطل", archHeroDesc: "الباحث",
+                navMapTitle: "الخريطة الجماعية", navMapDesc: "استكشف الأحلام عالمياً",
+                navForecastTitle: "التوقعات", navForecastDesc: "تنبؤات بالذكاء الاصطناعي",
+                scanBtn: "🔍 مسح الويب",
+                keyBtn: "🔑 مفتاح API",
+                clearBtn: "🗑️ مسح الأرشيف",
+                totalLabel: "إجمالي الأحلام",
+                resultTitle: "تحليل حلمك",
+                shareStoryBtn: "📱 شارك في القصة",
+                dreamPlaceholder: "صف حلمك بالتفصيل...",
+                loadingTexts: ["مسح اللاوعي...", "تحديد الأصول...", "فك الرموز...", "توليد الرؤى..."]
+            },
+            hi: {
+                heroSubtitle: "सामूहिक अवचेतन बोलता है",
+                shareTitle: "अपना सपना साझा करें",
+                shareDesc: "सामूहिक अवचेतन में प्रवेश करें",
+                analyzeBtn: "🔮 सपना विश्लेषण",
+                archetypeTitle: "यूंगियन पुरातत्व",
+                archShadow: "छाया", archShadowDesc: "छिपी हुई आत्मा",
+                archAnima: "अनिमा", archAnimaDesc: "आंतरिक स्त्री",
+                archWise: "बुद्धिमान वृद्ध", archWiseDesc: "मार्गदर्शक",
+                archHero: "नायक", archHeroDesc: "खोजकर्ता",
+                navMapTitle: "सामूहिक मानचित्र", navMapDesc: "वैश्विक सपने देखें",
+                navForecastTitle: "पूर्वानुमान", navForecastDesc: "AI आधारित भविष्यवाणी",
+                scanBtn: "🔍 वेब स्कैन",
+                keyBtn: "🔑 API कुंजी",
+                clearBtn: "🗑️ संग्रह साफ़",
+                totalLabel: "कुल सपने",
+                resultTitle: "आपके सपने का विश्लेषण",
+                shareStoryBtn: "📱 कहानी में साझा करें",
+                dreamPlaceholder: "अपने सपने का विस्तार से वर्णन करें...",
+                loadingTexts: ["अवचेतन स्कैन...", "पुरातत्व पहचान...", "प्रतीक डिकोड...", "अंतर्दृष्टि उत्पन्न..."]
+            },
+            zh: {
+                heroSubtitle: "集体潜意识在说话",
+                shareTitle: "分享你的梦",
+                shareDesc: "进入集体潜意识",
+                analyzeBtn: "🔮 分析梦境",
+                archetypeTitle: "荣格原型",
+                archShadow: "阴影", archShadowDesc: "隐藏的自我",
+                archAnima: "阿尼玛", archAnimaDesc: "内在女性",
+                archWise: "智慧老人", archWiseDesc: "向导",
+                archHero: "英雄", archHeroDesc: "探索者",
+                navMapTitle: "集体地图", navMapDesc: "探索全球梦境",
+                navForecastTitle: "预测", navForecastDesc: "AI驱动预测",
+                scanBtn: "🔍 扫描网络",
+                keyBtn: "🔑 API密钥",
+                clearBtn: "🗑️ 清除存档",
+                totalLabel: "总梦境",
+                resultTitle: "你的梦境分析",
+                shareStoryBtn: "📱 分享到故事",
+                dreamPlaceholder: "详细描述你的梦...",
+                loadingTexts: ["扫描潜意识...", "识别原型...", "解码符号...", "生成洞察..."]
+            }
+        };
+
+        let currentLang = localStorage.getItem('lang') || 'en';
+
+        // ============ 🌍 LANGUAGE FUNCTIONS ============
+        function toggleLangMenu() {
+            document.getElementById('langMenu').classList.toggle('hidden');
+        }
+
+        function changeLang(lang) {
+            currentLang = lang;
+            localStorage.setItem('lang', lang);
+            updateUI();
+            toggleLangMenu();
+        }
+
+        function updateUI() {
+            const t = translations[currentLang];
+            const langNames = { en: '🇬🇧 EN', tr: '🇹🇷 TR', es: '🇪🇸 ES', ar: '🇸🇦 AR', hi: '🇮🇳 HI', zh: '🇨🇳 ZH' };
+            
+            document.getElementById('currentLang').textContent = langNames[currentLang];
+            
+            // Update all text elements
+            Object.keys(t).forEach(key => {
+                const el = document.getElementById(key);
+                if (el && typeof t[key] === 'string') {
+                    el.textContent = t[key];
+                }
+            });
+            
+            // Update placeholder
+            document.getElementById('dreamInput').placeholder = t.dreamPlaceholder;
+            
+            // RTL for Arabic
+            document.body.style.direction = currentLang === 'ar' ? 'rtl' : 'ltr';
+        }
+
+        // ============ WEB SCANNING ============
         async function scanWebForDreams() {
             const subreddits = ['dreams', 'DreamInterpretation', 'luciddreaming'];
             let totalAdded = 0;
@@ -410,12 +612,18 @@
                 }
             }
             
-            alert(`✅ Scanned web and added ${totalAdded} new dreams`);
+            const t = translations[currentLang];
+            const msg = currentLang === 'tr' ? `✅ ${totalAdded} yeni rüya eklendi` :
+                       currentLang === 'es' ? `✅ ${totalAdded} sueños añadidos` :
+                       currentLang === 'ar' ? `✅ تمت إضافة ${totalAdded} حلم` :
+                       currentLang === 'hi' ? `✅ ${totalAdded} सपने जोड़े गए` :
+                       currentLang === 'zh' ? `✅ 添加了 ${totalAdded} 个梦` :
+                       `✅ Added ${totalAdded} new dreams`;
+            alert(msg);
             updateArchiveCount();
             updateGlobe();
         }
 
-        // ============ AUTO SCAN (Every 30 minutes) ============
         async function autoScan() {
             const lastScan = localStorage.getItem('lastScan');
             const now = Date.now();
@@ -426,28 +634,25 @@
             }
         }
 
-        // ============ GLOBE ANIMATION ============
+        // ============ GLOBE ============
         function updateGlobe() {
             const globe = document.querySelector('.globe-sphere');
             const dreams = dreamArchive.getAll();
             
-            // Remove old points
             document.querySelectorAll('.dream-point').forEach(p => p.remove());
             
-            // Add new points
             dreams.slice(0, 20).forEach(dream => {
                 if (!dream.lat || !dream.lng) return;
                 
                 const point = document.createElement('div');
                 point.className = 'dream-point';
                 
-                // Convert lat/lng to 3D position
                 const phi = (90 - dream.lat) * (Math.PI / 180);
                 const theta = (dream.lng + 180) * (Math.PI / 180);
                 
-                const x = -(200 * Math.sin(phi) * Math.cos(theta));
-                const y = 200 * Math.cos(phi);
-                const z = 200 * Math.sin(phi) * Math.sin(theta);
+                const x = -(175 * Math.sin(phi) * Math.cos(theta));
+                const y = 175 * Math.cos(phi);
+                const z = 175 * Math.sin(phi) * Math.sin(theta);
                 
                 point.style.left = `calc(50% + ${x}px)`;
                 point.style.top = `calc(50% - ${y}px)`;
@@ -457,36 +662,29 @@
             });
         }
 
-        // ============ DREAM ANALYSIS ============
+        // ============ ANALYSIS ============
         async function analyzeDream() {
             const dreamText = document.getElementById('dreamInput').value.trim();
             if (!dreamText) {
-                alert('Please write your dream');
+                alert(currentLang === 'tr' ? 'Lütfen rüyanı yaz' : 'Please write your dream');
                 return;
             }
             
             const apiKey = localStorage.getItem('groq_api_key');
             if (!apiKey) {
-                alert('API key not set. Click "Set API Key" in admin panel.');
+                alert(currentLang === 'tr' ? 'API anahtarı yok' : 'API key not set');
                 return;
             }
             
-            // Show modal with loading
             document.getElementById('resultModal').classList.remove('hidden');
             document.getElementById('loadingState').classList.remove('hidden');
             document.getElementById('resultState').classList.add('hidden');
             
-            // Loading text animation
-            const loadingTexts = [
-                'Scanning the unconscious...',
-                'Identifying archetypes...',
-                'Decoding symbols...',
-                'Generating insight...'
-            ];
+            const t = translations[currentLang];
             let textIndex = 0;
             const textInterval = setInterval(() => {
-                document.getElementById('loadingText').textContent = loadingTexts[textIndex];
-                textIndex = (textIndex + 1) % loadingTexts.length;
+                document.getElementById('loadingText').textContent = t.loadingTexts[textIndex];
+                textIndex = (textIndex + 1) % t.loadingTexts.length;
             }, 2000);
             
             try {
@@ -501,12 +699,9 @@
                         messages: [
                             {
                                 role: 'system',
-                                content: 'You are Carl Jung as an AI. Analyze this dream. Identify the dominant archetype (Shadow, Anima, Wise Old Man, Hero, etc.). Return JSON: {"archetype": "name", "emoji": "emoji", "description": "short desc", "analysis": "poetic analysis, max 150 words"}'
+                                content: 'You are Carl Jung as AI. Analyze this dream. Identify dominant archetype. Return JSON: {"archetype": "name", "emoji": "emoji", "description": "short desc", "analysis": "poetic analysis, max 150 words"}'
                             },
-                            {
-                                role: 'user',
-                                content: dreamText
-                            }
+                            { role: 'user', content: dreamText }
                         ],
                         temperature: 0.7,
                         max_tokens: 500,
@@ -517,7 +712,6 @@
                 const data = await response.json();
                 const result = JSON.parse(data.choices[0].message.content);
                 
-                // Display result
                 clearInterval(textInterval);
                 document.getElementById('loadingState').classList.add('hidden');
                 document.getElementById('resultState').classList.remove('hidden');
@@ -527,15 +721,13 @@
                 document.getElementById('archetypeDesc').textContent = result.description;
                 document.getElementById('analysisText').textContent = result.analysis;
                 
-                // Save to archive
                 dreamArchive.add({
                     text: dreamText,
                     analysis: result.analysis,
                     archetype: result.archetype,
-                    language: 'en',
+                    language: currentLang,
                     country: 'User',
-                    lat: 0,
-                    lng: 0,
+                    lat: 0, lng: 0,
                     symbols: [],
                     timestamp: new Date().toISOString()
                 });
@@ -551,15 +743,15 @@
             document.getElementById('resultModal').classList.add('hidden');
         }
 
-        // ============ VOICE INPUT ============
         function startVoiceInput() {
             if (!('webkitSpeechRecognition' in window)) {
-                alert('Voice input not supported in this browser');
+                alert('Voice input not supported');
                 return;
             }
             
+            const langMap = { en: 'en-US', tr: 'tr-TR', es: 'es-ES', ar: 'ar-SA', hi: 'hi-IN', zh: 'zh-CN' };
             const recognition = new webkitSpeechRecognition();
-            recognition.lang = 'en-US';
+            recognition.lang = langMap[currentLang] || 'en-US';
             recognition.continuous = true;
             recognition.interimResults = true;
             
@@ -572,14 +764,11 @@
             };
             
             recognition.start();
-            alert('🎤 Speaking... Click OK to stop');
-            
             setTimeout(() => recognition.stop(), 30000);
         }
 
-        // ============ SHARE TO STORY ============
         function shareToStory() {
-            alert('📱 Story sharing feature coming soon!');
+            alert('📱 Story sharing coming soon!');
         }
 
         // ============ ADMIN ============
@@ -609,20 +798,23 @@
 
         // ============ INIT ============
         window.addEventListener('DOMContentLoaded', async () => {
-            // Admin panel
+            updateUI();
+            
             if (new URLSearchParams(window.location.search).get('admin') === '1') {
                 document.getElementById('adminPanel').classList.remove('hidden');
                 updateArchiveCount();
             }
             
-            // Auto scan web
             await autoScan();
-            
-            // Update globe
             updateGlobe();
-            
-            // Refresh globe every 5 seconds
             setInterval(updateGlobe, 5000);
+        });
+
+        // Close lang menu on outside click
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.relative')) {
+                document.getElementById('langMenu').classList.add('hidden');
+            }
         });
     </script>
 </body>
