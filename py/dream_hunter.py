@@ -1,15 +1,16 @@
 import requests
 import json
+import os
 from datetime import datetime
 from supabase import create_client
 
 # ============================================
-# 🔑 API ANAHTARLARI (BURAYA YAPIŞTIR)
+# 🔑 API ANAHTARLARI (Environment variables'dan okur)
 # ============================================
-SERPAPI_KEY = '109d6f576a359697a3d8c35c2023324612c4f5def1b5c34335190e78a9be453c'
-GROQ_KEY = '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'
-SUPABASE_URL = 'https://hhtoezrhvipiketlelqh.supabase.co'
-SUPABASE_KEY = 'sb_publishable_Pm9O8xgmYcBhvQR0_2QQ3g_cmekoTMN'
+SERPAPI_KEY = os.environ.get('SERPAPI_KEY')
+GROQ_KEY = os.environ.get('GROQ_KEY')
+SUPABASE_URL = os.environ.get('SUPABASE_URL')
+SUPABASE_KEY = os.environ.get('SUPABASE_KEY')
 
 # Supabase client
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
